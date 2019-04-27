@@ -1,0 +1,12 @@
+{
+  "name": "vue-live-preview",
+  "description": "A component to live preview vue components with a neat editor",
+  "author": {
+    "name": "Bart Ledoux",
+    "email": "ledouxb@gmail.com",
+    "github": "elevatebart"
+  },
+  "peerDependencies": {
+    "vue": ">=2.0.0"
+  }
+}

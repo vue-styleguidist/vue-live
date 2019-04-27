@@ -1,0 +1,5 @@
+/node_modules/**
+/dist/**
+/packages/**
+/tests/e2e/fixtures/public/packages/**
+/tests/unit/coverage/**
