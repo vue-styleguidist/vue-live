@@ -1,8 +1,12 @@
 <template>
-  <div class="preview-code" style="display:flex;">
-    <PrismEditor style="flex-grow:1;width:auto;" v-model="model" language="html"/>
-    <Preview :key="codeKey" style="padding:10px;flex-grow:1;" :code="model"/>
-  </div>
+  <VueLiveLayout>
+    <template v-slot:editor>
+      <PrismEditor v-model="model" language="html"/>
+    </template>
+    <template v-slot:preview>
+      <Preview :key="codeKey" :code="model"/>
+    </template>
+  </VueLiveLayout>
 </template>
 <script>
 //load prism somewhere
@@ -13,21 +17,30 @@ import "vue-prism-editor/dist/VuePrismEditor.css";
 
 import PrismEditor from "vue-prism-editor";
 import Preview from "./Preview";
+import VueLiveLayout from "./VueLiveDefaultLayout";
 import hash from "hash-sum";
 
 export default {
   name: "VueLivePreview",
-  components: { PrismEditor, Preview },
+  components: { PrismEditor, Preview, VueLiveLayout },
   props: {
     code: {
       type: String,
       required: true
+    },
+    layout: {
+      type: Object
     }
   },
   data() {
     return {
       model: this.code
     };
+  },
+  created() {
+    if (this.layout) {
+      this.$options.components.VueLiveLayout = this.layout;
+    }
   },
   computed: {
     codeKey() {
