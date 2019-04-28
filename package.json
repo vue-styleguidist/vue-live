@@ -10,7 +10,7 @@
   },
   "main": "./dist/vue-live.common.js",
   "files": [
-    "./dist/vue-live.common.js"
+    "./dist"
   ],
   "dependencies": {
     "acorn": "^6.1.1",
