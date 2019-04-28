@@ -16,9 +16,10 @@
     "acorn": "^6.1.1",
     "buble": "^0.19.7",
     "core-js": "^2.6.5",
+    "prismjs": "^1.16.0",
     "rewrite-imports": "^2.0.3",
     "vue": "^2.6.10",
-    "vue-codemirror": "^4.0.6",
+    "vue-prism-editor": "^0.2.0",
     "vue-template-compiler": "^2.5.21",
     "walkes": "^0.2.1"
   },

@@ -1,26 +1,23 @@
 <template>
-  <div class="preview-code">
-    <codemirror
-      v-model="model"
-      :options="defaultOptions"
-      @input="change"
-    />
-    <Preview
-      :key="codeKey"
-      :code="model"
-    />
+  <div class="preview-code" style="display:flex;">
+    <PrismEditor style="flex-grow:1;width:auto;" v-model="model" language="html"/>
+    <Preview :key="codeKey" style="padding:10px;flex-grow:1;" :code="model"/>
   </div>
 </template>
 <script>
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/mode/vue/vue.js'
-import { codemirror } from 'vue-codemirror'
-import Preview from './Preview'
-import hash from 'hash-sum'
+//load prism somewhere
+import "prismjs";
+import "prismjs/themes/prism-tomorrow.css";
+//vue-prism-editor dependency
+import "vue-prism-editor/dist/VuePrismEditor.css";
+
+import PrismEditor from "vue-prism-editor";
+import Preview from "./Preview";
+import hash from "hash-sum";
 
 export default {
-  name: 'VueLivePreview',
-  components: { codemirror, Preview },
+  name: "VueLivePreview",
+  components: { PrismEditor, Preview },
   props: {
     code: {
       type: String,
@@ -29,20 +26,13 @@ export default {
   },
   data() {
     return {
-      model: this.code,
-      codeKey: hash(this.code),
-      defaultOptions: {
-        theme: 'default',
-        tabSize: 2,
-        lineNumbers: true,
-        mode: 'text/x-vue'
-      }
-    }
+      model: this.code
+    };
   },
-  methods: {
-    change(code) {
-      this.codeKey = hash(code)
+  computed: {
+    codeKey() {
+      return hash(this.model);
     }
   }
-}
+};
 </script>
