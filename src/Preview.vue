@@ -95,9 +95,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.previewCode {
-  text-align: left;
-}
-</style>
