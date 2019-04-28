@@ -47,7 +47,26 @@
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.unit.js"
+        ],
+        "parserOptions": {
+          "parser": "babel-eslint",
+          "sourceType": "module"
+        },
+        "env": {
+          "jest": true
+        },
+        "globals": {
+          "mount": false,
+          "shallowMount": false,
+          "createComponentMocks": false
+        }
+      }
+    ]
   },
   "postcss": {
     "plugins": {
