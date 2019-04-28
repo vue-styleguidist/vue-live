@@ -3,7 +3,7 @@
 </template>
 <script>
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import VueLive from "./components/VueLive";
+import { VueLive } from "../src";
 import code from "!!raw-loader!./assets/Button.vue";
 
 export default {
