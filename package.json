@@ -1,6 +1,7 @@
 {
   "name": "vue-live",
   "version": "0.1.0",
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --entry ./src/index.js",

@@ -46,7 +46,10 @@ export default {
       this.error = e.message;
     },
     renderComponent(code) {
-      let data, script, style, template;
+      let data = {},
+        script,
+        style,
+        template;
       let listVars = [];
       try {
         const renderedComponent = compileCode(code);

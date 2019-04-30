@@ -17,6 +17,6 @@
 }
 
 .container td {
-  width: 500px;
+  width: 475px;
 }
 </style>
