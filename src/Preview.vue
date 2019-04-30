@@ -85,9 +85,10 @@ export default {
 
       // Add the scoped style if there is any
       if (style) {
+        vueInstance.$el.setAttribute(`data-${this.scope}`, true);
         const styleContainer = document.createElement("div");
         styleContainer.innerHTML = style;
-        styleContainer.firstChild.id = this.scope;
+        styleContainer.firstChild.id = `data-${this.scope}`;
         vueInstance.$el.appendChild(styleContainer.firstChild);
       }
       styleScoper();
