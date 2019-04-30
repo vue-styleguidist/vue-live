@@ -7,15 +7,20 @@ module.exports = {
 
     config.resolve.alias.set("vue$", "vue/dist/vue.esm.js");
     if (process.env.NODE_ENV === "production") {
-      config.externals({
-        acorn: "acorn",
-        buble: "buble",
-        walkes: "walkes",
-        "hash-sum": "hash-sum",
-        "vue-template-compiler": "vue-template-compiler",
-        "rewrite-imports": "rewrite-imports",
-        prismjs: "prismjs"
-      });
+      config.externals(
+        [
+          "acorn",
+          "buble",
+          "walkes",
+          "hash-sum",
+          "vue-template-compiler",
+          "rewrite-imports",
+          "prismjs"
+        ].reduce((exts, pkg) => {
+          exts[pkg] = pkg;
+          return exts;
+        }, {})
+      );
     }
   }
 };
