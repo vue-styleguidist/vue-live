@@ -1,5 +1,5 @@
 <template functional>
-  <table>
+  <table class="container">
     <tr>
       <td>
         <slot name="editor"></slot>
@@ -10,3 +10,13 @@
     </tr>
   </table>
 </template>
+<style>
+.container {
+  margin: 20px auto;
+  border: 1px solid #ccc;
+}
+
+.container td {
+  width: 500px;
+}
+</style>

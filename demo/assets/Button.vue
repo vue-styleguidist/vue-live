@@ -7,18 +7,20 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   data() {
     return {
-      msg: 'Welcome to Preview'
-    }
+      msg: "Welcome to Preview"
+    };
   }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .hello {
+  margin: auto;
+  text-align: center;
+  width: 200px;
   font-size: 2em;
 }
 </style>
