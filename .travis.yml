@@ -1,5 +1,8 @@
 language: node_js
 
+node_js:
+  - lts/*
+
 # never build when commited by the bot
 # + prevent double build on dev -> master Pull Request
 if: sender != "vue-styleguidist-bot" AND sender != "Vue Styleguidist Bot" AND (type = pull_request OR branch = master)
