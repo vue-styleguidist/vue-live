@@ -28,7 +28,7 @@ jobs:
       script:
         - yarn lint
         - yarn test:unit --runInBand
-        - yarn danger ci
+        - npx danger ci
 
     - stage: release
       script:
