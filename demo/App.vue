@@ -7,6 +7,7 @@
     <VueLive :code="codeSfc" :layout="CustomLayout"/>
     <h2>Pure JavaScript code</h2>
     <VueLive :code="codeJs" :layout="CustomLayout"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   </main>
 </template>
 <script>
@@ -32,3 +33,10 @@ export default {
   }
 };
 </script>
+<style>
+body {
+  font-family: "Roboto Mono", monospace;
+  background-color: #ded;
+}
+</style>
+>

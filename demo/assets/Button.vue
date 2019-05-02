@@ -1,16 +1,14 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <button>Push me</button>
+    <button>{{ msg }}</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
   data() {
     return {
-      msg: "Welcome to Preview"
+      msg: "Push Me"
     };
   }
 };
@@ -18,9 +16,6 @@ export default {
 
 <style scoped>
 .hello {
-  margin: auto;
   text-align: center;
-  width: 200px;
-  font-size: 2em;
 }
 </style>
