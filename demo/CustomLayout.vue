@@ -15,6 +15,7 @@
   margin: 30px auto;
   border-radius: 10px;
   border: 1px solid #ccc;
+  box-shadow: 0 0 3px #ccc;
 }
 
 .preview-code > div {
