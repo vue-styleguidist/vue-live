@@ -1,7 +1,6 @@
 {
   "name": "vue-live",
   "version": "0.1.0",
-  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "cross-env LIB_MAKING=true vue-cli-service build --target lib --entry ./src/index.js",
@@ -9,6 +8,15 @@
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vue-styleguidist/vue-live.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vue-styleguidist/vue-live/issues"
+  },
+  "author": "Bart Ledoux <ledouxb@me.com>",
   "main": "./dist/vue-live.common.js",
   "files": [
     "./dist"
