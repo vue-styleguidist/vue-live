@@ -19,6 +19,7 @@ import "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
 //vue-prism-editor dependency
 import "vue-prism-editor/dist/VuePrismEditor.css";
+import "prismjs/components/prism-jsx.min";
 
 import PrismEditor from "vue-prism-editor";
 import Preview from "./Preview";
@@ -27,7 +28,7 @@ import hash from "hash-sum";
 
 const LANG_TO_PRISM = {
   vue: "html",
-  js: "js"
+  js: "jsx"
 };
 
 export default {
