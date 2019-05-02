@@ -85,9 +85,12 @@ export default {
       }
 
       data.components = this.components;
+      if (style) {
+        data._scopeId = `data-${this.scope}`;
+        addScopedStyle(style, this.scope);
+      }
 
       this.$options.components.VuePreview = data;
-      addScopedStyle(style, this.scope);
     }
   }
 };
