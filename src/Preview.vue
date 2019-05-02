@@ -23,6 +23,10 @@ export default {
     scoped: {
       type: Boolean,
       default: true
+    },
+    components: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -83,6 +87,8 @@ export default {
       } catch (e) {
         this.handleError(e);
       }
+
+      data.components = this.components;
 
       // eslint-disable-next-line no-new
       const vueInstance = new Vue({

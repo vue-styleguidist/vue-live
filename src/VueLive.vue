@@ -4,7 +4,12 @@
       <PrismEditor v-model="model" :language="prismLang"/>
     </template>
     <template v-slot:preview>
-      <Preview :key="codeKey" :code="model" @detect-language="switchLanguage"/>
+      <Preview
+        :key="codeKey"
+        :code="model"
+        @detect-language="switchLanguage"
+        :components="components"
+      />
     </template>
   </VueLiveLayout>
 </template>
@@ -34,7 +39,12 @@ export default {
       required: true
     },
     layout: {
-      type: Object
+      type: Object,
+      default: undefined
+    },
+    components: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
