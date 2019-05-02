@@ -1,22 +1,22 @@
-import walkes from 'walkes'
-import transformOneImport from './transformOneImport'
-import normalizeSfcComponent from './normalizeSfcComponent'
-import getAst from './getAst'
+import walkes from "walkes";
+import transformOneImport from "./transformOneImport";
+import normalizeSfcComponent from "./normalizeSfcComponent";
+import getAst from "./getAst";
 
-function isCodeVueSfc(code) {
-  return /\n\W*<script/.test(code)
+export function isCodeVueSfc(code) {
+  return /\n\W*<script/.test(code);
 }
 
 function transformImports(code) {
-  let offset = 0
+  let offset = 0;
   walkes(getAst(code), {
     ImportDeclaration(node) {
-      const ret = transformOneImport(node, code, offset)
-      offset = ret.offset
-      code = ret.code
+      const ret = transformOneImport(node, code, offset);
+      offset = ret.offset;
+      code = ret.code;
     }
-  })
-  return code
+  });
+  return code;
 }
 
 /**
@@ -27,30 +27,30 @@ function transformImports(code) {
  *
  */
 export default function compileCode(code, style, importTransformed) {
-  let index
-  const lines = code.split('\n')
-  if (code.indexOf('new Vue') > -1) {
+  let index;
+  const lines = code.split("\n");
+  if (code.indexOf("new Vue") > -1) {
     return {
       script: importTransformed ? code : transformImports(code),
       style
-    }
+    };
   } else if (isCodeVueSfc(code)) {
-    const transformed = normalizeSfcComponent(code)
-    return compileCode(transformed.component, transformed.style, true)
+    const transformed = normalizeSfcComponent(code);
+    return compileCode(transformed.component, transformed.style, true);
   }
   for (let id = 0; id < lines.length; id++) {
-    if (lines[id].trim().charAt(0) === '<') {
-      index = id
-      break
+    if (lines[id].trim().charAt(0) === "<") {
+      index = id;
+      break;
     }
   }
   return {
     script: transformImports(
       lines
         .slice(0, index)
-        .join('\n')
+        .join("\n")
         .trim()
     ),
-    html: lines.slice(index).join('\n')
-  }
+    html: lines.slice(index).join("\n")
+  };
 }
