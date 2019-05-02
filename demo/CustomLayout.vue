@@ -15,10 +15,18 @@
   margin: 30px auto;
   border-radius: 10px;
   border: 1px solid #ccc;
-  overflow: hidden;
 }
 
 .preview-code > div {
   width: 100%;
+}
+
+.preview-code > div:first-child {
+  border-radius: 10px 0 0 10px;
+  overflow: hidden;
+}
+
+.preview-code > div:last-child {
+  padding: 30px;
 }
 </style>

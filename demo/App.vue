@@ -7,12 +7,14 @@
     <VueLive :code="codeTemplate" :layout="CustomLayout"/>
     <h2>Pure JavaScript code</h2>
     <VueLive :code="codeJs" :layout="CustomLayout"/>
-    <h2>and even a weird hybrid format</h2>
+    <h2>With imported components</h2>
+    <VueLive :code="`<date-picker />`" :layout="CustomLayout" :components="registeredComponents"/>
   </main>
 </template>
 <script>
 import VueLive from "../src/VueLive";
 import CustomLayout from "./CustomLayout";
+import DatePicker from "vuejs-datepicker";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import codeSfc from "!!raw-loader!./assets/Button.vue";
 import codeJs from "!!raw-loader!./assets/input.js";
@@ -23,6 +25,7 @@ export default {
   components: { VueLive },
   data() {
     return {
+      registeredComponents: { DatePicker },
       codeSfc,
       codeTemplate,
       codeJs,
