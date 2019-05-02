@@ -33,6 +33,7 @@ jobs:
     - stage: demo
       script: yarn build:demo
       deploy:
+        skip_cleanup: true
         provider: surge
         project: ./dist/
         domain: vue-live.surge.sh
