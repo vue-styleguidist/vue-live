@@ -1,7 +1,7 @@
 <template>
   <div>
-    <VueLive :code="codeSfc"/>
-    <VueLive :code="codeTemplate"/>
+    <VueLive :code="codeSfc" :layout="CustomLayout"/>
+    <VueLive :code="codeTemplate" :layout="CustomLayout"/>
   </div>
 </template>
 <script>
