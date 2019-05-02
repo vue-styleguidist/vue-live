@@ -8,7 +8,7 @@
 <script>
 import Vue from "vue";
 import { transform } from "buble";
-import compileCode from "./utils/compileCode";
+import compileCode, { isCodeVueSfc } from "./utils/compileCode";
 import getVars from "./utils/getVars";
 import getVueConfigObject from "./utils/getVueConfigObject";
 import styleScoper from "./utils/styleScoper";
@@ -67,6 +67,7 @@ export default {
           // it can be:
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
+          this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "js");
           script = transform(renderedComponent.script).code;
           data = getVueConfigObject(script, listVars) || {};
         }

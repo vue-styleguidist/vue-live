@@ -1,10 +1,10 @@
 <template>
   <VueLiveLayout>
     <template v-slot:editor>
-      <PrismEditor v-model="model" language="html"/>
+      <PrismEditor v-model="model" :language="prismLang"/>
     </template>
     <template v-slot:preview>
-      <Preview :key="codeKey" :code="model"/>
+      <Preview :key="codeKey" :code="model" @detect-language="switchLanguage"/>
     </template>
   </VueLiveLayout>
 </template>
@@ -20,6 +20,11 @@ import Preview from "./Preview";
 import VueLiveLayout from "./VueLiveDefaultLayout";
 import hash from "hash-sum";
 
+const LANG_TO_PRISM = {
+  vue: "html",
+  js: "js"
+};
+
 export default {
   name: "VueLivePreview",
   components: { PrismEditor, Preview, VueLiveLayout },
@@ -34,7 +39,8 @@ export default {
   },
   data() {
     return {
-      model: this.code
+      model: this.code,
+      prismLang: "html"
     };
   },
   created() {
@@ -45,6 +51,11 @@ export default {
   computed: {
     codeKey() {
       return hash(this.model);
+    }
+  },
+  methods: {
+    switchLanguage(newLang) {
+      this.prismLang = LANG_TO_PRISM[newLang];
     }
   }
 };
