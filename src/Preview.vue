@@ -64,7 +64,7 @@ export default {
         }
         if (renderedComponent.script) {
           // if the compiled code contains a script it might be "just" a script
-          // if so change scheme used by editor
+          // if so, change scheme used by editor
           this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "js");
 
           // compile and execute the script
