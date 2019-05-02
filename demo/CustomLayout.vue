@@ -29,6 +29,7 @@
 .preview-code > div:last-child {
   padding: 30px;
   background-color: #fff;
+  text-align: center;
   border-radius: 0 10px 10px 0;
 }
 </style>

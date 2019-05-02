@@ -2,7 +2,7 @@
   <main style="text-align:center;">
     <h1>Vue Live renders vue code directly in the browser</h1>
     <h2>With imported components</h2>
-    <VueLive :code="`<date-picker />`" :layout="CustomLayout" :components="registeredComponents"/>
+    <VueLive :code="codeTemplate" :layout="CustomLayout" :components="registeredComponents"/>
     <h2>Display Single File Components</h2>
     <VueLive :code="codeSfc" :layout="CustomLayout"/>
     <h2>Pure JavaScript code</h2>

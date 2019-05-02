@@ -1,4 +1,5 @@
-<h1>pure template</h1>
-<h2>pure template</h2>
-<h3>pure template</h3>
-<h4>pure template</h4>
+let isChecked = true
+let today = new Date();
+
+<input type="checkbox" v-model="isChecked">
+<date-picker v-if="isChecked" :value="today"/>
