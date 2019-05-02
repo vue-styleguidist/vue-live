@@ -1,6 +1,6 @@
 {
   "name": "vue-live",
-  "version": "0.0.0.dev",
+  "version": "0.0.0-dev",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "cross-env LIB_MAKING=true vue-cli-service build --target lib --entry ./src/index.js",
