@@ -27,7 +27,7 @@ export default {
 </script>
 ```
 
-Check out the demo for alernative syntaxes to write your showcases.
+Check out the [demo](http://vue-live.surge.sh) for alernative syntaxes to write your showcases.
 
 ## How to contribute
 ```
