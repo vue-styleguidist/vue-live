@@ -22,7 +22,13 @@ import VueLive from "vue-live";
 import DatePicker from "vuejs-datepicker"
 
 export default {
-    components: { VueLive }
+    components: { VueLive },
+    data(){
+        return {
+            // make DatePicker available in template
+            DatePicker
+        }
+    }
 }
 </script>
 ```
