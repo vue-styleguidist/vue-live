@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <h1>Colored Text</h1>
     <button>{{ msg }}</button>
   </div>
 </template>
@@ -14,8 +15,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .hello {
   text-align: center;
+  color: #900;
 }
 </style>

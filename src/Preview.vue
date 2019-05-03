@@ -1,28 +1,24 @@
 <template>
   <div>
     <div style="color:red" v-if="error">{{this.error}}</div>
-    <div :id="scope"/>
+    <VuePreview :id="scope"/>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
 import { transform } from "buble";
 import compileCode, { isCodeVueSfc } from "./utils/compileCode";
 import getVars from "./utils/getVars";
 import getVueConfigObject from "./utils/getVueConfigObject";
-import styleScoper from "./utils/styleScoper";
+import addScopedStyle from "./utils/addScopedStyle";
 
 export default {
   name: "VueLivePreviewComponent",
+  components: {},
   props: {
     code: {
       type: String,
       required: true
-    },
-    scoped: {
-      type: Boolean,
-      default: true
     },
     components: {
       type: Object,
@@ -35,7 +31,7 @@ export default {
       error: false
     };
   },
-  mounted() {
+  beforeMount() {
     this.renderComponent(this.code.trim());
   },
   methods: {
@@ -50,11 +46,11 @@ export default {
       this.error = e.message;
     },
     renderComponent(code) {
-      let data = {},
-        script,
-        style,
-        template;
+      let data = {};
       let listVars = [];
+      let script;
+      let style;
+      let template;
       try {
         const renderedComponent = compileCode(code);
         style = renderedComponent.style;
@@ -89,22 +85,14 @@ export default {
       }
 
       data.components = this.components;
-
-      // eslint-disable-next-line no-new
-      const vueInstance = new Vue({
-        el: `#${this.scope}`,
-        render: createElement => createElement(data)
-      });
-
-      // Add the scoped style if there is any
       if (style) {
-        vueInstance.$el.setAttribute(`data-${this.scope}`, true);
-        const styleContainer = document.createElement("div");
-        styleContainer.innerHTML = style;
-        styleContainer.firstChild.id = `data-${this.scope}`;
-        vueInstance.$el.appendChild(styleContainer.firstChild);
+        // To add the scope id attribute to each item in the html
+        // this way when we add the scoped style sheet it will be aplied
+        data._scopeId = `data-${this.scope}`;
+        addScopedStyle(style, this.scope);
       }
-      styleScoper();
+
+      this.$options.components.VuePreview = data;
     }
   }
 };
