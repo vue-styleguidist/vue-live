@@ -3,7 +3,8 @@
   "version": "0.0.0-dev",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "cross-env LIB_MAKING=true vue-cli-service build --target lib --entry ./src/index.js",
+    "start": "vue-cli-service serve",
+    "build": "rollup -c",
     "build:demo": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
@@ -45,6 +46,13 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "raw-loader": "^2.0.0",
+    "rollup": "^1.11.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-css-only": "^1.0.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-vue": "^5.0.0",
     "vuejs-datepicker": "^1.5.4"
   },
   "eslintConfig": {

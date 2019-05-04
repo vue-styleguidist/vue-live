@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import { transform } from "buble";
 import compileCode, { isCodeVueSfc } from "./utils/compileCode";
 import getVars from "./utils/getVars";
 import getVueConfigObject from "./utils/getVueConfigObject";
@@ -71,7 +70,7 @@ export default {
           // it can be:
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
-          script = transform(renderedComponent.script).code;
+          script = renderedComponent.script;
           data = getVueConfigObject(script, listVars) || {};
         }
         if (renderedComponent.html) {

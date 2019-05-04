@@ -1,4 +1,5 @@
 import walkes from "walkes";
+import { transform } from "buble";
 import transformOneImport from "./transformOneImport";
 import normalizeSfcComponent from "./normalizeSfcComponent";
 import getAst from "./getAst";
@@ -45,12 +46,14 @@ export default function compileCode(code, style, importTransformed) {
     }
   }
   return {
-    script: transformImports(
-      lines
-        .slice(0, index)
-        .join("\n")
-        .trim()
-    ),
+    script: transform(
+      transformImports(
+        lines
+          .slice(0, index)
+          .join("\n")
+          .trim()
+      )
+    ).code,
     html: lines.slice(index).join("\n")
   };
 }

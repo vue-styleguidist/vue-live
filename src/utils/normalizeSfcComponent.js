@@ -1,7 +1,10 @@
-import { parseComponent } from "vue-template-compiler";
 import walkes from "walkes";
 import transformOneImport from "./transformOneImport";
 import getAst from "./getAst";
+
+// rollup does not import this indirect dependency
+// no import here, use require
+const vueCompiler = require("vue-template-compiler");
 
 const buildStyles = function(styles) {
   let _styles = "";
@@ -19,7 +22,7 @@ const buildStyles = function(styles) {
 };
 
 function getSingleFileComponentParts(code) {
-  const parts = parseComponent(code);
+  const parts = vueCompiler.parseComponent(code);
   if (parts.script)
     parts.script.content = parts.script.content.replace(
       /\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm,
