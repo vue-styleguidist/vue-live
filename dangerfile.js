@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { danger, warn, fail } from "danger";
+import { danger, warn, fail, markdown } from "danger";
 import * as fs from "fs";
 import * as path from "path";
 
