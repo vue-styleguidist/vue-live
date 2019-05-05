@@ -1,27 +1,16 @@
 {
   "name": "vue-live",
   "version": "0.0.0-dev",
+  "author": "Bart Ledoux <ledouxb@me.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "start": "vue-cli-service serve",
     "build": "rollup -c",
-    "build:demo": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "build:demo": "vue-cli-service build",
+    "start": "vue-cli-service serve",
+    "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vue-styleguidist/vue-live.git"
-  },
-  "bugs": {
-    "url": "https://github.com/vue-styleguidist/vue-live/issues"
-  },
-  "author": "Bart Ledoux <ledouxb@me.com>",
-  "main": "./dist/vue-live.common.js",
-  "files": [
-    "./dist"
-  ],
   "dependencies": {
     "acorn": "^6.1.1",
     "buble": "^0.19.7",
@@ -35,6 +24,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",
+    "@vue/cli-plugin-e2e-cypress": "^3.7.0",
     "@vue/cli-plugin-eslint": "^3.6.0",
     "@vue/cli-plugin-unit-jest": "^3.6.3",
     "@vue/cli-service": "^3.6.0",
@@ -97,5 +87,17 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/vue-styleguidist/vue-live/issues"
+  },
+  "files": [
+    "./dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/vue-live.common.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vue-styleguidist/vue-live.git"
+  }
 }
