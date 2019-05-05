@@ -33,7 +33,7 @@ jobs:
   include:
     - stage: test
       script:
-        - yarn danger ci
+        - npx danger ci
         - yarn lint
         - yarn test:unit --runInBand
         - yarn test:e2e --headless
