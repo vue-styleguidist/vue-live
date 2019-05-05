@@ -1,8 +1,7 @@
 /* eslint-disable */
-import * as fs from "fs";
-import * as path from "path";
-
-var validateMessage = require("validate-commit-msg");
+const fs = require("fs");
+const path = require("path");
+const validateMessage = require("validate-commit-msg");
 
 const packageChanged = danger.git.modified_files.includes("package.json");
 const lockfileChanged = danger.git.modified_files.includes("yarn.lock");
