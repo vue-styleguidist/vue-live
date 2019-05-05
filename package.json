@@ -43,6 +43,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-vue": "^5.0.0",
+    "validate-commit-msg": "^2.14.0",
     "vuejs-datepicker": "^1.5.4"
   },
   "eslintConfig": {
