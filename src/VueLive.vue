@@ -1,7 +1,7 @@
 <template>
   <VueLiveLayout>
     <template v-slot:editor>
-      <PrismEditor v-model="model" v-debounce="1000" :language="prismLang"/>
+      <PrismEditor v-model="model" :language="prismLang"/>
     </template>
     <template v-slot:preview>
       <Preview
@@ -23,7 +23,6 @@ import "prismjs/components/prism-jsx.min";
 
 import PrismEditor from "vue-prism-editor";
 import hash from "hash-sum";
-import debounce from "v-debounce";
 
 import Preview from "./Preview.vue";
 import VueLiveLayout from "./VueLiveDefaultLayout.vue";
@@ -70,7 +69,6 @@ export default {
     switchLanguage(newLang) {
       this.prismLang = LANG_TO_PRISM[newLang];
     }
-  },
-  directives: { debounce }
+  }
 };
 </script>
