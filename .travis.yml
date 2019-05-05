@@ -22,6 +22,13 @@ branches:
   only:
     - master
 
+stages:
+  - test
+  - name: demo
+    if: type != pull_request AND branch = master
+  - name: release
+    if: type != pull_request AND branch = master  
+
 jobs:
   include:
     - stage: test
