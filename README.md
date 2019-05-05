@@ -47,7 +47,7 @@ yarn install
 yarn serve
 ```
 
-### Compiles and minifies for production
+### Compiles and minifies library for production using rollup
 
 ```
 yarn build
