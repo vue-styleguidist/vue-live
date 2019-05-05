@@ -33,10 +33,10 @@ jobs:
   include:
     - stage: test
       script:
+        - yarn danger ci
         - yarn lint
         - yarn test:unit --runInBand
         - yarn test:e2e --headless
-        - yarn danger ci
 
     - stage: demo
       script: yarn build:demo

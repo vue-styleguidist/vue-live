@@ -1,4 +1,4 @@
-import { danger, warn, fail, markdown } from "danger";
+/* eslint-disable */
 import * as fs from "fs";
 import * as path from "path";
 
