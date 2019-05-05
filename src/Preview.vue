@@ -22,6 +22,10 @@ export default {
     components: {
       type: Object,
       default: () => {}
+    },
+    requires: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -71,7 +75,7 @@ export default {
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
           script = renderedComponent.script;
-          data = getVueConfigObject(script, listVars) || {};
+          data = getVueConfigObject(script, listVars, this.requires) || {};
         }
         if (renderedComponent.html) {
           // if this is a pure template or if we are in hybrid vsg mode,

@@ -9,6 +9,7 @@
         :code="model"
         @detect-language="switchLanguage"
         :components="components"
+        :requires="requires"
       />
     </template>
   </VueLiveLayout>
@@ -45,6 +46,10 @@ export default {
       default: undefined
     },
     components: {
+      type: Object,
+      default: () => {}
+    },
+    requires: {
       type: Object,
       default: () => {}
     }

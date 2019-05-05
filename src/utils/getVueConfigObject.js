@@ -1,6 +1,7 @@
-import evalInContext from './evalInContext'
+import evalInContext from "./evalInContext";
+import requireAtRuntime from "./requireAtRuntime";
 
-export default function getVueConfigObject(compiledCode, listVars) {
+export default function getVueConfigObject(compiledCode, listVars, requires) {
   const exampleComponentCode = `
 let __component__ = {}
 
@@ -19,9 +20,11 @@ eval(${JSON.stringify(
       // this is done through an object like {varName: varName}
       // since each varName is defined in compiledCode, it can be used to init
       // the data object here
-      listVars.map(varName => `${varName}: ${varName}`).join(',')
+      listVars.map(varName => `${varName}: ${varName}`).join(",")
     }};};`
   )});
-return __component__;`
-  return evalInContext(exampleComponentCode)
+return __component__;`;
+  return evalInContext(exampleComponentCode, filepath =>
+    requireAtRuntime(requires, filepath)
+  );
 }

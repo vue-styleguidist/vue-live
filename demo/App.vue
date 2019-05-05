@@ -10,6 +10,8 @@
     <VueLive :code="codeSfc" :layout="CustomLayout"/>
     <h2>Pure JavaScript code</h2>
     <VueLive :code="codeJs" :layout="CustomLayout"/>
+    <h2>Use the requires prop to make libraries and packages available in the browser</h2>
+    <VueLive :code="codeChicago" :layout="CustomLayout" :requires="chicagoRequires"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   </main>
 </template>
@@ -21,6 +23,8 @@ import DatePicker from "vuejs-datepicker";
 import codeSfc from "!!raw-loader!./assets/Button.vue";
 import codeJs from "!!raw-loader!./assets/input.js";
 import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
+import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
+import all from "./assets/chicagoNeighbourhoods";
 
 export default {
   name: "VueLiveDemo",
@@ -31,7 +35,9 @@ export default {
       codeSfc,
       codeTemplate,
       codeJs,
-      CustomLayout
+      codeChicago,
+      CustomLayout,
+      chicagoRequires: { chicagoNeighbourhoods: all }
     };
   }
 };
