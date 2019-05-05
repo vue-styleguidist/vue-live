@@ -93,7 +93,7 @@
     "url": "https://github.com/vue-styleguidist/vue-live/issues"
   },
   "files": [
-    "./dist"
+    "dist"
   ],
   "license": "MIT",
   "main": "./dist/vue-live.common.js",
