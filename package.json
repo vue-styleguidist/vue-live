@@ -33,6 +33,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "cross-env": "^5.2.0",
+    "danger": "^7.1.4",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "raw-loader": "^2.0.0",

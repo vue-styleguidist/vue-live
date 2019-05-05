@@ -36,7 +36,7 @@ jobs:
         - yarn lint
         - yarn test:unit --runInBand
         - yarn test:e2e --headless
-        - npx danger ci
+        - yarn danger ci
 
     - stage: demo
       script: yarn build:demo
