@@ -33,4 +33,28 @@
   text-align: center;
   border-radius: 0 10px 10px 0;
 }
+
+@media only screen and (max-width: 1000px) {
+  .preview-code {
+    width: 90vw;
+  }
+}
+
+@media only screen and (max-width: 568px) {
+  .preview-code {
+    display: block;
+  }
+
+  .preview-code > div {
+    width: auto;
+  }
+
+  .preview-code > div:first-child {
+    border-radius: 10px 10px 0 0;
+  }
+
+  .preview-code > div:last-child {
+    border-radius: 0 0 10px 10px;
+  }
+}
 </style>
