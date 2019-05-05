@@ -1,26 +1,16 @@
 {
   "name": "vue-live",
   "version": "0.0.0-dev",
+  "author": "Bart Ledoux <ledouxb@me.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "cross-env LIB_MAKING=true vue-cli-service build --target lib --entry ./src/index.js",
-    "build:demo": "vue-cli-service build",
+    "build": "rollup -c",
     "lint": "vue-cli-service lint",
+    "build:demo": "vue-cli-service build",
+    "start": "vue-cli-service serve",
+    "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vue-styleguidist/vue-live.git"
-  },
-  "bugs": {
-    "url": "https://github.com/vue-styleguidist/vue-live/issues"
-  },
-  "author": "Bart Ledoux <ledouxb@me.com>",
-  "main": "./dist/vue-live.common.js",
-  "files": [
-    "./dist"
-  ],
   "dependencies": {
     "acorn": "^6.1.1",
     "buble": "^0.19.7",
@@ -34,6 +24,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",
+    "@vue/cli-plugin-e2e-cypress": "^3.7.0",
     "@vue/cli-plugin-eslint": "^3.6.0",
     "@vue/cli-plugin-unit-jest": "^3.6.3",
     "@vue/cli-service": "^3.6.0",
@@ -45,6 +36,14 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "raw-loader": "^2.0.0",
+    "rollup": "^1.11.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-css-only": "^1.0.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-vue": "^5.0.0",
+    "validate-commit-msg": "^2.14.0",
     "vuejs-datepicker": "^1.5.4"
   },
   "eslintConfig": {
@@ -89,5 +88,17 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/vue-styleguidist/vue-live/issues"
+  },
+  "files": [
+    "./dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/vue-live.common.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vue-styleguidist/vue-live.git"
+  }
 }

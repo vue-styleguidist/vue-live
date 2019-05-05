@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+# tests artefact
+/tests/e2e/videos
+
 # local env files
 .env.local
 .env.*.local

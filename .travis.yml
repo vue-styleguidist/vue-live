@@ -22,13 +22,21 @@ branches:
   only:
     - master
 
+stages:
+  - test
+  - name: demo
+    if: type != pull_request AND branch = master
+  - name: release
+    if: type != pull_request AND branch = master  
+
 jobs:
   include:
     - stage: test
       script:
+        - npx danger ci
         - yarn lint
         - yarn test:unit --runInBand
-        - npx danger ci
+        - yarn test:e2e --headless
 
     - stage: demo
       script: yarn build:demo
