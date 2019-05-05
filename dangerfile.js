@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { danger, warn } from "danger";
+import { danger, warn, fail } from "danger";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -37,42 +37,13 @@ if (testFilesIncludeExclusion.length > 0) {
   fail("an `only` was left in tests (" + testFilesIncludeExclusion + ")");
 }
 
-// Check test cases missing type signature import for test marble helper functions
-var testFilesMissingTypes = modifiedSpecFiles.reduce(function(acc, value) {
-  var content = fs.readFileSync(value).toString();
-
-  var hotFnMatchesWithoutTypes =
-    content.match(hotMatch) && !content.match(hotSignatureMatch);
-  var coldFnMatchesWithoutTypes =
-    content.match(coldMatch) && !content.match(coldSignatureMatch);
-
-  if (hotFnMatchesWithoutTypes || coldFnMatchesWithoutTypes) {
-    acc.push(path.basename(value));
-  }
-
-  return acc;
-}, []);
-
-if (testFilesMissingTypes.length > 0) {
-  fail(
-    "missing type definition import in tests (" +
-      testFilesMissingTypes +
-      ") (" +
-      ++errorCount +
-      ")"
-  );
-  markdown(
-    "> (" +
-      errorCount +
-      ") : It seems updated test cases uses test scheduler interface `hot`, `cold` but miss to import type signature for those."
-  );
-}
-
 //validate commit message in PR if it conforms conventional change log, notify if it doesn't.
 var messageConventionValid = danger.git.commits.reduce(function(acc, value) {
   var valid = validateMessage(value.message);
   return valid && acc;
 }, true);
+
+let errorCount = 0;
 
 if (!messageConventionValid) {
   warn(
