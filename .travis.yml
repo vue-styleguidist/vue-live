@@ -34,7 +34,6 @@ jobs:
     - stage: test
       script:
         - npx danger ci
-      script:
         - yarn lint
         - yarn test:unit --runInBand
         - yarn test:e2e --headless
