@@ -22,7 +22,7 @@ const buildStyles = function(styles) {
 };
 
 function getSingleFileComponentParts(code) {
-  const parts = vueCompiler.parseComponent(code);
+  const parts = vueCompiler.parseComponent(code, { pad: "line" });
   if (parts.script)
     parts.script.content = parts.script.content.replace(
       /\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm,
