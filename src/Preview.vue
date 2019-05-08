@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="color:red" v-if="error">{{this.error}}</div>
-    <VuePreview :id="scope"/>
+    <VuePreview v-if="!error" :id="scope"/>
   </div>
 </template>
 
@@ -95,7 +95,9 @@ export default {
         addScopedStyle(style, this.scope);
       }
 
-      this.$options.components.VuePreview = data;
+      if (data.template || data.render) {
+        this.$options.components.VuePreview = data;
+      }
     }
   }
 };
