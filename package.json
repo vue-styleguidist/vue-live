@@ -14,7 +14,6 @@
   "dependencies": {
     "acorn": "^6.1.1",
     "buble": "^0.19.7",
-    "core-js": "^2.6.5",
     "lodash.debounce": "^4.0.8",
     "prismjs": "^1.16.0",
     "rewrite-imports": "^2.0.3",
@@ -97,7 +96,8 @@
     "dist"
   ],
   "license": "MIT",
-  "main": "./dist/vue-live.common.js",
+  "main": "dist/vue-live.common.js",
+  "module": "dist/vue-live.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vue-styleguidist/vue-live.git"

@@ -10,10 +10,16 @@ const resolve = _path => path.resolve(__dirname, _path);
 
 export default {
   input: resolve("./src/main.js"),
-  output: {
-    file: resolve(`./dist/vue-live.common.js`),
-    format: "cjs"
-  },
+  output: [
+    {
+      file: resolve(`./dist/vue-live.common.js`),
+      format: "cjs"
+    },
+    {
+      file: resolve(`./dist/vue-live.esm.js`),
+      format: "esm"
+    }
+  ],
   plugins: [
     cjs(),
     node(),
