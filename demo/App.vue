@@ -12,6 +12,8 @@
     <VueLive :code="codeJs" :layout="CustomLayout"/>
     <h2>Use the requires prop to make libraries and packages available in the browser</h2>
     <VueLive :code="codeChicago" :layout="CustomLayout" :requires="chicagoRequires"/>
+    <h2>Default Layout</h2>
+    <VueLive :code="`<input type='button' value='I am Groot'>`"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   </main>
 </template>
@@ -47,5 +49,8 @@ body {
   font-family: "Roboto Mono", monospace;
   background-color: #ded;
 }
+
+body .prism-editor__line-numbers {
+  box-sizing: border-box;
+}
 </style>
->

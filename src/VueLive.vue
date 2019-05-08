@@ -1,7 +1,7 @@
 <template>
-  <VueLiveLayout>
+  <component :is="this.layout ? this.layout : VueLiveDefaultLayout">
     <template v-slot:editor>
-      <PrismEditor :code="model" @change="updatePreview" :language="prismLang" :lineNumbers="true"/>
+      <PrismEditor :code="model" @change="updatePreview" :language="prismLang"/>
     </template>
     <template v-slot:preview>
       <Preview
@@ -12,7 +12,7 @@
         :requires="requires"
       />
     </template>
-  </VueLiveLayout>
+  </component>
 </template>
 <script>
 //load prism somewhere
@@ -27,7 +27,7 @@ import hash from "hash-sum";
 import debounce from "lodash.debounce";
 
 import Preview from "./Preview.vue";
-import VueLiveLayout from "./VueLiveDefaultLayout.vue";
+import VueLiveDefaultLayout from "./VueLiveDefaultLayout.vue";
 
 const LANG_TO_PRISM = {
   vue: "html",
@@ -36,20 +36,37 @@ const LANG_TO_PRISM = {
 
 export default {
   name: "VueLivePreview",
-  components: { PrismEditor, Preview, VueLiveLayout },
+  components: { PrismEditor, Preview },
   props: {
+    /**
+     * code rendered in the preview and the editor
+     */
     code: {
       type: String,
       required: true
     },
+    /**
+     * Layout vue component with 2 slots named `editor` & `preview`
+     */
     layout: {
       type: Object,
       default: undefined
     },
+    /**
+     * Hashtable of auto-registered components
+     * @example { DatePicker: VueDatePicker }
+     * @example { VueDatePicker }
+     */
     components: {
       type: Object,
       default: () => {}
     },
+    /**
+     * Hashtable of modules available in require and import statements
+     * in the Preview component
+     * @example { lodash: require("lodash") }
+     * @example { moment: require("moment") }
+     */
     requires: {
       type: Object,
       default: () => {}
@@ -58,13 +75,9 @@ export default {
   data() {
     return {
       model: this.code,
-      prismLang: "html"
+      prismLang: "html",
+      VueLiveDefaultLayout
     };
-  },
-  created() {
-    if (this.layout) {
-      this.$options.components.VueLiveLayout = this.layout;
-    }
   },
   computed: {
     codeKey() {

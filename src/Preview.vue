@@ -15,14 +15,28 @@ export default {
   name: "VueLivePreviewComponent",
   components: {},
   props: {
+    /**
+     * code rendered
+     */
     code: {
       type: String,
       required: true
     },
+    /**
+     * Hashtable of auto-registered components
+     * @example { DatePicker: VueDatePicker }
+     * @example { VueDatePicker }
+     */
     components: {
       type: Object,
       default: () => {}
     },
+    /**
+     * Hashtable of modules available in require and import statements
+     * in the code prop
+     * @example { lodash: require("lodash") }
+     * @example { moment: require("moment") }
+     */
     requires: {
       type: Object,
       default: () => {}
@@ -38,6 +52,10 @@ export default {
     this.renderComponent(this.code.trim());
   },
   methods: {
+    /**
+     * Generates the Scope Id attribute value. It will be added to each
+     * tag if a style is applied to scope the style only to this example
+     */
     generateScope() {
       return "v-xxxxxxxx".replace(/[xy]/g, c => {
         const r = (Math.random() * 16) | 0;
