@@ -1,7 +1,7 @@
 <template>
   <VueLiveLayout>
     <template v-slot:editor>
-      <PrismEditor v-model="model" :language="prismLang"/>
+      <PrismEditor :code="model" @change="updatePreview" :language="prismLang" :lineNumbers="true"/>
     </template>
     <template v-slot:preview>
       <Preview
@@ -24,6 +24,7 @@ import "prismjs/components/prism-jsx.min";
 
 import PrismEditor from "vue-prism-editor";
 import hash from "hash-sum";
+import debounce from "lodash.debounce";
 
 import Preview from "./Preview.vue";
 import VueLiveLayout from "./VueLiveDefaultLayout.vue";
@@ -73,7 +74,10 @@ export default {
   methods: {
     switchLanguage(newLang) {
       this.prismLang = LANG_TO_PRISM[newLang];
-    }
+    },
+    updatePreview: debounce(function(value) {
+      this.model = value;
+    }, 300)
   }
 };
 </script>
