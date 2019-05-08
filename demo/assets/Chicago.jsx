@@ -1,10 +1,14 @@
 import all from "chicagoNeighbourhoods";
 let i = 4;
-const four = [];
-while (i--) {
-  let indexInList = Math.floor(Math.random() * all.length);
-  four.push(all[indexInList]);
+const sel = [];
+const getIndex = () => {
+  const random = Math.random() * all.length
+  return Math.floor(random)
 }
 
-<h3>What Chicago do you wish to visit tonight?</h3>
-<ul><li v-for="a in four">{{ a }}</li></ul>
+while (i--) {
+  sel.push(all[getIndex()]);
+}
+
+<h3>Here are {{ sel.length }} hoods</h3>
+<ul><li v-for="a in sel">{{ a }}</li></ul>
