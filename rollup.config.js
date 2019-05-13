@@ -41,9 +41,7 @@ export default {
     "vue-template-compiler",
     "rewrite-imports",
     "prismjs",
-    "prismjs/themes/prism-tomorrow.css",
     "prismjs/components/prism-jsx.min",
-    "vue-prism-editor/dist/VuePrismEditor.css",
     "vue-prism-editor"
   ]
 };

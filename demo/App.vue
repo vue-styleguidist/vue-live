@@ -28,6 +28,9 @@ import codeJs from "!!raw-loader!./assets/input.js";
 import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
 import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
 import all from "./assets/chicagoNeighbourhoods";
+import "prismjs/themes/prism-tomorrow.css";
+//vue-prism-editor dependency
+import "vue-prism-editor/dist/VuePrismEditor.css";
 
 export default {
   name: "VueLiveDemo",
