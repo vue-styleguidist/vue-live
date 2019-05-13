@@ -13,15 +13,16 @@
     <h2>Use the requires prop to make libraries and packages available in the browser</h2>
     <VueLive :code="codeChicago" :layout="CustomLayout" :requires="chicagoRequires"/>
     <h2>Default Layout</h2>
-    <VueLive :code="`<input type='button' value='I am Groot'>`"/>
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <div style="width:950px; width:950px; max-width:95vw; margin:20px auto;">
+      <VueLive :code="`<input type='button' value='I am Groot'>`"/>
+      <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    </div>
   </main>
 </template>
 <script>
 import VueLive from "../src/VueLive";
 import CustomLayout from "./CustomLayout";
 import DatePicker from "vuejs-datepicker";
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import codeSfc from "!!raw-loader!./assets/Button.vue";
 import codeJs from "!!raw-loader!./assets/input.js";
 import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
