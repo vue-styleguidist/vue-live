@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="color:red" v-if="error">{{this.error}}</div>
-    <VuePreview v-if="!error" :id="scope"/>
+    <component v-if="!error && previewedComponent" :id="scope" :is="previewedComponent"/>
   </div>
 </template>
 
@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       scope: this.generateScope(),
+      previewedComponent: undefined,
       error: false
     };
   },
@@ -114,7 +115,7 @@ export default {
       }
 
       if (data.template || data.render) {
-        this.$options.components.VuePreview = data;
+        this.previewedComponent = data;
       }
     }
   }
