@@ -15,8 +15,8 @@
     <h2>Default Layout</h2>
     <div style="width:950px; width:950px; max-width:95vw; margin:20px auto;">
       <VueLive :code="`<input type='button' value='I am Groot'>`"/>
-      <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     </div>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   </main>
 </template>
 <script>
