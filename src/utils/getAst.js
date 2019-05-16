@@ -1,7 +1,8 @@
-import { parse } from "acorn";
+var acorn = require("acorn");
+var jsx = require("acorn-jsx");
 
 export default function getAst(code) {
-  return parse(code, {
+  return acorn.Parser.extend(jsx()).parse(code, {
     ecmaVersion: 2019,
     sourceType: "module"
   });
