@@ -1,7 +1,7 @@
 <template>
   <component :is="this.layout ? this.layout : VueLiveDefaultLayout">
     <template v-slot:editor>
-      <PrismEditor :code="model" @change="updatePreview" :language="prismLang"/>
+      <PrismEditor :code="code" @change="updatePreview" :language="prismLang"/>
     </template>
     <template v-slot:preview>
       <Preview
