@@ -1,6 +1,6 @@
 {
   "name": "vue-live",
-  "version": "0.0.0-dev",
+  "version": "1.0.0",
   "author": "Bart Ledoux <ledouxb@me.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
