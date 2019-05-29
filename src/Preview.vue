@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import compileCode, { isCodeVueSfc } from "./utils/compileCode";
-import getVars from "./utils/getVars";
-import getVueConfigObject from "./utils/getVueConfigObject";
+import { compile, isCodeVueSfc } from "vue-inbrowser-compiler";
 import addScopedStyle from "./utils/addScopedStyle";
+import evalInContext from "./utils/evalInContext";
+import requireAtRuntime from "./utils/requireAtRuntime";
 
 export default {
   name: "VueLivePreviewComponent",
@@ -69,21 +69,10 @@ export default {
     },
     renderComponent(code) {
       let data = {};
-      let listVars = [];
-      let script;
       let style;
-      let template;
       try {
-        const renderedComponent = compileCode(code);
+        const renderedComponent = compile(code);
         style = renderedComponent.style;
-        if (renderedComponent.html && renderedComponent.script.length) {
-          // When it's a template preceeded by a script (vsg format)
-          // NOTA: if it is an SFC, the html template will be added in the script
-
-          // extract all variable to set them up as data in the component
-          // this way we can use in the template what is defined in the script
-          listVars = getVars(renderedComponent.script);
-        }
         if (renderedComponent.script) {
           // if the compiled code contains a script it might be "just" a script
           // if so, change scheme used by editor
@@ -93,14 +82,16 @@ export default {
           // it can be:
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
-          script = renderedComponent.script;
-          data = getVueConfigObject(script, listVars, this.requires) || {};
+          const script = renderedComponent.script;
+          data =
+            evalInContext(script, filepath =>
+              requireAtRuntime(this.requires, filepath)
+            ) || {};
         }
-        if (renderedComponent.html) {
+        if (renderedComponent.template) {
           // if this is a pure template or if we are in hybrid vsg mode,
           // we need to set the template up.
-          template = `<div>${renderedComponent.html}</div>`;
-          data.template = template;
+          data.template = `<div>${renderedComponent.template}</div>`;
         }
       } catch (e) {
         this.handleError(e);
@@ -116,6 +107,11 @@ export default {
 
       if (data.template || data.render) {
         this.previewedComponent = data;
+      } else {
+        this.handleError({
+          message:
+            "[Vue Live] no template or render function specified, you might have an issue in your example"
+        });
       }
     }
   }
