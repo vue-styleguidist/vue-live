@@ -43,7 +43,7 @@ export default {
       codeJs,
       codeChicago,
       CustomLayout,
-      chicagoRequires: { chicagoNeighbourhoods: all }
+      chicagoRequires: { "./chicagoNeighbourhoods": all }
     };
   }
 };

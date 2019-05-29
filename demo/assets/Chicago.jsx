@@ -1,4 +1,4 @@
-import all from "chicagoNeighbourhoods";
+import all from "./chicagoNeighbourhoods";
 let i = 4;
 const sel = [];
 const getIndex = () => {

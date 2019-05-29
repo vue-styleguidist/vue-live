@@ -1,7 +1,7 @@
 <template>
-  <component :is="this.layout ? this.layout : VueLiveDefaultLayout">
+  <component :is="layout ? layout : VueLiveDefaultLayout">
     <template v-slot:editor>
-      <PrismEditor :code="code" @change="updatePreview" :language="prismLang"/>
+      <PrismEditor v-model="stableCode" @change="updatePreview" :language="prismLang"/>
     </template>
     <template v-slot:preview>
       <Preview
@@ -30,6 +30,8 @@ const LANG_TO_PRISM = {
   vue: "html",
   js: "jsx"
 };
+
+const UPDATE_DELAY = 300;
 
 export default {
   name: "VueLivePreview",
@@ -73,7 +75,13 @@ export default {
     return {
       model: this.code,
       prismLang: "html",
-      VueLiveDefaultLayout
+      VueLiveDefaultLayout,
+      /**
+       * this data only gets changed when changing language.
+       * it allows for copy and pasting without having the code
+       * editor repainted every keystroke
+       */
+      stableCode: this.code
     };
   },
   computed: {
@@ -83,11 +91,15 @@ export default {
   },
   methods: {
     switchLanguage(newLang) {
-      this.prismLang = LANG_TO_PRISM[newLang];
+      const newPrismLang = LANG_TO_PRISM[newLang];
+      if (this.prismLang !== newPrismLang) {
+        this.prismLang = newPrismLang;
+        this.stableCode = this.model;
+      }
     },
     updatePreview: debounce(function(value) {
       this.model = value;
-    }, 300)
+    }, UPDATE_DELAY)
   }
 };
 </script>
