@@ -6,8 +6,7 @@
 </template>
 
 <script>
-import { compile, isCodeVueSfc } from "vue-inbrowser-compiler";
-import addScopedStyle from "./utils/addScopedStyle";
+import { compile, isCodeVueSfc, addScopedStyle } from "vue-inbrowser-compiler";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
