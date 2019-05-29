@@ -1,7 +1,7 @@
 <template>
   <component :is="this.layout ? this.layout : VueLiveDefaultLayout">
     <template v-slot:editor>
-      <PrismEditor :code="code" @change="updatePreview" :language="prismLang"/>
+      <PrismEditor :code="stableCode" @change="updatePreview" :language="prismLang"/>
     </template>
     <template v-slot:preview>
       <Preview
@@ -73,7 +73,8 @@ export default {
     return {
       model: this.code,
       prismLang: "html",
-      VueLiveDefaultLayout
+      VueLiveDefaultLayout,
+      stableCode: this.code
     };
   },
   computed: {
@@ -83,7 +84,11 @@ export default {
   },
   methods: {
     switchLanguage(newLang) {
-      this.prismLang = LANG_TO_PRISM[newLang];
+      const newPrismLang = LANG_TO_PRISM[newLang];
+      if (this.prismLang !== newPrismLang) {
+        this.prismLang = newPrismLang;
+        this.stableCode = this.model;
+      }
     },
     updatePreview: debounce(function(value) {
       this.model = value;
