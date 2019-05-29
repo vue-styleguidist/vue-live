@@ -94,6 +94,7 @@ export default {
         }
       } catch (e) {
         this.handleError(e);
+        return;
       }
 
       data.components = this.components;
