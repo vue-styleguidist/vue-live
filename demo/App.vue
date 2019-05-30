@@ -12,9 +12,15 @@
     <VueLive :code="codeJs" :layout="CustomLayout"/>
     <h2>Use the requires prop to make libraries and packages available in the browser</h2>
     <VueLive :code="codeChicago" :layout="CustomLayout" :requires="chicagoRequires"/>
+    <h2>With a custom update delay of 2 seconds</h2>
+    <VueLive
+      :code="`<input type='button' value='update me' />`"
+      :layout="CustomLayout"
+      :delay="2000"
+    />
     <h2>Default Layout</h2>
     <div style="width:950px; width:950px; max-width:95vw; margin:20px auto;">
-      <VueLive :code="`<input type='button' value='I am Groot'>`"/>
+      <VueLive :code="`<input type='button' value='I am Groot' />`"/>
     </div>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   </main>

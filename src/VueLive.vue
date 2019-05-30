@@ -69,6 +69,13 @@ export default {
     requires: {
       type: Object,
       default: () => {}
+    },
+    /**
+     * Time in ms debouncing updates to the preview
+     */
+    delay: {
+      type: Number,
+      default: UPDATE_DELAY
     }
   },
   data() {
@@ -76,6 +83,7 @@ export default {
       model: this.code,
       prismLang: "html",
       VueLiveDefaultLayout,
+      updatePreview: () => {},
       /**
        * this data only gets changed when changing language.
        * it allows for copy and pasting without having the code
@@ -83,6 +91,11 @@ export default {
        */
       stableCode: this.code
     };
+  },
+  beforeMount() {
+    this.updatePreview = debounce(value => {
+      this.model = value;
+    }, this.delay);
   },
   computed: {
     codeKey() {
@@ -96,10 +109,7 @@ export default {
         this.prismLang = newPrismLang;
         this.stableCode = this.model;
       }
-    },
-    updatePreview: debounce(function(value) {
-      this.model = value;
-    }, UPDATE_DELAY)
+    }
   }
 };
 </script>
