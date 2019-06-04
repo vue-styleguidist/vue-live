@@ -37,30 +37,31 @@ Check out the [demo](http://vue-live.surge.sh) for alernative syntaxes to write 
 
 ## How to contribute
 
-```
-yarn install
+```sh
+npm ci
 ```
 
 ### Compiles and hot-reloads for development
 
-```
-yarn serve
+```sh
+npm run start
 ```
 
 ### Compiles and minifies library for production using rollup
 
-```
-yarn build
+```sh
+npm run build
 ```
 
-### Run your tests
+### Run unit and e2e tests
 
-```
-yarn test:unit
+```sh
+npm run test:unit
+npm run test:e2e
 ```
 
 ### Lints and fixes files
 
-```
-yarn lint
+```sh
+npm run lint
 ```

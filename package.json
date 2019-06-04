@@ -12,10 +12,10 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "lodash.debounce": "^4.0.8",
+    "debounce": "^1.2.0",
     "prismjs": "^1.16.0",
     "vue": "^2.6.10",
-    "vue-inbrowser-compiler": "^3.13.8",
+    "vue-inbrowser-compiler": "^3.13.10",
     "vue-prism-editor": "^0.2.0"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.8.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",

@@ -21,7 +21,7 @@ import "prismjs/components/prism-jsx.min";
 
 import PrismEditor from "vue-prism-editor";
 import hash from "hash-sum";
-import debounce from "lodash.debounce";
+import debounce from "debounce";
 
 import Preview from "./Preview.vue";
 import VueLiveDefaultLayout from "./VueLiveDefaultLayout.vue";

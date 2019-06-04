@@ -23,19 +23,19 @@ stages:
   - name: demo
     if: type != pull_request AND branch = master
   - name: release
-    if: type != pull_request AND branch = master  
+    if: type != pull_request AND branch = master
 
 jobs:
   include:
     - stage: test
       script:
         - npx danger ci
-        - yarn lint
-        - yarn test:unit --runInBand
-        - yarn test:e2e --headless
+        - npm run lint
+        - npm run test:unit --runInBand
+        - npm run test:e2e --headless
 
     - stage: demo
-      script: yarn build:demo
+      script: npm run build:demo
       deploy:
         skip_cleanup: true
         provider: surge
@@ -44,5 +44,5 @@ jobs:
 
     - stage: release
       script:
-        - yarn build
+        - npm run build
         - npx semantic-release
