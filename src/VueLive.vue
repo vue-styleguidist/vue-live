@@ -102,6 +102,12 @@ export default {
       return hash(this.model);
     }
   },
+  watch: {
+    code(newCode) {
+      this.stableCode = newCode;
+      this.model = newCode;
+    }
+  },
   methods: {
     switchLanguage(newLang) {
       const newPrismLang = LANG_TO_PRISM[newLang];
