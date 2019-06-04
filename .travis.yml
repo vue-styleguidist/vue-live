@@ -31,8 +31,8 @@ jobs:
       script:
         - npx danger ci
         - npm run lint
-        - npm run test:unit --runInBand
-        - npm run test:e2e --headless
+        - npm run test:unit -- --runInBand
+        - npm run test:e2e -- --headless
 
     - stage: demo
       script: npm run build:demo
