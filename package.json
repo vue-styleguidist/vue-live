@@ -15,7 +15,7 @@
     "debounce": "^1.2.0",
     "prismjs": "^1.16.0",
     "vue": "^2.6.10",
-    "vue-inbrowser-compiler": "^3.13.10",
+    "vue-inbrowser-compiler": "^3.14.0",
     "vue-prism-editor": "^0.2.0"
   },
   "devDependencies": {
@@ -93,7 +93,6 @@
   ],
   "license": "MIT",
   "main": "dist/vue-live.common.js",
-  "module": "dist/vue-live.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vue-styleguidist/vue-live.git"

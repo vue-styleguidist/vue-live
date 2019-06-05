@@ -14,10 +14,6 @@ export default {
     {
       file: resolve(`./dist/vue-live.common.js`),
       format: "cjs"
-    },
-    {
-      file: resolve(`./dist/vue-live.esm.js`),
-      format: "esm"
     }
   ],
   plugins: [
