@@ -13,7 +13,12 @@ export default {
   output: [
     {
       file: resolve(`./dist/vue-live.common.js`),
-      format: "cjs"
+      format: "cjs",
+      exports: "named"
+    },
+    {
+      file: resolve(`./dist/vue-live.esm.js`),
+      format: "es"
     }
   ],
   plugins: [
@@ -30,12 +35,8 @@ export default {
     json()
   ],
   external: [
-    "acorn",
-    "buble",
-    "walkes",
-    "hash-sum",
-    "vue-template-compiler",
-    "rewrite-imports",
+    "debounce",
+    "vue-inbrowser-compiler",
     "prismjs",
     "prismjs/components/prism-jsx.min",
     "vue-prism-editor"
