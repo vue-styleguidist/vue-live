@@ -19,8 +19,13 @@
       :delay="2000"
     />
     <h2>Default Layout</h2>
-    <div style="width:950px; width:950px; max-width:95vw; margin:20px auto;">
+    <div style="width:950px; max-width:95vw; margin:20px auto;">
       <VueLive :code="`<input type='button' value='I am Groot' />`"/>
+    </div>
+    <h2>Custom Layout</h2>
+    <div>
+      <p>Attributes available for custom layout: <code>code: String</code>, <code>language: String</code></p>
+      <VueLive :code="`<input type='button' value='I am Groot' />`" :layout="CustomLayout"/>
     </div>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   </main>
