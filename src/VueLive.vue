@@ -1,7 +1,7 @@
 <template>
   <component :is="layout ? layout : VueLiveDefaultLayout" :code="stableCode" :language="prismLang">
     <template v-slot:editor>
-      <PrismEditor v-model="stableCode" @change="updatePreview" :language="prismLang"/>
+      <PrismEditor v-model="stableCode" @change="updatePreview" :language="prismLang" />
     </template>
     <template v-slot:preview>
       <Preview
@@ -10,6 +10,7 @@
         @detect-language="switchLanguage"
         :components="components"
         :requires="requires"
+        :jsx="jsx"
       />
     </template>
   </component>
@@ -76,6 +77,13 @@ export default {
     delay: {
       type: Number,
       default: UPDATE_DELAY
+    },
+    /**
+     * Do the code contain JSX rendered functions
+     */
+    jsx: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
