@@ -1,5 +1,11 @@
 <template>
-  <component :is="layout ? layout : VueLiveDefaultLayout" :code="stableCode" :language="prismLang">
+  <component
+    :is="layout ? layout : VueLiveDefaultLayout"
+    :code="stableCode"
+    :language="prismLang"
+    :requires="requires"
+    :components="components"
+  >
     <template v-slot:editor>
       <PrismEditor v-model="stableCode" @change="updatePreview" :language="prismLang"/>
     </template>

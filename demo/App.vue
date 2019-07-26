@@ -24,7 +24,11 @@
     </div>
     <h2>Custom Layout</h2>
     <div>
-      <p>Attributes available for custom layout: <code>code: String</code>, <code>language: String</code></p>
+      <p>Attributes available for custom layout: </p>
+      <p>
+        <code>code: String</code>, <code>language: String</code>,
+        <code>components: Object</code>, <code>requires: Object</code>
+      </p>
       <VueLive :code="`<input type='button' value='I am Groot' />`" :layout="CustomLayout"/>
     </div>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
