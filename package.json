@@ -14,15 +14,15 @@
   "dependencies": {
     "debounce": "^1.2.0",
     "prismjs": "^1.16.0",
-    "vue-inbrowser-compiler": "^3.14.2",
-    "vue-prism-editor": "^0.2.0"
+    "vue-inbrowser-compiler": "^3.16.3",
+    "vue-prism-editor": "^0.2.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.8.0",
-    "@vue/cli-plugin-e2e-cypress": "^3.8.0",
-    "@vue/cli-plugin-eslint": "^3.8.0",
-    "@vue/cli-plugin-unit-jest": "^3.8.0",
-    "@vue/cli-service": "^3.8.0",
+    "@vue/cli-plugin-babel": "^3.9.2",
+    "@vue/cli-plugin-e2e-cypress": "^3.9.0",
+    "@vue/cli-plugin-eslint": "^3.9.2",
+    "@vue/cli-plugin-unit-jest": "^3.9.0",
+    "@vue/cli-service": "^3.9.3",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
@@ -40,6 +40,7 @@
     "rollup-plugin-vue": "^5.0.0",
     "validate-commit-msg": "^2.14.0",
     "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10",
     "vuejs-datepicker": "^1.5.4"
   },
   "peerDependencies": {

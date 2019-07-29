@@ -5,13 +5,13 @@
       href="https://github.com/vue-styleguidist/vue-live/tree/master/demo"
     >Check out the source for this demo</a>
     <h2>With imported components</h2>
-    <VueLive :code="codeTemplate" :layout="CustomLayout" :components="registeredComponents"/>
+    <VueLive :code="codeTemplate" :layout="CustomLayout" :components="registeredComponents" />
     <h2>Display Single File Components</h2>
-    <VueLive :code="codeSfc" :layout="CustomLayout"/>
+    <VueLive :code="codeSfc" :layout="CustomLayout" />
     <h2>Pure JavaScript code</h2>
-    <VueLive :code="codeJs" :layout="CustomLayout"/>
+    <VueLive :code="codeJs" :layout="CustomLayout" />
     <h2>Use the requires prop to make libraries and packages available in the browser</h2>
-    <VueLive :code="codeChicago" :layout="CustomLayout" :requires="chicagoRequires"/>
+    <VueLive :code="codeChicago" :layout="CustomLayout" :requires="chicagoRequires" />
     <h2>With a custom update delay of 2 seconds</h2>
     <VueLive
       :code="`<input type='button' value='update me' />`"
@@ -20,7 +20,7 @@
     />
     <h2>Default Layout</h2>
     <div style="width:950px; max-width:95vw; margin:20px auto;">
-      <VueLive :code="`<input type='button' value='I am Groot' />`"/>
+      <VueLive :code="`<input type='button' value='I am Groot' />`" />
     </div>
     <h2>Custom Layout</h2>
     <div>
@@ -31,7 +31,9 @@
       </p>
       <VueLive :code="`<input type='button' value='I am Groot' />`" :layout="CustomLayout"/>
     </div>
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <h2>It even supports jsx</h2>
+    <VueLive :code="realjsx" :layout="CustomLayout" :jsx="true" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet" />
   </main>
 </template>
 <script>
@@ -40,6 +42,7 @@ import CustomLayout from "./CustomLayout";
 import DatePicker from "vuejs-datepicker";
 import codeSfc from "!!raw-loader!./assets/Button.vue";
 import codeJs from "!!raw-loader!./assets/input.js";
+import realjsx from "!!raw-loader!./assets/real.jsx";
 import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
 import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
 import all from "./assets/chicagoNeighbourhoods";
@@ -58,7 +61,8 @@ export default {
       codeJs,
       codeChicago,
       CustomLayout,
-      chicagoRequires: { "./chicagoNeighbourhoods": all }
+      chicagoRequires: { "./chicagoNeighbourhoods": all },
+      realjsx
     };
   }
 };
