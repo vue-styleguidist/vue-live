@@ -2,7 +2,8 @@
   <component
     :is="layout ? layout : VueLiveDefaultLayout"
     :code="stableCode"
-    :language="prismLang"
+    :languages="lang"
+    :prismLang="prismLang"
     :requires="requires"
     :components="components"
   >
@@ -95,6 +96,7 @@ export default {
   data() {
     return {
       model: this.code,
+      lang: "vue",
       prismLang: "html",
       VueLiveDefaultLayout,
       updatePreview: () => {},
@@ -124,6 +126,7 @@ export default {
   },
   methods: {
     switchLanguage(newLang) {
+      this.lang = newLang;
       const newPrismLang = LANG_TO_PRISM[newLang];
       if (this.prismLang !== newPrismLang) {
         this.prismLang = newPrismLang;
