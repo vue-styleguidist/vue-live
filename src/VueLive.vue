@@ -2,7 +2,7 @@
   <component
     :is="layout ? layout : VueLiveDefaultLayout"
     :code="stableCode"
-    :languages="lang"
+    :language="lang"
     :prismLang="prismLang"
     :requires="requires"
     :components="components"
