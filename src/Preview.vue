@@ -1,12 +1,18 @@
 <template>
   <div>
     <div style="color:red" v-if="error">{{this.error}}</div>
-    <component v-if="!error && previewedComponent" :id="scope" :is="previewedComponent"/>
+    <component v-if="!error && previewedComponent" :id="scope" :is="previewedComponent" />
   </div>
 </template>
 
 <script>
-import { compile, isCodeVueSfc, addScopedStyle } from "vue-inbrowser-compiler";
+import {
+  compile,
+  isCodeVueSfc,
+  addScopedStyle,
+  adaptCreateElement,
+  concatenate
+} from "vue-inbrowser-compiler";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
@@ -39,6 +45,10 @@ export default {
     requires: {
       type: Object,
       default: () => {}
+    },
+    jsx: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -70,7 +80,12 @@ export default {
       let data = {};
       let style;
       try {
-        const renderedComponent = compile(code);
+        const renderedComponent = compile(
+          code,
+          this.jsx
+            ? { jsx: "__pragma__(h)", objectAssign: "__concatenate__" }
+            : {}
+        );
         style = renderedComponent.style;
         if (renderedComponent.script) {
           // if the compiled code contains a script it might be "just" a script
@@ -83,8 +98,11 @@ export default {
           // - a `new Vue()` script that will return a full config object
           const script = renderedComponent.script;
           data =
-            evalInContext(script, filepath =>
-              requireAtRuntime(this.requires, filepath)
+            evalInContext(
+              script,
+              filepath => requireAtRuntime(this.requires, filepath),
+              adaptCreateElement,
+              concatenate
             ) || {};
         }
         if (renderedComponent.template) {

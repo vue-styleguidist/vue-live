@@ -4,16 +4,16 @@ const path = require("path");
 const validateMessage = require("validate-commit-msg");
 
 const packageChanged = danger.git.modified_files.includes("package.json");
-const lockfileChanged = danger.git.modified_files.includes("yarn.lock");
+const lockfileChanged = danger.git.modified_files.includes("package-lock.json");
 
 if (packageChanged && !lockfileChanged) {
-  warn(`Changes were made to \`package.json\`, but not to \`yarn.lock\`.
-If you’ve changed any dependencies (added, removed or updated any packages), please run \`yarn install\` and commit changes in yarn.lock file.`);
+  warn(`Changes were made to \`package.json\`, but not to \`package-lock.json\`.
+If you’ve changed any dependencies (added, removed or updated any packages), please run \`npm install\` and commit changes in package-lock.json file.`);
 }
 
 if (!packageChanged && lockfileChanged) {
-  warn(`Changes were made to \`yarn.lock\`, but not to \`package.json\`.
-Please remove \`yarn.lock\` changes from your pull request. Try to run \`git checkout master -- yarn.lock\` and commit changes.`);
+  warn(`Changes were made to \`package-lock.json\`, but not to \`package.json\`.
+Please remove \`package-lock.json\` changes from your pull request. Try to run \`git checkout master -- package-lock.json\` and commit changes.`);
 }
 
 // Check test exclusion (.only) is included
