@@ -1,6 +1,7 @@
 <template>
   <component
     :is="layout ? layout : VueLiveDefaultLayout"
+    ...layoutProps
     :code="stableCode"
     :language="lang"
     :prismLang="prismLang"
@@ -91,6 +92,14 @@ export default {
     jsx: {
       type: Boolean,
       default: false
+    },
+    /**
+     * These props will be passed as a spreat to your layout
+     * They can be used to change the style
+     */
+    layoutProps: {
+      type: Object,
+      default: undefined
     }
   },
   data() {
