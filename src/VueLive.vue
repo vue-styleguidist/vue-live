@@ -1,7 +1,7 @@
 <template>
   <component
     :is="layout ? layout : VueLiveDefaultLayout"
-    ...layoutProps
+    v-bind="layoutProps"
     :code="stableCode"
     :language="lang"
     :prismLang="prismLang"
