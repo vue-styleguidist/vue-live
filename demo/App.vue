@@ -24,12 +24,12 @@
     </div>
     <h2>Custom Layout</h2>
     <div>
+      <p>Attributes available for custom layout: </p>
       <p>
-        Attributes available for custom layout:
-        <code>code: String</code>,
-        <code>language: String</code>
+        <code>code: String</code>, <code>language: String</code>,
+        <code>components: Object</code>, <code>requires: Object</code>
       </p>
-      <VueLive :code="`<input type='button' value='I am Groot' />`" :layout="CustomLayout" />
+      <VueLive :code="`<input type='button' value='I am Groot' />`" :layout="CustomLayout"/>
     </div>
     <h2>It even supports jsx</h2>
     <VueLive :code="realjsx" :layout="CustomLayout" :jsx="true" />
