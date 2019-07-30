@@ -35,6 +35,34 @@ export default {
 
 Check out the [demo](http://vue-live.surge.sh) for alernative syntaxes to write your showcases.
 
+## Configuration
+
+```js
+module.exports = {
+  // ...
+  plugins: [
+    [
+      'live',
+      {
+        // to use a custom layout for your vue components
+        layout: path.resolve(__dirname, "../custom-layout")
+      }
+    ],
+    [
+      "@vuepress/register-components",
+      {
+        components: [
+          {
+            name: "vue-slider",
+            path: path.resolve(__dirname, "../vue-slider")
+          }
+        ]
+      }
+    ]
+  ]
+}
+```
+
 ## How to contribute
 
 ```sh
