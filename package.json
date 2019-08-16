@@ -37,7 +37,6 @@
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-css-only": "^1.0.0",
-    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.0.0",
     "rollup-plugin-vue": "^5.0.0",
     "validate-commit-msg": "^2.14.0",

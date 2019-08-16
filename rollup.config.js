@@ -1,10 +1,8 @@
 import * as path from "path";
 import cjs from "rollup-plugin-commonjs";
-import node from "rollup-plugin-node-resolve";
 import babel from "rollup-plugin-babel";
 import vue from "rollup-plugin-vue";
 import css from "rollup-plugin-css-only";
-import json from "rollup-plugin-json";
 
 const resolve = _path => path.resolve(__dirname, _path);
 
@@ -18,12 +16,11 @@ export default {
     },
     {
       file: resolve(`./dist/vue-live.esm.js`),
-      format: "es"
+      format: "esm"
     }
   ],
   plugins: [
     cjs(),
-    node(),
     babel({
       babelrc: false,
       presets: [["@vue/babel-preset-app", { useBuiltIns: false }]],
@@ -31,14 +28,14 @@ export default {
       runtimeHelpers: true
     }),
     vue(),
-    css(),
-    json()
+    css()
   ],
   external: [
     "debounce",
     "vue-inbrowser-compiler",
     "prismjs",
     "prismjs/components/prism-jsx.min",
-    "vue-prism-editor"
+    "vue-prism-editor",
+    "hash-sum"
   ]
 };
