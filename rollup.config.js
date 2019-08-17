@@ -1,8 +1,9 @@
 import * as path from "path";
-import cjs from "rollup-plugin-commonjs";
+import commonjs from "rollup-plugin-commonjs";
 import babel from "rollup-plugin-babel";
 import vue from "rollup-plugin-vue";
 import css from "rollup-plugin-css-only";
+import pkg from "./package.json";
 
 const resolve = _path => path.resolve(__dirname, _path);
 
@@ -10,17 +11,17 @@ export default {
   input: resolve("./src/main.js"),
   output: [
     {
-      file: resolve(`./dist/vue-live.common.js`),
-      format: "cjs",
-      exports: "named"
+      file: pkg.main,
+      name: "VueLive",
+      format: "umd"
     },
     {
-      file: resolve(`./dist/vue-live.esm.js`),
-      format: "esm"
+      file: pkg.module,
+      format: "es" // the preferred format
     }
   ],
   plugins: [
-    cjs(),
+    commonjs(),
     babel({
       babelrc: false,
       presets: [["@vue/babel-preset-app", { useBuiltIns: false }]],
@@ -31,11 +32,7 @@ export default {
     css()
   ],
   external: [
-    "debounce",
-    "vue-inbrowser-compiler",
-    "prismjs",
-    "prismjs/components/prism-jsx.min",
-    "vue-prism-editor",
-    "hash-sum"
+    ...Object.keys(pkg.dependencies),
+    "prismjs/components/prism-jsx.min"
   ]
 };
