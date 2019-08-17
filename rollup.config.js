@@ -33,6 +33,7 @@ export default {
   ],
   external: [
     ...Object.keys(pkg.dependencies),
+    // make sure jsx schema is loaded from external
     "prismjs/components/prism-jsx.min"
   ]
 };
