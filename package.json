@@ -17,7 +17,7 @@
     "debounce": "^1.2.0",
     "prismjs": "^1.16.0",
     "vue-inbrowser-compiler": "^3.21.0",
-    "vue-prism-editor": "^0.2.1"
+    "vue-prism-editor": "^0.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
