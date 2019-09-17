@@ -9,14 +9,15 @@
     "build:demo": "vue-cli-service build",
     "start": "vue-cli-service serve",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "cy:verify": "cypress verify"
   },
   "dependencies": {
     "core-js": "^2.6.5",
     "debounce": "^1.2.0",
     "prismjs": "^1.16.0",
-    "vue-inbrowser-compiler": "^3.16.3",
     "vue-prism-editor": "^0.3.0"
+    "vue-inbrowser-compiler": "^3.21.0",
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
@@ -36,7 +37,6 @@
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-css-only": "^1.0.0",
-    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.0.0",
     "rollup-plugin-vue": "^5.0.0",
     "validate-commit-msg": "^2.14.0",
@@ -60,6 +60,7 @@
   ],
   "license": "MIT",
   "main": "dist/vue-live.common.js",
+  "module": "dist/vue-live.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vue-styleguidist/vue-live.git"

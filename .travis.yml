@@ -6,11 +6,17 @@ addons:
     packages:
       - libgconf-2-4
 
+cache:
+  # cache both npm modules and Cypress binary
+  directories:
+    - ~/.npm
+    - ~/.cache
+  override:
+    - npm ci
+    - npm run cy:verify
+
 node_js:
   - lts/*
-
-install:
-  - npm ci
 
 # In order to avoid double build on pull requests,
 # only build on pushes on master and on pushes on pull requests
