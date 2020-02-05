@@ -18,7 +18,7 @@ The simplest way to render components is as a VueJs template:
 </template>
 
 <script>
-import VueLive from "vue-live";
+import { VueLive } from "vue-live";
 import DatePicker from "vuejs-datepicker"
 
 export default {
