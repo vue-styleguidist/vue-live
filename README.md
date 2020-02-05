@@ -33,7 +33,7 @@ export default {
 </script>
 ```
 
-Check out the [demo](http://vue-live.surge.sh) for alernative syntaxes to write your showcases.
+Check out the [demo](http://vue-live.surge.sh) for alternative syntaxes to write your showcases.
 
 ## Configuration
 
