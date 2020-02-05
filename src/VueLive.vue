@@ -117,7 +117,7 @@ export default {
       stableCode: this.code
     };
   },
-  beforeMount() {
+  created() {
     this.updatePreview = debounce(value => {
       this.model = value;
     }, this.delay);
