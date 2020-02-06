@@ -58,7 +58,7 @@ export default {
       error: false
     };
   },
-  beforeMount() {
+  created() {
     this.renderComponent(this.code.trim());
   },
   methods: {
