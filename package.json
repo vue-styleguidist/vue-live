@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "rollup -c",
     "lint": "vue-cli-service lint",
-    "build:demo": "vue-cli-service build",
+    "build:demo": "vue-cli-service build --modern",
     "start": "vue-cli-service serve",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
