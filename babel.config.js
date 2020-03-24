@@ -1,5 +1,16 @@
 module.exports = {
-  presets: [
-    '@vue/app'
+  presets: ["@vue/app"],
+  overrides: [
+    {
+      include: ["node_modules"],
+      presets: [
+        [
+          "@babel/env",
+          {
+            modules: "cjs"
+          }
+        ]
+      ]
+    }
   ]
-}
+};
