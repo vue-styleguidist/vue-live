@@ -24,6 +24,8 @@ export default {
     commonjs(),
     babel({
       babelrc: false,
+      // avoid using babel.config.js that kills es6 modules for ie compatibility
+      configFile: "./babel.rollup.js",
       presets: [["@vue/babel-preset-app", { useBuiltIns: false }]],
       extensions: [".js"],
       runtimeHelpers: true
