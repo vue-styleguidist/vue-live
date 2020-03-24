@@ -71,6 +71,7 @@ export default {
   }
 };
 </script>
+
 <style>
 body {
   font-family: "Roboto Mono", monospace;
