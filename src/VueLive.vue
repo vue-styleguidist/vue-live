@@ -9,7 +9,12 @@
     :components="components"
   >
     <template v-slot:editor>
-      <PrismEditor v-model="stableCode"  @change="updatePreview" :language="prismLang" v-bind="editorProps" />
+      <PrismEditor
+        v-model="stableCode"
+        @change="updatePreview"
+        :language="prismLang"
+        v-bind="editorProps"
+      />
     </template>
     <template v-slot:preview>
       <Preview
@@ -102,9 +107,9 @@ export default {
       default: undefined
     },
     /**
-     * they can change the vue-prism-editor props
-     * there props will use to the vue-prism-editor example { lineNumbers }
-     * more https://github.com/koca/vue-prism-editor
+     * Props of vue-prism-editor
+     * @example { lineNumbers: true }
+     * @see https://github.com/koca/vue-prism-editor
      */
     editorProps: {
       type: Object,
