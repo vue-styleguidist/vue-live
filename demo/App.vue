@@ -4,8 +4,8 @@
     <a
       href="https://github.com/vue-styleguidist/vue-live/tree/master/demo"
     >Check out the source for this demo</a>
-    <h2>With imported components</h2>
-    <VueLive :code="codeTemplate" :layout="CustomLayout" :components="registeredComponents" />
+    <h2>With imported components and the code-editor lineNumers</h2>
+    <VueLive :editorProps="{lineNumbers: true}" :code="codeTemplate" :layout="CustomLayout" :components="registeredComponents" />
     <h2>Display Single File Components</h2>
     <VueLive :code="codeSfc" :layout="CustomLayout" />
     <h2>Pure JavaScript code</h2>
