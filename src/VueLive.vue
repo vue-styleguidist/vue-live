@@ -9,11 +9,12 @@
     :components="components"
   >
     <template v-slot:editor>
-      <PrismEditor
-        v-model="stableCode"
+      <Editor
+        :code="stableCode"
+        :delay="delay"
+        :prism-lang="prismLang"
+        :editor-props="editorProps"
         @change="updatePreview"
-        :language="prismLang"
-        v-bind="editorProps"
       />
     </template>
     <template v-slot:preview>
@@ -29,15 +30,10 @@
   </component>
 </template>
 <script>
-//load prism somewhere
-import "prismjs";
-import "prismjs/components/prism-jsx.min";
-
-import PrismEditor from "vue-prism-editor";
 import hash from "hash-sum";
-import debounce from "debounce";
 
 import Preview from "./Preview.vue";
+import Editor from './Editor.vue';
 import VueLiveDefaultLayout from "./VueLiveDefaultLayout.vue";
 
 const LANG_TO_PRISM = {
@@ -49,7 +45,7 @@ const UPDATE_DELAY = 300;
 
 export default {
   name: "VueLivePreview",
-  components: { PrismEditor, Preview },
+  components: { Preview, Editor },
   props: {
     /**
      * code rendered in the preview and the editor
@@ -122,7 +118,6 @@ export default {
       lang: "vue",
       prismLang: "html",
       VueLiveDefaultLayout,
-      updatePreview: () => {},
       /**
        * this data only gets changed when changing language.
        * it allows for copy and pasting without having the code
@@ -130,11 +125,6 @@ export default {
        */
       stableCode: this.code
     };
-  },
-  created() {
-    this.updatePreview = debounce(value => {
-      this.model = value;
-    }, this.delay);
   },
   computed: {
     codeKey() {
@@ -148,6 +138,12 @@ export default {
     }
   },
   methods: {
+    updatePreview(code) {
+      this.stableCode = code;
+      this.model = code;
+
+      this.$emit('change', code);
+    },
     switchLanguage(newLang) {
       this.lang = newLang;
       const newPrismLang = LANG_TO_PRISM[newLang];
