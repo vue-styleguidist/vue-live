@@ -1,8 +1,9 @@
 <template>
   <div>
+    <slot name="before-preview"></slot>
     <div style="color:red" v-if="error">{{this.error}}</div>
     <component v-if="!error && previewedComponent" :id="scope" :is="previewedComponent" />
-    <slot></slot>
+    <slot name="after-preview"></slot>
   </div>
 </template>
 

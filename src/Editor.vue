@@ -1,12 +1,13 @@
 <template>
   <div>
+    <slot name="before-editor"></slot>
     <PrismEditor
       v-model="stableCode"
       :language="prismLang"
       @change="updatePreview"
       v-bind="editorProps"
     />
-    <slot></slot>
+    <slot name="after-editor"></slot>
   </div>
 </template>
 
