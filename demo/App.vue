@@ -54,10 +54,17 @@
       href="https://fonts.googleapis.com/css?family=Roboto+Mono"
       rel="stylesheet"
     />
+    <h2>Separate use Editor and Preview with change event</h2>
+    <div class="separate">
+      <div class="preview-separate">
+        <VueLivePreview :code="separateCode" />
+      </div>
+      <VueLiveEditor :code="separateCode" @change="updateCode" />
+    </div>
   </main>
 </template>
 <script>
-import VueLive from "../src/VueLive";
+import { VueLive, VueLiveEditor, VueLivePreview } from '../src';
 import CustomLayout from "./CustomLayout";
 import DatePicker from "vuejs-datepicker";
 import codeSfc from "!!raw-loader!./assets/Button.vue";
@@ -72,7 +79,7 @@ import "vue-prism-editor/dist/VuePrismEditor.css";
 
 export default {
   name: "VueLiveDemo",
-  components: { VueLive },
+  components: { VueLive, VueLiveEditor, VueLivePreview },
   data() {
     return {
       registeredComponents: { DatePicker },
@@ -82,8 +89,14 @@ export default {
       codeChicago,
       CustomLayout,
       chicagoRequires: { "./chicagoNeighbourhoods": all },
-      realjsx
+      realjsx,
+      separateCode: codeSfc
     };
+  },
+  methods: {
+    updateCode(code) {
+      this.separateCode = code;
+    }
   }
 };
 </script>
@@ -96,5 +109,19 @@ body {
 
 body .prism-editor__line-numbers {
   box-sizing: border-box;
+}
+
+.separate {
+  display: flex;
+  flex-direction: column;
+  width: 950px;
+  margin: 30px auto;
+}
+
+.preview-separate {
+  padding: 30px;
+  background-color: #fff;
+  text-align: center;
+  border-radius: 0 10px 10px 0;
 }
 </style>

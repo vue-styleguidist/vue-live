@@ -61,6 +61,11 @@ export default {
   created() {
     this.renderComponent(this.code.trim());
   },
+  watch: {
+    code(value) {
+      this.renderComponent(value.trim());
+    }
+  },
   methods: {
     /**
      * Generates the Scope Id attribute value. It will be added to each
