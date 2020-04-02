@@ -2,6 +2,7 @@
   <div>
     <div style="color:red" v-if="error">{{this.error}}</div>
     <component v-if="!error && previewedComponent" :id="scope" :is="previewedComponent" />
+    <slot></slot>
   </div>
 </template>
 

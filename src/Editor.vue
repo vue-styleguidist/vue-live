@@ -1,10 +1,13 @@
 <template>
-  <PrismEditor
-    v-model="stableCode"
-    :language="prismLang"
-    @change="updatePreview"
-    v-bind="editorProps"
-  />
+  <div>
+    <PrismEditor
+      v-model="stableCode"
+      :language="prismLang"
+      @change="updatePreview"
+      v-bind="editorProps"
+    />
+    <slot></slot>
+  </div>
 </template>
 
 <script>
