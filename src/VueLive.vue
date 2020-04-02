@@ -6,6 +6,7 @@
     :language="lang"
     :prismLang="prismLang"
     :requires="requires"
+    :data-scope="dataScope"
     :components="components"
   >
     <template v-slot:editor>
@@ -25,6 +26,7 @@
         :components="components"
         :requires="requires"
         :jsx="jsx"
+        :data-scope="dataScope"
       />
     </template>
   </component>
@@ -110,6 +112,14 @@ export default {
     editorProps: {
       type: Object,
       default: () => ({})
+    },
+    /**
+     * Outside data to the preview
+     * @example { count: 1 }
+     */
+    dataScope: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {

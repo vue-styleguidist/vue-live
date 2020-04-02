@@ -49,6 +49,14 @@ export default {
     jsx: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Outside data to the preview
+     * @example { count: 1 }
+     */
+    dataScope: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -109,6 +117,11 @@ export default {
               adaptCreateElement,
               concatenate
             ) || {};
+
+          if (this.dataScope) {
+            const mergeData = { ...data.data(), ...this.dataScope  };
+            data.data = () => mergeData;
+          }
         }
         if (renderedComponent.template) {
           // if this is a pure template or if we are in hybrid vsg mode,
