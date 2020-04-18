@@ -22,60 +22,74 @@
       />
     </div>
 
-    <p>Here are a few examples of use</p>
-
-    <h2>Display Single File Components</h2>
-    <VueLive :code="codeSfc" :layout="CustomLayout" />
-    <h2>Pure JavaScript code</h2>
-    <VueLive :code="codeJs" :layout="CustomLayout" />
-    <h2>
-      Use the requires prop to make libraries and packages available in the
-      browser
-    </h2>
-    <VueLive
-      :code="codeChicago"
-      :layout="CustomLayout"
-      :requires="chicagoRequires"
-    />
-    <h2>With a custom update delay of 2 seconds</h2>
-    <VueLive
-      :code="`<input type='button' value='update me' />`"
-      :layout="CustomLayout"
-      :delay="2000"
-    />
-    <h2>Default Layout</h2>
-    <div style="width: 950px; max-width: 95vw; margin: 20px auto;">
-      <VueLive :code="`<input type='button' value='I am Groot' />`" />
-    </div>
-    <h2>Custom Layout</h2>
-    <div>
-      <p>Attributes available for custom layout:</p>
+    <span v-if="!openExamples">+</span><span v-else>-</span>&nbsp;
+    <a href="#" @click="openExamples = !openExamples">More examples</a>
+    <div v-if="openExamples">
+      <h2>Vue SFC</h2>
       <p>
-        <code>code: String</code>, <code>language: String</code>,
-        <code>components: Object</code>, <code>requires: Object</code>, ... all
-        props passed in the
-        <code>layoutProps</code>
+        If this format is not fitting for you, vue-live renders VueJs single
+        file components as well
+      </p>
+      <VueLive :code="codeSfc" :layout="CustomLayout" />
+      <h2>Pure JavaScript code</h2>
+      <p>Or if you prefer to, use the <b>new Vue()</b> format</p>
+      <VueLive :code="codeJs" :layout="CustomLayout" />
+      <h2>
+        Extra dependencies
+      </h2>
+      <p>
+        Use the <b>requires</b> prop to make libraries and packages available in
+        the browser
       </p>
       <VueLive
-        :code="`<input type='button' value='I am Groot' />`"
+        :code="codeChicago"
         :layout="CustomLayout"
+        :requires="chicagoRequires"
       />
-    </div>
-    <h2>It even supports jsx</h2>
-    <VueLive :code="realjsx" :layout="CustomLayout" :jsx="true" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto+Mono"
-      rel="stylesheet"
-    />
-    <h2>Separate use Editor and Preview with change event</h2>
-    <div class="separate">
-      <div class="preview-separate">
-        <VueLivePreview :code="separateCode" />
+      <h2>Custom delay</h2>
+      <p>
+        when updates should not hapen too often, for instance when a component
+        need a lot of computing power to render, One can change the standard
+        throttle timing.
+      </p>
+      <VueLive
+        :code="`<input type='button' value='update me' />`"
+        :layout="CustomLayout"
+        :delay="2000"
+      />
+
+      <h2>Default Layout</h2>
+      <div style="width: 950px; max-width: 95vw; margin: 20px auto;">
+        <VueLive :code="`<input type='button' value='I am Groot' />`" />
       </div>
-      <hr style="width: 950px;" />
-      <p>Edit the code here</p>
-      <VueLiveEditor :code="separateCode" @change="updateCode" />
-      <div class="button-bar"><button>Save</button></div>
+      <h2>Custom Layout</h2>
+      <div>
+        <p>Attributes available for custom layout:</p>
+        <p>
+          <code>code: String</code>, <code>language: String</code>,
+          <code>components: Object</code>, <code>requires: Object</code>, ...
+          all props passed in the
+          <code>layoutProps</code>
+        </p>
+        <VueLive
+          :code="`<input type='button' value='I am Groot' />`"
+          :layout="CustomLayout"
+        />
+      </div>
+
+      <h2>JSX</h2>
+      <VueLive :code="realjsx" :layout="CustomLayout" :jsx="true" />
+
+      <h2>Separate components for Editor and Preview</h2>
+      <div class="separate">
+        <div class="preview-separate">
+          <VueLivePreview :code="separateCode" />
+        </div>
+        <hr style="width: 950px;" />
+        <p>Edit the code here</p>
+        <VueLiveEditor :code="separateCode" @change="updateCode" />
+        <div class="button-bar"><button>Save</button></div>
+      </div>
     </div>
 
     <github-corners
@@ -114,6 +128,7 @@ export default {
       chicagoRequires: { "./chicagoNeighbourhoods": all },
       realjsx,
       separateCode: codeSfc,
+      openExamples: false,
     };
   },
   methods: {
@@ -126,6 +141,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
 body {
   font-family: "Roboto Mono", monospace;
