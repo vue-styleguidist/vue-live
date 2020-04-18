@@ -1,16 +1,29 @@
 <template>
-  <main style="text-align:center;">
-    <h1>Vue Live renders vue code directly in the browser</h1>
-    <a href="https://github.com/vue-styleguidist/vue-live/tree/master/demo"
-      >Check out the source for this demo</a
-    >
-    <h2>With imported components and the code-editor lineNumers</h2>
-    <VueLive
-      :editorProps="{ lineNumbers: true }"
-      :code="codeTemplate"
-      :layout="CustomLayout"
-      :components="registeredComponents"
-    />
+  <main style="text-align: center;">
+    <h1>Vue Live renders vue code in the browser</h1>
+    <p class="description">
+      <em>vue-live</em> is a VueJs component. It renders the code passed in prop
+      using the VueJs compiler - yes exactly like the vuejs compiler. But wait!
+      it has a <b>super-power</b>! It keeps the rendered code reactive in the
+      browser.
+    </p>
+    <p class="description">
+      If you edit the code in the editor on the left, the preview on the right
+      will update automatically.
+    </p>
+
+    <div class="livebox">
+      <div class="hint">You can edit this <span>-></span></div>
+      <VueLive
+        :editorProps="{ lineNumbers: true }"
+        :code="codeTemplate"
+        :layout="CustomLayout"
+        :components="registeredComponents"
+      />
+    </div>
+
+    <p>Here are a few examples of use</p>
+
     <h2>Display Single File Components</h2>
     <VueLive :code="codeSfc" :layout="CustomLayout" />
     <h2>Pure JavaScript code</h2>
@@ -31,7 +44,7 @@
       :delay="2000"
     />
     <h2>Default Layout</h2>
-    <div style="width:950px; max-width:95vw; margin:20px auto;">
+    <div style="width: 950px; max-width: 95vw; margin: 20px auto;">
       <VueLive :code="`<input type='button' value='I am Groot' />`" />
     </div>
     <h2>Custom Layout</h2>
@@ -59,12 +72,20 @@
       <div class="preview-separate">
         <VueLivePreview :code="separateCode" />
       </div>
+      <hr style="width: 950px;" />
+      <p>Edit the code here</p>
       <VueLiveEditor :code="separateCode" @change="updateCode" />
+      <div class="button-bar"><button>Save</button></div>
     </div>
+
+    <github-corners
+      url="https://github.com/vue-styleguidist/vue-live"
+      gitColor="#FFFFFF"
+    />
   </main>
 </template>
 <script>
-import { VueLive, VueLiveEditor, VueLivePreview } from '../src';
+import { VueLive, VueLiveEditor, VueLivePreview } from "../src";
 import CustomLayout from "./CustomLayout";
 import DatePicker from "vuejs-datepicker";
 import codeSfc from "!!raw-loader!./assets/Button.vue";
@@ -77,9 +98,11 @@ import "prismjs/themes/prism-tomorrow.css";
 //vue-prism-editor dependency
 import "vue-prism-editor/dist/VuePrismEditor.css";
 
+import GithubCorners from "vue-github-corners";
+
 export default {
   name: "VueLiveDemo",
-  components: { VueLive, VueLiveEditor, VueLivePreview },
+  components: { VueLive, VueLiveEditor, VueLivePreview, GithubCorners },
   data() {
     return {
       registeredComponents: { DatePicker },
@@ -90,18 +113,20 @@ export default {
       CustomLayout,
       chicagoRequires: { "./chicagoNeighbourhoods": all },
       realjsx,
-      separateCode: codeSfc
+      separateCode: codeSfc,
     };
   },
   methods: {
     updateCode(code) {
       this.separateCode = code;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
+
 body {
   font-family: "Roboto Mono", monospace;
   background-color: #ded;
@@ -123,5 +148,52 @@ body .prism-editor__line-numbers {
   background-color: #fff;
   text-align: center;
   border-radius: 0 10px 10px 0;
+}
+
+.description {
+  max-width: 600px;
+  margin: 30px auto;
+  text-align: left;
+}
+
+.livebox {
+  position: relative;
+  max-width: 950px;
+  margin: auto;
+}
+
+.hint {
+  position: absolute;
+  top: 100px;
+  left: -200px;
+  font-family: "Nanum Pen Script";
+  font-size: 2em;
+  color: red;
+  transform: rotate(-30deg);
+}
+
+@media (max-width: 1400px) {
+  .hint {
+    transform: none;
+    top: -35px;
+    left: 0;
+  }
+  .hint span {
+    transform: rotate(80deg) translate(10px, 10px);
+    display: inline-block;
+  }
+}
+
+.button-bar {
+  height: 70px;
+  padding: 5px 0;
+  text-align: left;
+}
+
+.button-bar button {
+  font-size: 1.5em;
+  padding: 6px;
+  border-radius: 8px;
+  width: 200px;
 }
 </style>
