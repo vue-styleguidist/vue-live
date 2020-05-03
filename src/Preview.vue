@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div style="color:red" v-if="error">{{this.error}}</div>
-    <component v-if="!error && previewedComponent" :id="scope" :is="previewedComponent" />
+    <div style="color:red" v-if="error">{{ this.error }}</div>
+    <component
+      v-if="!error && previewedComponent"
+      :id="scope"
+      :is="previewedComponent"
+    />
   </div>
 </template>
 
@@ -11,7 +15,7 @@ import {
   isCodeVueSfc,
   addScopedStyle,
   adaptCreateElement,
-  concatenate
+  concatenate,
 } from "vue-inbrowser-compiler";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
@@ -25,7 +29,7 @@ export default {
      */
     code: {
       type: String,
-      required: true
+      required: true,
     },
     /**
      * Hashtable of auto-registered components
@@ -34,7 +38,7 @@ export default {
      */
     components: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -44,11 +48,11 @@ export default {
      */
     requires: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     jsx: {
       type: Boolean,
-      default: false
+      default: false,
     },
     /**
      * Outside data to the preview
@@ -56,14 +60,14 @@ export default {
      */
     dataScope: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
       scope: this.generateScope(),
       previewedComponent: undefined,
-      error: false
+      error: false,
     };
   },
   created() {
@@ -72,7 +76,7 @@ export default {
   watch: {
     code(value) {
       this.renderComponent(value.trim());
-    }
+    },
   },
   methods: {
     /**
@@ -80,13 +84,14 @@ export default {
      * tag if a style is applied to scope the style only to this example
      */
     generateScope() {
-      return "v-xxxxxxxx".replace(/[xy]/g, c => {
+      return "v-xxxxxxxx".replace(/[xy]/g, (c) => {
         const r = (Math.random() * 16) | 0;
         const v = c === "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
       });
     },
     handleError(e) {
+      this.$emit("error", e);
       this.error = e.message;
     },
     renderComponent(code) {
@@ -113,13 +118,13 @@ export default {
           data =
             evalInContext(
               script,
-              filepath => requireAtRuntime(this.requires, filepath),
+              (filepath) => requireAtRuntime(this.requires, filepath),
               adaptCreateElement,
               concatenate
             ) || {};
 
           if (this.dataScope) {
-            const mergeData = { ...data.data(), ...this.dataScope  };
+            const mergeData = { ...data.data(), ...this.dataScope };
             data.data = () => mergeData;
           }
         }
@@ -146,10 +151,10 @@ export default {
       } else {
         this.handleError({
           message:
-            "[Vue Live] no template or render function specified, you might have an issue in your example"
+            "[Vue Live] no template or render function specified, you might have an issue in your example",
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
