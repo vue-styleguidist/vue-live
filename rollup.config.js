@@ -5,7 +5,7 @@ import vue from "rollup-plugin-vue";
 import css from "rollup-plugin-css-only";
 import pkg from "./package.json";
 
-const resolve = _path => path.resolve(__dirname, _path);
+const resolve = (_path) => path.resolve(__dirname, _path);
 
 export default {
   input: resolve("./src/main.js"),
@@ -13,12 +13,19 @@ export default {
     {
       file: pkg.main,
       name: "VueLive",
-      format: "umd"
+      format: "umd",
+      exports: "named", // remove warning about mixed exports
+      globals: {
+        "hash-sum": "vueLiveHashSum",
+        "vue-inbrowser-compiler": "vueInbrowserCompiler",
+        "vue-prism-editor": "VuePrismEditor",
+        debounce: "debounce",
+      },
     },
     {
       file: pkg.module,
-      format: "es" // the preferred format
-    }
+      format: "es", // the preferred format
+    },
   ],
   plugins: [
     commonjs(),
@@ -27,14 +34,14 @@ export default {
       // avoid using babel.config.js. It kills es6 modules for ie compatibility
       configFile: "./babel.rollup.js",
       extensions: [".js"],
-      runtimeHelpers: true
+      runtimeHelpers: true,
     }),
     vue(),
-    css()
+    css(),
   ],
   external: [
     ...Object.keys(pkg.dependencies),
     // make sure jsx schema is loaded from external
-    "prismjs/components/prism-jsx.min"
-  ]
+    "prismjs/components/prism-jsx.min",
+  ],
 };
