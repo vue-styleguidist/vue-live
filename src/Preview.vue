@@ -1,15 +1,17 @@
 <template>
   <div>
-    <div style="color:red" v-if="error">{{ this.error }}</div>
+    <pre :class="$style.error" v-if="error">{{ this.error }}</pre>
     <component
       v-if="!error && previewedComponent"
       :id="scope"
       :is="previewedComponent"
+      :key="iteration"
     />
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import {
   compile,
   isCodeVueSfc,
@@ -20,9 +22,39 @@ import {
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
+const errorDelimiter = "VueLivePreview";
+
+let globalIterator = 0;
+
+const existingWarnHandler =
+  Vue.config.warnHandler ||
+  ((msg, vm, trace) => {
+    if (console) {
+      console.error("[Vue warn]: " + msg + trace);
+    }
+  });
+
+function captureTemplateWarning(msg, vm) {
+  if (vm.$parent && vm.$parent.$options.errorDelimiter === errorDelimiter) {
+    vm.$parent._data.error = `Warning in template: ${msg}`;
+  }
+  existingWarnHandler(...arguments);
+}
+
+function setupWarningHandler() {
+  if (Vue.config.warnHandler !== captureTemplateWarning) {
+    Vue.config.warnHandler = captureTemplateWarning;
+  }
+}
+
 export default {
   name: "VueLivePreviewComponent",
+  errorDelimiter,
   components: {},
+  errorCaptured(err) {
+    err.message = `Error in template: ${err.message}`;
+    this.handleError(err);
+  },
   props: {
     /**
      * code rendered
@@ -67,11 +99,13 @@ export default {
     return {
       scope: this.generateScope(),
       previewedComponent: undefined,
+      iteration: 0,
       error: false,
     };
   },
   created() {
     this.renderComponent(this.code.trim());
+    setupWarningHandler();
   },
   watch: {
     code(value) {
@@ -131,7 +165,9 @@ export default {
         if (renderedComponent.template) {
           // if this is a pure template or if we are in hybrid vsg mode,
           // we need to set the template up.
-          data.template = `<div>${renderedComponent.template}</div>`;
+          data.template = `<div key="${globalIterator++}">${
+            renderedComponent.template
+          }</div>`;
         }
       } catch (e) {
         this.handleError(e);
@@ -148,6 +184,7 @@ export default {
 
       if (data.template || data.render) {
         this.previewedComponent = data;
+        this.iteration = this.iteration + 1;
       } else {
         this.handleError({
           message:
@@ -158,3 +195,12 @@ export default {
   },
 };
 </script>
+
+<style module>
+.error {
+  color: red;
+  text-align: left;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+</style>
