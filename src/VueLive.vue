@@ -23,6 +23,7 @@
         :key="codeKey"
         :code="model"
         @detect-language="switchLanguage"
+        @error="(e) => $emit('error', e)"
         :components="components"
         :requires="requires"
         :jsx="jsx"
@@ -35,12 +36,12 @@
 import hash from "hash-sum";
 
 import Preview from "./Preview.vue";
-import Editor from './Editor.vue';
+import Editor from "./Editor.vue";
 import VueLiveDefaultLayout from "./VueLiveDefaultLayout.vue";
 
 const LANG_TO_PRISM = {
   vue: "html",
-  js: "jsx"
+  js: "jsx",
 };
 
 const UPDATE_DELAY = 300;
@@ -54,14 +55,14 @@ export default {
      */
     code: {
       type: String,
-      required: true
+      required: true,
     },
     /**
      * Layout vue component with 2 slots named `editor` & `preview`
      */
     layout: {
       type: Object,
-      default: undefined
+      default: undefined,
     },
     /**
      * Hashtable of auto-registered components
@@ -70,7 +71,7 @@ export default {
      */
     components: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -80,21 +81,21 @@ export default {
      */
     requires: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     /**
      * Time in ms debouncing updates to the preview
      */
     delay: {
       type: Number,
-      default: UPDATE_DELAY
+      default: UPDATE_DELAY,
     },
     /**
      * Do the code contain JSX rendered functions
      */
     jsx: {
       type: Boolean,
-      default: false
+      default: false,
     },
     /**
      * These props will be passed as a spreat to your layout
@@ -102,7 +103,7 @@ export default {
      */
     layoutProps: {
       type: Object,
-      default: undefined
+      default: undefined,
     },
     /**
      * Props of vue-prism-editor
@@ -111,7 +112,7 @@ export default {
      */
     editorProps: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     /**
      * Outside data to the preview
@@ -119,8 +120,8 @@ export default {
      */
     dataScope: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -133,26 +134,26 @@ export default {
        * it allows for copy and pasting without having the code
        * editor repainted every keystroke
        */
-      stableCode: this.code
+      stableCode: this.code,
     };
   },
   computed: {
     codeKey() {
       return hash(this.model);
-    }
+    },
   },
   watch: {
     code(newCode) {
       this.stableCode = newCode;
       this.model = newCode;
-    }
+    },
   },
   methods: {
     updatePreview(code) {
       this.stableCode = code;
       this.model = code;
 
-      this.$emit('change', code);
+      this.$emit("change", code);
     },
     switchLanguage(newLang) {
       this.lang = newLang;
@@ -161,7 +162,7 @@ export default {
         this.prismLang = newPrismLang;
         this.stableCode = this.model;
       }
-    }
-  }
+    },
+  },
 };
 </script>

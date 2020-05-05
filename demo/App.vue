@@ -19,6 +19,7 @@
         :code="codeTemplate"
         :layout="CustomLayout"
         :components="registeredComponents"
+        @error="(e) => log('Error on first example', e)"
       />
     </div>
 
@@ -134,6 +135,9 @@ export default {
   methods: {
     updateCode(code) {
       this.separateCode = code;
+    },
+    log() {
+      console.log(...arguments);
     },
   },
 };

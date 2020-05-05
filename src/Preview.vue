@@ -1,31 +1,40 @@
 <template>
-  <div>
-    <div style="color:red" v-if="error">{{this.error}}</div>
-    <component v-if="!error && previewedComponent" :id="scope" :is="previewedComponent" />
-  </div>
+  <pre :class="$style.error" v-if="error">{{ this.error }}</pre>
+  <component
+    v-else-if="previewedComponent"
+    :id="scope"
+    :is="previewedComponent"
+    :key="iteration"
+  />
 </template>
 
 <script>
 import {
-  compile,
+  compile as compileScript,
   isCodeVueSfc,
   addScopedStyle,
   adaptCreateElement,
-  concatenate
+  concatenate,
 } from "vue-inbrowser-compiler";
+import checkTemplate, {
+  VueLiveUndefinedVariableError,
+} from "./utils/checkTemplate";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
 export default {
   name: "VueLivePreviewComponent",
   components: {},
+  errorCaptured(err) {
+    this.handleError(err);
+  },
   props: {
     /**
      * code rendered
      */
     code: {
       type: String,
-      required: true
+      required: true,
     },
     /**
      * Hashtable of auto-registered components
@@ -34,7 +43,7 @@ export default {
      */
     components: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -44,11 +53,11 @@ export default {
      */
     requires: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     jsx: {
       type: Boolean,
-      default: false
+      default: false,
     },
     /**
      * Outside data to the preview
@@ -56,14 +65,15 @@ export default {
      */
     dataScope: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
       scope: this.generateScope(),
       previewedComponent: undefined,
-      error: false
+      iteration: 0,
+      error: false,
     };
   },
   created() {
@@ -72,7 +82,7 @@ export default {
   watch: {
     code(value) {
       this.renderComponent(value.trim());
-    }
+    },
   },
   methods: {
     /**
@@ -80,20 +90,24 @@ export default {
      * tag if a style is applied to scope the style only to this example
      */
     generateScope() {
-      return "v-xxxxxxxx".replace(/[xy]/g, c => {
+      return "v-xxxxxxxx".replace(/[xy]/g, (c) => {
         const r = (Math.random() * 16) | 0;
         const v = c === "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
       });
     },
     handleError(e) {
+      this.$emit("error", e);
+      if (e.constructor === VueLiveUndefinedVariableError) {
+        e.message = `Cannot parse template expression: ${e.expression}\n\n${e.message}`;
+      }
       this.error = e.message;
     },
     renderComponent(code) {
-      let data = {};
+      let options = {};
       let style;
       try {
-        const renderedComponent = compile(
+        const renderedComponent = compileScript(
           code,
           this.jsx
             ? { jsx: "__pragma__(h)", objectAssign: "__concatenate__" }
@@ -110,46 +124,63 @@ export default {
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
           const script = renderedComponent.script;
-          data =
+          options =
             evalInContext(
               script,
-              filepath => requireAtRuntime(this.requires, filepath),
+              (filepath) => requireAtRuntime(this.requires, filepath),
               adaptCreateElement,
               concatenate
             ) || {};
 
           if (this.dataScope) {
-            const mergeData = { ...data.data(), ...this.dataScope  };
-            data.data = () => mergeData;
+            const mergeData = { ...options.data(), ...this.dataScope };
+            options.data = () => mergeData;
           }
         }
         if (renderedComponent.template) {
           // if this is a pure template or if we are in hybrid vsg mode,
           // we need to set the template up.
-          data.template = `<div>${renderedComponent.template}</div>`;
+          options.template = `<div>${renderedComponent.template}</div>`;
         }
       } catch (e) {
         this.handleError(e);
         return;
       }
 
-      data.components = this.components;
+      try {
+        checkTemplate(options.template, options);
+      } catch (e) {
+        this.handleError(e);
+        return;
+      }
+
+      options.components = this.components;
       if (style) {
         // To add the scope id attribute to each item in the html
         // this way when we add the scoped style sheet it will be aplied
-        data._scopeId = `data-${this.scope}`;
+        options._scopeId = `data-${this.scope}`;
         addScopedStyle(style, this.scope);
       }
 
-      if (data.template || data.render) {
-        this.previewedComponent = data;
+      if (options.template || options.render) {
+        this.previewedComponent = options;
+        this.iteration = this.iteration + 1;
       } else {
         this.handleError({
           message:
-            "[Vue Live] no template or render function specified, you might have an issue in your example"
+            "[Vue Live] no template or render function specified, you might have an issue in your example",
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
+
+<style module>
+.error {
+  color: red;
+  text-align: left;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+</style>
