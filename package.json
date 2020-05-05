@@ -13,14 +13,17 @@
     "cy:verify": "cypress verify"
   },
   "dependencies": {
+    "acorn": "^6.1.1",
     "core-js": "^3.6.5",
     "debounce": "^1.2.0",
     "hash-sum": "^2.0.0",
     "prismjs": "^1.16.0",
+    "recast": "^0.19.1",
     "vue-gh-corners": "^3.0.1",
     "vue-github-corners": "^1.2.3",
     "vue-inbrowser-compiler": "^3.21.0",
-    "vue-prism-editor": "^0.3.0"
+    "vue-prism-editor": "^0.3.0",
+    "vue-template-compiler": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.1",

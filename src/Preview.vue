@@ -11,45 +11,19 @@
 </template>
 
 <script>
-import Vue from "vue";
 import {
-  compile,
+  compile as compileScript,
   isCodeVueSfc,
   addScopedStyle,
   adaptCreateElement,
   concatenate,
 } from "vue-inbrowser-compiler";
+import checkTemplate from "./utils/checkTemplate";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
-const errorDelimiter = "VueLivePreview";
-
-let globalIterator = 0;
-
-const existingWarnHandler =
-  Vue.config.warnHandler ||
-  ((msg, vm, trace) => {
-    if (console) {
-      console.error("[Vue warn]: " + msg + trace);
-    }
-  });
-
-function captureTemplateWarning(msg, vm) {
-  if (vm.$parent && vm.$parent.$options.errorDelimiter === errorDelimiter) {
-    vm.$parent._data.error = `Warning in template: ${msg}`;
-  }
-  existingWarnHandler(...arguments);
-}
-
-function setupWarningHandler() {
-  if (Vue.config.warnHandler !== captureTemplateWarning) {
-    Vue.config.warnHandler = captureTemplateWarning;
-  }
-}
-
 export default {
   name: "VueLivePreviewComponent",
-  errorDelimiter,
   components: {},
   errorCaptured(err) {
     err.message = `Error in template: ${err.message}`;
@@ -105,7 +79,6 @@ export default {
   },
   created() {
     this.renderComponent(this.code.trim());
-    setupWarningHandler();
   },
   watch: {
     code(value) {
@@ -129,10 +102,10 @@ export default {
       this.error = e.message;
     },
     renderComponent(code) {
-      let data = {};
+      let options = {};
       let style;
       try {
-        const renderedComponent = compile(
+        const renderedComponent = compileScript(
           code,
           this.jsx
             ? { jsx: "__pragma__(h)", objectAssign: "__concatenate__" }
@@ -149,7 +122,7 @@ export default {
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
           const script = renderedComponent.script;
-          data =
+          options =
             evalInContext(
               script,
               (filepath) => requireAtRuntime(this.requires, filepath),
@@ -158,32 +131,31 @@ export default {
             ) || {};
 
           if (this.dataScope) {
-            const mergeData = { ...data.data(), ...this.dataScope };
-            data.data = () => mergeData;
+            const mergeData = { ...options.data(), ...this.dataScope };
+            options.data = () => mergeData;
           }
         }
         if (renderedComponent.template) {
           // if this is a pure template or if we are in hybrid vsg mode,
           // we need to set the template up.
-          data.template = `<div key="${globalIterator++}">${
-            renderedComponent.template
-          }</div>`;
+          options.template = `<div>${renderedComponent.template}</div>`;
+          checkTemplate(options.template, options);
         }
       } catch (e) {
         this.handleError(e);
         return;
       }
 
-      data.components = this.components;
+      options.components = this.components;
       if (style) {
         // To add the scope id attribute to each item in the html
         // this way when we add the scoped style sheet it will be aplied
-        data._scopeId = `data-${this.scope}`;
+        options._scopeId = `data-${this.scope}`;
         addScopedStyle(style, this.scope);
       }
 
-      if (data.template || data.render) {
-        this.previewedComponent = data;
+      if (options.template || options.render) {
+        this.previewedComponent = options;
         this.iteration = this.iteration + 1;
       } else {
         this.handleError({
