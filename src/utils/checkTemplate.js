@@ -28,16 +28,15 @@ export default function(src, $options) {
                   !$options.data()[varName])
               ) {
                 throw new VueLiveUndefinedVariableError(
-                  `Variable "${varName}" is not defined.`
+                  `Variable "${varName}" is not defined.`,
+                  varName
                 );
               }
               this.traverse(identifier);
             },
           });
         } catch (e) {
-          throw new VueLiveParseTemplateError(
-            `Cannot parse template expression: "${attr.value}"\n\n${e.message}`
-          );
+          throw new VueLiveParseTemplateError(e.message, attr.value, e);
         }
       });
   });
@@ -75,10 +74,13 @@ export function traverse(templateAst, handler) {
   }
 }
 
-function VueLiveUndefinedVariableError(message) {
+export function VueLiveUndefinedVariableError(message, varName) {
   this.message = message;
+  this.varName = varName;
 }
 
-function VueLiveParseTemplateError(message) {
+export function VueLiveParseTemplateError(message, expression, subError) {
   this.message = message;
+  this.expression = expression;
+  this.subError = subError;
 }

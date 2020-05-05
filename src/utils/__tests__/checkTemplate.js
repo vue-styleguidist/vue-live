@@ -11,9 +11,9 @@ test("parse valid template without error with a value", () => {
     checkTemplate('<div><compo :value="today">hello</compo></div>', {
       data() {
         return {
-          today: "hello",
+          today: "hello"
         };
-      },
+      }
     })
   ).not.toThrow();
 });
@@ -37,28 +37,21 @@ test("parse invalid template with an error in a function call and a spread", () 
 });
 
 test("parse invalid template with an error if the value is not in data", () => {
-  expect(() => checkTemplate('<div><compo :value="today">hello</compo></div>'))
-    .toThrowErrorMatchingInlineSnapshot(`
-"Cannot parse template expression: \\"today\\"
-
-Variable \\"today\\" is not defined."
-`);
+  expect(() =>
+    checkTemplate('<div><compo :value="today">hello</compo></div>')
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Variable \\"today\\" is not defined."`
+  );
 });
 
 test("parse invalid : template by throwing an error", () => {
-  expect(() => checkTemplate('<div><a :href="+++foo()">hello</a></div>'))
-    .toThrowErrorMatchingInlineSnapshot(`
-"Cannot parse template expression: \\"+++foo()\\"
-
-Assigning to rvalue (1:9)"
-`);
+  expect(() =>
+    checkTemplate('<div><a :href="+++foo()">hello</a></div>')
+  ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:9)"`);
 });
 
 test("parse invalid @ template by throwing an error", () => {
-  expect(() => checkTemplate('<div><a @click="+++foo()">hello</a></div>'))
-    .toThrowErrorMatchingInlineSnapshot(`
-"Cannot parse template expression: \\"+++foo()\\"
-
-Assigning to rvalue (1:9)"
-`);
+  expect(() =>
+    checkTemplate('<div><a @click="+++foo()">hello</a></div>')
+  ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:9)"`);
 });

@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <pre :class="$style.error" v-if="error">{{ this.error }}</pre>
-    <component
-      v-if="!error && previewedComponent"
-      :id="scope"
-      :is="previewedComponent"
-      :key="iteration"
-    />
-  </div>
+  <pre :class="$style.error" v-if="error">{{ this.error }}</pre>
+  <component
+    v-else-if="previewedComponent"
+    :id="scope"
+    :is="previewedComponent"
+    :key="iteration"
+  />
 </template>
 
 <script>
@@ -18,7 +16,9 @@ import {
   adaptCreateElement,
   concatenate,
 } from "vue-inbrowser-compiler";
-import checkTemplate from "./utils/checkTemplate";
+import checkTemplate, {
+  VueLiveUndefinedVariableError,
+} from "./utils/checkTemplate";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
@@ -26,7 +26,6 @@ export default {
   name: "VueLivePreviewComponent",
   components: {},
   errorCaptured(err) {
-    err.message = `Error in template: ${err.message}`;
     this.handleError(err);
   },
   props: {
@@ -99,6 +98,9 @@ export default {
     },
     handleError(e) {
       this.$emit("error", e);
+      if (e.constructor === VueLiveUndefinedVariableError) {
+        e.message = `Cannot parse template expression: ${e.expression}\n\n${e.message}`;
+      }
       this.error = e.message;
     },
     renderComponent(code) {
@@ -139,8 +141,14 @@ export default {
           // if this is a pure template or if we are in hybrid vsg mode,
           // we need to set the template up.
           options.template = `<div>${renderedComponent.template}</div>`;
-          checkTemplate(options.template, options);
         }
+      } catch (e) {
+        this.handleError(e);
+        return;
+      }
+
+      try {
+        checkTemplate(options.template, options);
       } catch (e) {
         this.handleError(e);
         return;
