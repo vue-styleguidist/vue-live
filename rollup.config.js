@@ -17,9 +17,12 @@ export default {
       exports: "named", // remove warning about mixed exports
       globals: {
         "hash-sum": "vueLiveHashSum",
-        "vue-inbrowser-compiler": "vueInbrowserCompiler",
+        "vue-inbrowser-compiler": "vueLivevueInbrowserCompiler",
+        "vue-template-compiler": "vueLiveVueTemplateCompiler",
         "vue-prism-editor": "VuePrismEditor",
         debounce: "debounce",
+        acorn: "acorn",
+        recast: "recast",
       },
     },
     {
