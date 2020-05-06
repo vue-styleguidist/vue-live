@@ -190,6 +190,7 @@ body .prism-editor__line-numbers {
   font-size: 2em;
   color: red;
   transform: rotate(-30deg);
+  transition: transform 0.2s;
 }
 
 @media (max-width: 1400px) {
