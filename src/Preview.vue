@@ -97,6 +97,12 @@ export default {
       });
     },
     handleError(e) {
+      /**
+       * Emitted every time the component rendered throws an error
+       * Catches runtime and compilation errors
+       * @event
+       * @property { Error } - the error thrown
+       */
       this.$emit("error", e);
       if (e.constructor === VueLiveParseTemplateError) {
         e.message = `Cannot parse template expression: ${e.expression}\n\n${e.message}`;

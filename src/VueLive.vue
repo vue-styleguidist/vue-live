@@ -19,6 +19,12 @@
       />
     </template>
     <template v-slot:preview>
+      <!-- 
+        * Emitted every time the component rendered throws an error
+        * Catches runtime and compilation errors
+        * @event error
+        * @property { Error } - the error thrown 
+      -->
       <Preview
         :key="codeKey"
         :code="model"

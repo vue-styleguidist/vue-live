@@ -14,7 +14,7 @@ The simplest way to render components is as a VueJs template:
 
 ```vue
 <template>
-    <VueLive :code="`<date-picker />`" :components="{ DatePicker }">
+    <VueLive :code="`<date-picker />`" :components="{ DatePicker }" @error="(e) => handleError(e)">
 </template>
 
 <script>
@@ -34,34 +34,6 @@ export default {
 ```
 
 Check out the [demo](http://vue-live.surge.sh) for alternative syntaxes to write your showcases.
-
-## Configuration
-
-```js
-module.exports = {
-  // ...
-  plugins: [
-    [
-      'live',
-      {
-        // to use a custom layout for your vue components
-        layout: path.resolve(__dirname, "../custom-layout")
-      }
-    ],
-    [
-      "@vuepress/register-components",
-      {
-        components: [
-          {
-            name: "vue-slider",
-            path: path.resolve(__dirname, "../vue-slider")
-          }
-        ]
-      }
-    ]
-  ]
-}
-```
 
 ## How to contribute
 
