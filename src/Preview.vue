@@ -17,7 +17,7 @@ import {
   concatenate,
 } from "vue-inbrowser-compiler";
 import checkTemplate, {
-  VueLiveUndefinedVariableError,
+  VueLiveParseTemplateError,
 } from "./utils/checkTemplate";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
@@ -98,7 +98,7 @@ export default {
     },
     handleError(e) {
       this.$emit("error", e);
-      if (e.constructor === VueLiveUndefinedVariableError) {
+      if (e.constructor === VueLiveParseTemplateError) {
         e.message = `Cannot parse template expression: ${e.expression}\n\n${e.message}`;
       }
       this.error = e.message;
@@ -148,7 +148,7 @@ export default {
       }
 
       try {
-        checkTemplate(options.template, options);
+        checkTemplate(options);
       } catch (e) {
         this.handleError(e);
         return;

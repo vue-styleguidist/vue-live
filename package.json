@@ -17,10 +17,9 @@
     "core-js": "^3.6.5",
     "debounce": "^1.2.0",
     "hash-sum": "^2.0.0",
+    "lodash.has": "^4.5.2",
     "prismjs": "^1.16.0",
     "recast": "^0.19.1",
-    "vue-gh-corners": "^3.0.1",
-    "vue-github-corners": "^1.2.3",
     "vue-inbrowser-compiler": "^3.21.0",
     "vue-prism-editor": "^0.3.0",
     "vue-template-compiler": "^2.0.0"
@@ -46,6 +45,8 @@
     "rollup-plugin-vue": "^5.1.6",
     "validate-commit-msg": "^2.14.0",
     "vue": "^2.6.10",
+    "vue-gh-corners": "^3.0.1",
+    "vue-github-corners": "^1.2.3",
     "vue-template-compiler": "^2.6.10",
     "vuejs-datepicker": "^1.6.2"
   },

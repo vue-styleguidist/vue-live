@@ -1,22 +1,26 @@
 import { compile } from "vue-template-compiler";
 import { parse } from "acorn";
-import * as recast from "recast";
+import { visit } from "recast";
+import has from "lodash.has";
 
-export default function(src, $options) {
-  const { ast } = compile(src);
+export default function($options) {
+  if (!$options.template) {
+    return;
+  }
+  const { ast } = compile($options.template);
   traverse(ast, (templateAst) => {
     if (templateAst.type !== 1) {
       return;
     }
     templateAst.attrsList
       // for all attribute that has an expression
-      .filter((attr) => /^[:,@,v-]/.test(attr.name))
+      .filter((attr) => /^(:|@|v-)/.test(attr.name))
       .forEach((attr) => {
         try {
           // try and parse the expression
           const ast = parse(`() => {${attr.value}}`);
           // identify all variables that would be undefined because not in the data object
-          recast.visit(ast, {
+          visit(ast, {
             visitIdentifier(identifier) {
               const varName = identifier.value.name;
               if (
@@ -25,7 +29,10 @@ export default function(src, $options) {
                   identifier.parentPath.name === "arguments") &&
                 (!$options ||
                   typeof $options.data !== "function" ||
-                  !$options.data()[varName])
+                  (!has($options.data(), varName) &&
+                    !has($options.props, varName) &&
+                    Array.isArray($options.props) &&
+                    $options.props.indexOf(varName) === -1))
               ) {
                 throw new VueLiveUndefinedVariableError(
                   `Variable "${varName}" is not defined.`,

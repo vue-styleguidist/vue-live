@@ -49,8 +49,8 @@
       />
       <h2>Custom delay</h2>
       <p>
-        when updates should not hapen too often, for instance when a component
-        need a lot of computing power to render, One can change the standard
+        When updates should not happen too often, for instance when a component
+        need a lot of computing power to render, one can change the standard
         throttle timing.
       </p>
       <VueLive
