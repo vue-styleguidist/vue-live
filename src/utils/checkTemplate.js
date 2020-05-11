@@ -1,84 +1,94 @@
-import { compile } from "vue-template-compiler";
-import { parse } from "acorn";
+import { parse as parseVue } from "@vue/compiler-dom";
+import { parse as parseEs } from "acorn";
 import { visit } from "recast";
 import has from "lodash.has";
+
+const ELEMENT = 1;
+const SIMPLE_EXPRESSION = 4;
+const INTERPOLATION = 5;
 
 export default function($options) {
   if (!$options.template) {
     return;
   }
-  const { ast } = compile($options.template);
-  traverse(ast, (templateAst) => {
-    if (templateAst.type !== 1) {
-      return;
-    }
-    templateAst.attrsList
-      // for all attribute that has an expression
-      .filter((attr) => /^(:|@|v-)/.test(attr.name))
-      .forEach((attr) => {
+  const ast = parseVue($options.template);
+  traverse(ast, [
+    (templateAst) => {
+      if (templateAst.type === ELEMENT) {
+        templateAst.props.forEach((attr) => {
+          const exp =
+            attr.type !== SIMPLE_EXPRESSION && attr.exp
+              ? attr.exp.content
+              : undefined;
+          if (!exp) {
+            return;
+          }
+          try {
+            checkExpression(exp, $options);
+          } catch (e) {
+            throw new VueLiveParseTemplateError(e.message, exp, e);
+          }
+        });
+      } else if (templateAst.type === INTERPOLATION) {
         try {
-          // try and parse the expression
-          const ast = parse(`() => {${attr.value}}`);
-          // identify all variables that would be undefined because not in the data object
-          visit(ast, {
-            visitIdentifier(identifier) {
-              const varName = identifier.value.name;
-              if (
-                (identifier.name === "expression" ||
-                  identifier.name === "argument" ||
-                  identifier.parentPath.name === "arguments") &&
-                (!$options ||
-                  typeof $options.data !== "function" ||
-                  (!has($options.data(), varName) &&
-                    !has($options.props, varName) &&
-                    Array.isArray($options.props) &&
-                    $options.props.indexOf(varName) === -1))
-              ) {
-                throw new VueLiveUndefinedVariableError(
-                  `Variable "${varName}" is not defined.`,
-                  varName
-                );
-              }
-              this.traverse(identifier);
-            },
-          });
+          if (templateAst.content) {
+            checkExpression(templateAst.content.content, $options);
+          }
         } catch (e) {
-          throw new VueLiveParseTemplateError(e.message, attr.value, e);
+          throw new VueLiveParseTemplateError(
+            e.message,
+            templateAst.content,
+            e
+          );
         }
-      });
+      }
+    },
+  ]);
+}
+
+export function checkExpression(expression, $options) {
+  // try and parse the expression
+  const ast = parseEs(`() => {${expression}}`);
+  // identify all variables that would be undefined because not in the data object
+  visit(ast, {
+    visitIdentifier(identifier) {
+      const varName = identifier.value.name;
+      if (
+        (identifier.name === "expression" ||
+          identifier.name === "argument" ||
+          identifier.parentPath.name === "arguments") &&
+        (!$options ||
+          typeof $options.data !== "function" ||
+          (!has($options.data(), varName) &&
+            !has($options.props, varName) &&
+            Array.isArray($options.props) &&
+            $options.props.indexOf(varName) === -1))
+      ) {
+        throw new VueLiveUndefinedVariableError(
+          `Variable "${varName}" is not defined.`,
+          varName
+        );
+      }
+      this.traverse(identifier);
+    },
   });
 }
 
-export function traverse(templateAst, handler) {
+export function traverse(templateAst, handlers) {
   const traverseAstChildren = (templateAst) => {
-    const children = templateAst.children;
+    const { children } = templateAst;
     if (children) {
       for (const childNode of children) {
-        traverse(childNode, handler);
+        traverse(childNode, handlers);
       }
-    }
-
-    const scopedSlots = templateAst.scopedSlots;
-    if (scopedSlots) {
-      Object.keys(scopedSlots).forEach((key) => {
-        const slotNode = scopedSlots[key];
-        traverse(slotNode, handler);
-      });
     }
   };
 
-  handler(templateAst);
+  handlers.forEach((handler) => {
+    handler(templateAst);
+  });
 
-  if (templateAst.type === 1) {
-    if (templateAst.if && templateAst.ifConditions) {
-      // for if statement iterate through the branches
-      templateAst.ifConditions.forEach(({ block }) => {
-        traverseAstChildren(block);
-      });
-    } else {
-      traverseAstChildren(templateAst);
-    }
-  }
+  traverseAstChildren(templateAst);
 }
 
 export function VueLiveUndefinedVariableError(message, varName) {
