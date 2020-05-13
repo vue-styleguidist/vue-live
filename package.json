@@ -13,6 +13,7 @@
     "cy:verify": "cypress verify"
   },
   "dependencies": {
+    "@vue/compiler-core": "^3.0.0-beta.10",
     "@vue/compiler-dom": "^3.0.0-beta.10",
     "acorn": "^6.1.1",
     "core-js": "^3.6.5",

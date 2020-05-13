@@ -1,4 +1,5 @@
 import { parse as parseVue } from "@vue/compiler-dom";
+import { createCompilerError } from "@vue/compiler-core/dist/compiler-core.cjs";
 import { parse as parseEs } from "acorn";
 import { visit } from "recast";
 import has from "lodash.has";
@@ -11,7 +12,12 @@ export default function($options) {
   if (!$options.template) {
     return;
   }
-  const ast = parseVue($options.template);
+  let ast;
+  try {
+    ast = parseVue($options.template);
+  } catch (e) {
+    throw createCompilerError(e.code);
+  }
   traverse(ast, [
     (templateAst) => {
       if (templateAst.type === ELEMENT) {
