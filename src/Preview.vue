@@ -171,6 +171,7 @@ export default {
       if (options.template || options.render) {
         this.previewedComponent = options;
         this.iteration = this.iteration + 1;
+        this.error = false;
       } else {
         this.handleError({
           message:
