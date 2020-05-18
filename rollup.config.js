@@ -39,7 +39,11 @@ export default {
       extensions: [".js"],
       runtimeHelpers: true,
     }),
-    vue(),
+    vue({
+			template: {
+				optimizeSSR: true
+			}
+		}),
     css(),
   ],
   external: [
