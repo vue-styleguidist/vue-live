@@ -85,7 +85,7 @@ test("parse invalid : template by throwing an error", () => {
     checkTemplate({
       template: '<div><a :href="+++foo()">hello</a></div>'
     })
-  ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:9)"`);
+  ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:21)"`);
 });
 
 test("parse invalid @ template by throwing an error", () => {
@@ -93,5 +93,29 @@ test("parse invalid @ template by throwing an error", () => {
     checkTemplate({
       template: '<div><a @click="+++foo()">hello</a></div>'
     })
-  ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:9)"`);
+  ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:21)"`);
+});
+
+test("parse valid object not to throw", () => {
+  expect(() =>
+    checkTemplate({
+      template: '<div><CustomSelect :options="{foo:1, bar:2}" /></div>'
+    })
+  ).not.toThrow();
+});
+
+test("parse valid expression with mutiple lines not to throw", () => {
+  expect(() =>
+    checkTemplate({
+      template: `<div><CustomSelect @event="
+        test();
+        callFunction(hello);
+      " /></div>`,
+      data() {
+        return {};
+      }
+    })
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Variable \\"hello\\" is not defined."`
+  );
 });

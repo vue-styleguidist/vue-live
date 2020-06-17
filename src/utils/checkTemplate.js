@@ -54,27 +54,38 @@ export default function($options) {
 
 export function checkExpression(expression, $options) {
   // try and parse the expression
-  const ast = parseEs(`() => {${expression}}`);
+  const ast = parseEs(`(function(){return ${expression}})()`);
+
   // identify all variables that would be undefined because not in the data object
   visit(ast, {
     visitIdentifier(identifier) {
       const varName = identifier.value.name;
       if (
-        (identifier.name === "expression" ||
-          identifier.name === "argument" ||
-          identifier.parentPath.name === "arguments") &&
-        (!$options ||
-          typeof $options.data !== "function" ||
-          (!has($options.data(), varName) &&
-            !has($options.props, varName) &&
-            Array.isArray($options.props) &&
-            $options.props.indexOf(varName) === -1))
+        identifier.name === "expression" ||
+        identifier.name === "argument" ||
+        identifier.parentPath.name === "arguments"
       ) {
-        throw new VueLiveUndefinedVariableError(
-          `Variable "${varName}" is not defined.`,
-          varName
-        );
+        if (!$options || typeof $options.data !== "function") {
+          throw new VueLiveUndefinedVariableError(
+            `Variable "${varName}" is not defined.`,
+            varName
+          );
+        }
+        if (
+          !has($options.data(), varName) &&
+          !has($options.props, varName) &&
+          !(
+            Array.isArray($options.props) &&
+            $options.props.indexOf(varName) !== -1
+          )
+        ) {
+          throw new VueLiveUndefinedVariableError(
+            `Variable "${varName}" is not defined.`,
+            varName
+          );
+        }
       }
+
       this.traverse(identifier);
     },
   });
