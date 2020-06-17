@@ -19,7 +19,6 @@
     "core-js": "^3.6.5",
     "debounce": "^1.2.0",
     "hash-sum": "^2.0.0",
-    "lodash.has": "^4.5.2",
     "prismjs": "^1.16.0",
     "recast": "^0.19.1",
     "vue-inbrowser-compiler": "^3.21.0",

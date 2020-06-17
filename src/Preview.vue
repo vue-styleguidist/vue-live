@@ -105,7 +105,9 @@ export default {
        */
       this.$emit("error", e);
       if (e.constructor === VueLiveParseTemplateError) {
-        e.message = `Cannot parse template expression: ${e.expression}\n\n${e.message}`;
+        e.message = `Cannot parse template expression: ${JSON.stringify(
+          e.expression.content || e.expression
+        )}\n\n${e.message}`;
       }
       this.error = e.message;
     },

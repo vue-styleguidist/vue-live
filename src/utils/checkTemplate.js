@@ -2,7 +2,6 @@ import { parse as parseVue } from "@vue/compiler-dom";
 import { createCompilerError } from "@vue/compiler-core/dist/compiler-core.cjs";
 import { parse as parseEs } from "acorn";
 import { visit } from "recast";
-import has from "lodash.has";
 
 const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
@@ -18,8 +17,10 @@ export default function($options) {
   } catch (e) {
     throw createCompilerError(e.code);
   }
+
   traverse(ast, [
-    (templateAst) => {
+    (templateAst, availableVarNames) => {
+      const templateVars = [];
       if (templateAst.type === ELEMENT) {
         templateAst.props.forEach((attr) => {
           const exp =
@@ -29,16 +30,58 @@ export default function($options) {
           if (!exp) {
             return;
           }
-          try {
-            checkExpression(exp, $options);
-          } catch (e) {
-            throw new VueLiveParseTemplateError(e.message, exp, e);
+          if (attr.name === "slot") {
+            const astSlot = parseEs(`var ${exp}=1`);
+            visit(astSlot, {
+              visitVariableDeclarator(declarator) {
+                const { id } = declarator.node;
+                switch (id.type) {
+                  case "ArrayPattern":
+                    id.elements.forEach((e) => {
+                      templateVars.push(e.name);
+                    });
+                    break;
+                  case "ObjectPattern":
+                    id.properties.forEach((e) => {
+                      templateVars.push(e.value.name);
+                    });
+                    break;
+                  case "Identifier":
+                    templateVars.push(id.name);
+                    break;
+                }
+                return false;
+              },
+            });
+          } else if (attr.name === "for") {
+            const [vForLeft] = exp.split(/( in | of )/);
+            const doubleForRE = /\((\w+),(\w+)\)/;
+            if (doubleForRE.test(vForLeft.replace(" ", ""))) {
+              const vars = doubleForRE.exec(vForLeft.replace(" ", ""));
+              templateVars.push(vars[1]);
+              templateVars.push(vars[2]);
+            } else {
+              templateVars.push(vForLeft);
+            }
+          } else {
+            try {
+              checkExpression(exp, $options, [
+                ...availableVarNames,
+                ...templateVars,
+              ]);
+            } catch (e) {
+              throw new VueLiveParseTemplateError(e.message, exp, e);
+            }
           }
         });
       } else if (templateAst.type === INTERPOLATION) {
         try {
           if (templateAst.content) {
-            checkExpression(templateAst.content.content, $options);
+            checkExpression(
+              templateAst.content.content,
+              $options,
+              availableVarNames
+            );
           }
         } catch (e) {
           throw new VueLiveParseTemplateError(
@@ -48,13 +91,32 @@ export default function($options) {
           );
         }
       }
+      return templateVars;
     },
   ]);
 }
 
-export function checkExpression(expression, $options) {
+export function checkExpression(expression, $options, templateVars) {
   // try and parse the expression
   const ast = parseEs(`(function(){return ${expression}})()`);
+
+  const propNamesArray =
+    $options && $options.props
+      ? Array.isArray($options.props)
+        ? $options.props
+        : Object.keys($options.props)
+      : [];
+
+  const dataArray =
+    $options && typeof $options.data === "function"
+      ? Object.keys($options.data())
+      : [];
+
+  const availableIdentifiers = [
+    ...propNamesArray,
+    ...dataArray,
+    ...templateVars,
+  ];
 
   // identify all variables that would be undefined because not in the data object
   visit(ast, {
@@ -65,19 +127,9 @@ export function checkExpression(expression, $options) {
         identifier.name === "argument" ||
         identifier.parentPath.name === "arguments"
       ) {
-        if (!$options || typeof $options.data !== "function") {
-          throw new VueLiveUndefinedVariableError(
-            `Variable "${varName}" is not defined.`,
-            varName
-          );
-        }
         if (
-          !has($options.data(), varName) &&
-          !has($options.props, varName) &&
-          !(
-            Array.isArray($options.props) &&
-            $options.props.indexOf(varName) !== -1
-          )
+          !availableIdentifiers ||
+          availableIdentifiers.indexOf(varName) === -1
         ) {
           throw new VueLiveUndefinedVariableError(
             `Variable "${varName}" is not defined.`,
@@ -91,21 +143,30 @@ export function checkExpression(expression, $options) {
   });
 }
 
-export function traverse(templateAst, handlers) {
-  const traverseAstChildren = (templateAst) => {
+export function traverse(templateAst, handlers, availableVarNames = []) {
+  const traverseAstChildren = (templateAst, availableVarNamesChildren) => {
     const { children } = templateAst;
     if (children) {
       for (const childNode of children) {
-        traverse(childNode, handlers);
+        traverse(childNode, handlers, availableVarNamesChildren);
       }
     }
   };
 
-  handlers.forEach((handler) => {
-    handler(templateAst);
-  });
+  // we load this object with all available varnames
+  // discovered in the template parsing on v-for and v-slot
+  const availableVarNamesThisLevel = handlers.reduce((acc, handler) => {
+    const result = handler(templateAst, availableVarNames);
+    if (result && result.length) {
+      return acc.concat(result);
+    }
+    return acc;
+  }, []);
 
-  traverseAstChildren(templateAst);
+  traverseAstChildren(templateAst, [
+    ...availableVarNames,
+    ...availableVarNamesThisLevel,
+  ]);
 }
 
 export function VueLiveUndefinedVariableError(message, varName) {

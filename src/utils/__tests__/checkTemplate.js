@@ -12,9 +12,9 @@ test("parse valid template without error with a value", () => {
       template: '<div><compo :value="today">hello</compo></div>',
       data() {
         return {
-          today: "hello"
+          today: "hello",
         };
-      }
+      },
     })
   ).not.toThrow();
 });
@@ -29,9 +29,9 @@ test("parse false value as a valid value", () => {
   </div>`,
       data() {
         return {
-          value: false
+          value: false,
         };
-      }
+      },
     })
   ).not.toThrow();
 });
@@ -39,7 +39,7 @@ test("parse false value as a valid value", () => {
 test("parse invalid template with an error in the ++", () => {
   expect(() =>
     checkTemplate({
-      template: '<div><compo :value="today++">hello</compo></div>'
+      template: '<div><compo :value="today++">hello</compo></div>',
     })
   ).toThrow();
 });
@@ -47,7 +47,7 @@ test("parse invalid template with an error in the ++", () => {
 test("parse invalid template with an error in a function call", () => {
   expect(() =>
     checkTemplate({
-      template: '<div><compo :value="callit(today)">hello</compo></div>'
+      template: '<div><compo :value="callit(today)">hello</compo></div>',
     })
   ).toThrow();
 });
@@ -55,7 +55,7 @@ test("parse invalid template with an error in a function call", () => {
 test("parse invalid template with an error in a function call and a spread", () => {
   expect(() =>
     checkTemplate({
-      template: '<div><compo :value="callit(...today)">hello</compo></div>'
+      template: '<div><compo :value="callit(...today)">hello</compo></div>',
     })
   ).toThrow();
 });
@@ -63,7 +63,7 @@ test("parse invalid template with an error in a function call and a spread", () 
 test("parse invalid template with an error if the value is not in data", () => {
   expect(() =>
     checkTemplate({
-      template: '<div><compo :value="today">hello</compo></div>'
+      template: '<div><compo :value="today">hello</compo></div>',
     })
   ).toThrowErrorMatchingInlineSnapshot(
     `"Variable \\"today\\" is not defined."`
@@ -73,7 +73,7 @@ test("parse invalid template with an error if the value is not in data", () => {
 test("parse template interpolatio and detect undefined variables", () => {
   expect(() =>
     checkTemplate({
-      template: "<div><compo>{{ hello }}</compo></div>"
+      template: "<div><compo>{{ hello }}</compo></div>",
     })
   ).toThrowErrorMatchingInlineSnapshot(
     `"Variable \\"hello\\" is not defined."`
@@ -83,7 +83,7 @@ test("parse template interpolatio and detect undefined variables", () => {
 test("parse invalid : template by throwing an error", () => {
   expect(() =>
     checkTemplate({
-      template: '<div><a :href="+++foo()">hello</a></div>'
+      template: '<div><a :href="+++foo()">hello</a></div>',
     })
   ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:21)"`);
 });
@@ -91,7 +91,7 @@ test("parse invalid : template by throwing an error", () => {
 test("parse invalid @ template by throwing an error", () => {
   expect(() =>
     checkTemplate({
-      template: '<div><a @click="+++foo()">hello</a></div>'
+      template: '<div><a @click="+++foo()">hello</a></div>',
     })
   ).toThrowErrorMatchingInlineSnapshot(`"Assigning to rvalue (1:21)"`);
 });
@@ -99,23 +99,75 @@ test("parse invalid @ template by throwing an error", () => {
 test("parse valid object not to throw", () => {
   expect(() =>
     checkTemplate({
-      template: '<div><CustomSelect :options="{foo:1, bar:2}" /></div>'
+      template: '<div><CustomSelect :options="{foo:1, bar:2}" /></div>',
     })
   ).not.toThrow();
 });
 
-test("parse valid expression with mutiple lines not to throw", () => {
+test("parse expression using mutiple lines to throw", () => {
   expect(() =>
     checkTemplate({
       template: `<div><CustomSelect @event="
         test();
         callFunction(hello);
       " /></div>`,
-      data() {
-        return {};
-      }
     })
   ).toThrowErrorMatchingInlineSnapshot(
     `"Variable \\"hello\\" is not defined."`
   );
+});
+
+test("parse v-for expressions and add their vars to available data", () => {
+  expect(() =>
+    checkTemplate({
+      template: `<div v-for="hello in [1,2]"><CustomSelect @event="
+        test();
+        callFunction(hello);
+      " /></div>`,
+    })
+  ).not.toThrow();
+});
+
+test("parse v-for expressions with index and add their vars to available data", () => {
+  expect(() =>
+    checkTemplate({
+      template: `<div v-for="(hello, index) in [1,2]"><CustomSelect @event="
+        test(index);
+        callFunction(hello);
+      " /></div>`,
+    })
+  ).not.toThrow();
+});
+
+test("parse v-slot-scope expressions without issues", () => {
+  expect(() =>
+    checkTemplate({
+      template: `<template v-slot:default="hello"><CustomSelect @event="
+        test();
+        callFunction(hello);
+      " /></template>`,
+    })
+  ).not.toThrow();
+});
+
+test("parse v-slot-scope deconstructed expressions without issues", () => {
+  expect(() =>
+    checkTemplate({
+      template: `<template v-slot:default="{ bye: hello, whats: up, foo }"><CustomSelect @event="
+        test();
+        callFunction(hello);
+      " /></template>`,
+    })
+  ).not.toThrow();
+});
+
+test("parse v-slot-scope deconstructed array expressions without issues", () => {
+  expect(() =>
+    checkTemplate({
+      template: `<template v-slot:default="[ hello ]"><CustomSelect @event="
+        test();
+        callFunction(hello);
+      " /></template>`,
+    })
+  ).not.toThrow();
 });
