@@ -7,7 +7,7 @@ const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
 const INTERPOLATION = 5;
 
-export default function($options) {
+export default function($options, checkVariableAvailability) {
   if (!$options.template) {
     return;
   }
@@ -18,8 +18,33 @@ export default function($options) {
     throw createCompilerError(e.code);
   }
 
+  if (!checkVariableAvailability) {
+    return;
+  }
+
+  const propNamesArray = $options.props
+    ? Array.isArray($options.props)
+      ? $options.props
+      : Object.keys($options.props)
+    : [];
+
+  const dataArray =
+    typeof $options.data === "function" ? Object.keys($options.data()) : [];
+
+  const computedArray = $options.computed ? Object.keys($options.computed) : [];
+
+  const methodsArray =
+    $options && $options.methods ? Object.keys($options.methods) : [];
+
+  const scriptVars = [
+    ...propNamesArray,
+    ...dataArray,
+    ...computedArray,
+    ...methodsArray,
+  ];
+
   traverse(ast, [
-    (templateAst, availableVarNames) => {
+    (templateAst, parentTemplateVars) => {
       const templateVars = [];
       if (templateAst.type === ELEMENT) {
         templateAst.props.forEach((attr) => {
@@ -65,8 +90,8 @@ export default function($options) {
             }
           } else {
             try {
-              checkExpression(exp, $options, [
-                ...availableVarNames,
+              checkExpression(exp, scriptVars, [
+                ...parentTemplateVars,
                 ...templateVars,
               ]);
             } catch (e) {
@@ -79,8 +104,8 @@ export default function($options) {
           if (templateAst.content) {
             checkExpression(
               templateAst.content.content,
-              $options,
-              availableVarNames
+              scriptVars,
+              parentTemplateVars
             );
           }
         } catch (e) {
@@ -96,29 +121,13 @@ export default function($options) {
   ]);
 }
 
-export function checkExpression(expression, $options, templateVars) {
+export function checkExpression(expression, availableVars, templateVars) {
   // try and parse the expression
   const ast = parseEs(`(function(){return ${expression}})()`);
 
-  const propNamesArray =
-    $options && $options.props
-      ? Array.isArray($options.props)
-        ? $options.props
-        : Object.keys($options.props)
-      : [];
-
-  const dataArray =
-    $options && typeof $options.data === "function"
-      ? Object.keys($options.data())
-      : [];
-
-  const availableIdentifiers = [
-    ...propNamesArray,
-    ...dataArray,
-    ...templateVars,
-  ];
-
-  // identify all variables that would be undefined because not in the data object
+  // identify all variables that would be undefined because
+  // - not in the options object
+  // - not defined in the template
   visit(ast, {
     visitIdentifier(identifier) {
       const varName = identifier.value.name;
@@ -128,8 +137,8 @@ export function checkExpression(expression, $options, templateVars) {
         identifier.parentPath.name === "arguments"
       ) {
         if (
-          !availableIdentifiers ||
-          availableIdentifiers.indexOf(varName) === -1
+          availableVars.indexOf(varName) === -1 &&
+          templateVars.indexOf(varName) === -1
         ) {
           throw new VueLiveUndefinedVariableError(
             `Variable "${varName}" is not defined.`,

@@ -67,6 +67,13 @@ export default {
       type: Object,
       default: () => {},
     },
+    /**
+     * Avoid checking variables for availability it template
+     */
+    checkVariableAvailability: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -156,7 +163,7 @@ export default {
       }
 
       try {
-        checkTemplate(options);
+        checkTemplate(options, this.checkVariableAvailability);
       } catch (e) {
         this.handleError(e);
         return;

@@ -1,4 +1,6 @@
-import checkTemplate from "../checkTemplate";
+import checkTemplateDummy from "../checkTemplate";
+
+const checkTemplate = (opts) => checkTemplateDummy(opts, true);
 
 test("parse valid template without error with a function", () => {
   expect(() =>
@@ -6,7 +8,7 @@ test("parse valid template without error with a function", () => {
   ).not.toThrow();
 });
 
-test("parse valid template without error with a value", () => {
+test("parse valid template without error with a value in data", () => {
   expect(() =>
     checkTemplate({
       template: '<div><compo :value="today">hello</compo></div>',
@@ -14,6 +16,43 @@ test("parse valid template without error with a value", () => {
         return {
           today: "hello",
         };
+      },
+    })
+  ).not.toThrow();
+});
+
+test("parse valid template without error with a value in props", () => {
+  expect(() =>
+    checkTemplate({
+      template: '<div><compo :value="today">hello</compo></div>',
+      props: {
+        today: { type: String },
+      },
+    })
+  ).not.toThrow();
+});
+
+test("parse valid template without error with a value in computed", () => {
+  expect(() =>
+    checkTemplate({
+      template: '<div><compo :value="today">hello</compo></div>',
+      computed: {
+        today() {
+          return "bonjour";
+        },
+      },
+    })
+  ).not.toThrow();
+});
+
+test("parse valid template without error with a value in methods", () => {
+  expect(() =>
+    checkTemplate({
+      template: '<div><compo :value="today">hello</compo></div>',
+      methods: {
+        today() {
+          return "bonjour";
+        },
       },
     })
   ).not.toThrow();
@@ -168,6 +207,21 @@ test("parse v-slot-scope deconstructed array expressions without issues", () => 
         test();
         callFunction(hello);
       " /></template>`,
+    })
+  ).not.toThrow();
+});
+
+test("parse v-for nested expressions and add their vars to available data", () => {
+  expect(() =>
+    checkTemplate({
+      template: `<div v-for="hello in [1,2]">
+        <div v-for="other in [1,2]">
+          <CustomSelect @event="
+            test();
+            callFunction(hello);
+          " />
+        </div>
+      </div>`,
     })
   ).not.toThrow();
 });

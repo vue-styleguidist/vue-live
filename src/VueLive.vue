@@ -34,6 +34,7 @@
         :requires="requires"
         :jsx="jsx"
         :data-scope="dataScope"
+        :check-variable-availability="checkVariableAvailability"
       />
     </template>
   </component>
@@ -127,6 +128,15 @@ export default {
     dataScope: {
       type: Object,
       default: () => {},
+    },
+    /**
+     * Set if checking variables for availability
+     * when used in template
+     * NOTE: if this is not checked, undefined vars will yield a blank output
+     */
+    checkVariableAvailability: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
