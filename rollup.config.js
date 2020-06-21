@@ -3,6 +3,7 @@ import commonjs from "rollup-plugin-commonjs";
 import babel from "rollup-plugin-babel";
 import vue from "rollup-plugin-vue";
 import css from "rollup-plugin-css-only";
+import analyze from "rollup-plugin-analyzer";
 import pkg from "./package.json";
 
 const resolve = (_path) => path.resolve(__dirname, _path);
@@ -36,6 +37,7 @@ export default {
       },
     }),
     css(),
+    analyze({ summaryOnly: true }),
   ],
   external: [
     ...Object.keys(pkg.dependencies),
