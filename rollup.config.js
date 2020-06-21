@@ -8,22 +8,13 @@ import pkg from "./package.json";
 const resolve = (_path) => path.resolve(__dirname, _path);
 
 export default {
-  input: resolve("./src/main.js"),
+  input: resolve("./src/index.js"),
   output: [
     {
       file: pkg.main,
       name: "VueLive",
-      format: "umd",
+      format: "cjs",
       exports: "named", // remove warning about mixed exports
-      globals: {
-        "hash-sum": "vueLiveHashSum",
-        "vue-inbrowser-compiler": "vueLivevueInbrowserCompiler",
-        "vue-template-compiler": "vueLiveVueTemplateCompiler",
-        "vue-prism-editor": "VuePrismEditor",
-        debounce: "debounce",
-        acorn: "acorn",
-        recast: "recast",
-      },
     },
     {
       file: pkg.module,
@@ -40,15 +31,16 @@ export default {
       runtimeHelpers: true,
     }),
     vue({
-			template: {
-				optimizeSSR: true
-			}
-		}),
+      template: {
+        optimizeSSR: true,
+      },
+    }),
     css(),
   ],
   external: [
     ...Object.keys(pkg.dependencies),
     // make sure jsx schema is loaded from external
     "prismjs/components/prism-jsx.min",
+    "@vue/compiler-core/dist/compiler-core.cjs",
   ],
 };
