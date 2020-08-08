@@ -132,7 +132,10 @@ export default {
         if (renderedComponent.script) {
           // if the compiled code contains a script it might be "just" a script
           // if so, change scheme used by editor
-          this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "js");
+          // NOTE: vsg is a superset of JavaScript allowing
+          // the template to succeed litterally code, very useful for examples
+          // vsg stands for vue-styleguidist
+          this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
 
           // compile and execute the script
           // it can be:

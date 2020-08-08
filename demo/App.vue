@@ -111,7 +111,7 @@ import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
 import all from "./assets/chicagoNeighbourhoods";
 import "prismjs/themes/prism-tomorrow.css";
 //vue-prism-editor dependency
-import "vue-prism-editor/dist/VuePrismEditor.css";
+import "vue-prism-editor/dist/prismeditor.min.css";
 
 import GithubCorners from "vue-github-corners";
 
@@ -152,10 +152,11 @@ body {
   background-color: #ded;
 }
 
-body .prism-editor__line-numbers {
-  box-sizing: border-box;
+.prism-editor-wrapper {
+  background-color: #222;
+  color: #eee;
+  padding: 8px 12px;
 }
-
 .separate {
   display: flex;
   flex-direction: column;
