@@ -23,7 +23,7 @@
     "recast": "^0.19.1",
     "vue-inbrowser-compiler": "^4.27.0",
     "vue-inbrowser-compiler-utils": "^4.27.0",
-    "vue-prism-editor": "^1.0.1"
+    "vue-prism-editor": "^1.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.1",
