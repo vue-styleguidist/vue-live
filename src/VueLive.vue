@@ -15,6 +15,7 @@
         :delay="delay"
         :prism-lang="prismLang"
         :editor-props="editorProps"
+        :jsx="jsx"
         @change="updatePreview"
       />
     </template>
@@ -48,7 +49,7 @@ import VueLiveDefaultLayout from "./VueLiveDefaultLayout.vue";
 
 const LANG_TO_PRISM = {
   vue: "html",
-  js: "jsx",
+  vsg: "vsg",
 };
 
 const UPDATE_DELAY = 300;

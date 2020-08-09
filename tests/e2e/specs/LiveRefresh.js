@@ -18,7 +18,7 @@ describe("Live Refresh", () => {
 
     const codeToDelete = ' :value="today"/>';
     cy.get("@container")
-      .find(".prism-editor-wrapper pre")
+      .find(".prism-editor-wrapper textarea")
       .type(`${"{backspace}".repeat(codeToDelete.length)}/>`);
 
     cy.get("@preview")
