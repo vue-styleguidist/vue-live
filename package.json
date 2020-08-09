@@ -13,8 +13,9 @@
     "cy:verify": "cypress verify"
   },
   "dependencies": {
-    "@vue/compiler-core": "^3.0.0-beta.10",
-    "@vue/compiler-dom": "^3.0.0-beta.10",
+    "@babel/runtime": "^7.11.2",
+    "@vue/compiler-core": "^3.0.0-rc.5",
+    "@vue/compiler-dom": "^3.0.0-rc.5",
     "acorn": "^7.4.0",
     "core-js": "^3.6.5",
     "debounce": "^1.2.0",
@@ -23,9 +24,14 @@
     "recast": "^0.19.1",
     "vue-inbrowser-compiler": "^4.27.0",
     "vue-inbrowser-compiler-utils": "^4.27.0",
-    "vue-prism-editor": "^1.0.1"
+    "vue-prism-editor": "^1.2.0",
+    "vue-template-compiler": "^2.6.11"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@rollup/plugin-babel": "^5.1.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
     "@vue/cli-plugin-babel": "^4.3.1",
     "@vue/cli-plugin-e2e-cypress": "^4.3.1",
     "@vue/cli-plugin-eslint": "^4.3.1",
@@ -40,16 +46,12 @@
     "raw-loader": "^3.1.0",
     "rollup": "^2.6.1",
     "rollup-plugin-analyzer": "^3.2.3",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-css-only": "^2.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-css-only": "^2.1.0",
     "rollup-plugin-vue": "^5.1.6",
     "validate-commit-msg": "^2.14.0",
-    "vue": "^2.6.10",
+    "vue": "^2.6.11",
     "vue-gh-corners": "^3.0.1",
     "vue-github-corners": "^1.2.3",
-    "vue-template-compiler": "^2.6.10",
     "vuejs-datepicker": "^1.6.2"
   },
   "peerDependencies": {

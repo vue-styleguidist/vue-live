@@ -1,3 +1,4 @@
 module.exports = {
-  presets: [["@vue/app", { useBuiltIns: false }]]
+  presets: [["@vue/app", { useBuiltIns: false }]],
+  plugins: ["@babel/plugin-transform-runtime"],
 };
