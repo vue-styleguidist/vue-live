@@ -156,6 +156,7 @@ body {
   background-color: #222;
   color: #eee;
   padding: 8px 12px;
+  box-sizing: border-box;
 }
 .separate {
   display: flex;
@@ -168,7 +169,7 @@ body {
   padding: 30px;
   background-color: #fff;
   text-align: center;
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px 10px 0 0;
 }
 
 .description {
@@ -203,6 +204,9 @@ body {
   .hint span {
     transform: rotate(80deg) translate(10px, 10px);
     display: inline-block;
+  }
+  .separate {
+    width: 90vw;
   }
 }
 
