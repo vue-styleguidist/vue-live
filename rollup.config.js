@@ -31,7 +31,11 @@ export default {
       extensions: [".js"],
       babelHelpers: "runtime",
     }),
-    vue(),
+    vue({
+      template: {
+        isProduction: true,
+      },
+    }),
     css(),
     analyze({ summaryOnly: true }),
   ],
