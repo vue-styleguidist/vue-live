@@ -1,5 +1,5 @@
 import { parseComponent } from "vue-template-compiler";
-import { isCodeVueSfc } from "vue-inbrowser-compiler-utils";
+import { isCodeVueSfc } from "vue-inbrowser-compiler";
 
 export default function(code, jsxInExamples) {
   // In case we are loading a vue component as an example, extract script tag
