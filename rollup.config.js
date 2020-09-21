@@ -31,11 +31,7 @@ export default {
       extensions: [".js"],
       babelHelpers: "runtime",
     }),
-    vue({
-      template: {
-        optimizeSSR: true,
-      },
-    }),
+    vue(),
     css(),
     analyze({ summaryOnly: true }),
   ],
