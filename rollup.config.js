@@ -8,20 +8,8 @@ import pkg from "./package.json";
 
 const resolve = (_path) => path.resolve(__dirname, _path);
 
-export default {
+const rootConfig = {
   input: resolve("./src/index.js"),
-  output: [
-    {
-      file: pkg.main,
-      name: "VueLive",
-      format: "cjs",
-      exports: "named", // remove warning about mixed exports
-    },
-    {
-      file: pkg.module,
-      format: "es", // the preferred format
-    },
-  ],
   plugins: [
     commonjs(),
     babel({
@@ -30,11 +18,6 @@ export default {
       configFile: "./babel.rollup.js",
       extensions: [".js"],
       babelHelpers: "runtime",
-    }),
-    vue({
-      template: {
-        isProduction: true,
-      },
     }),
     css(),
     analyze({ summaryOnly: true }),
@@ -53,3 +36,25 @@ export default {
     "@vue/compiler-core/dist/compiler-core.cjs",
   ],
 };
+
+export default [
+  // ESM build to be used with webpack/rollup.
+  {
+    ...rootConfig,
+    output: {
+      format: "esm",
+      file: pkg.module,
+    },
+    plugins: [...rootConfig.plugins, vue()],
+  },
+  // SSR build.
+  {
+    ...rootConfig,
+    output: {
+      format: "cjs",
+      file: pkg.main,
+      exports: "named", // remove warning about mixed exports
+    },
+    plugins: [...rootConfig.plugins, vue({ template: { optimizeSSR: true } })],
+  },
+];
