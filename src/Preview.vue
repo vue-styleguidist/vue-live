@@ -171,8 +171,13 @@ export default {
         this.handleError(e);
         return;
       }
-
-      options.components = this.components;
+      if (this.components) {
+        if (!options.components) {
+          options.components = this.components;
+        } else {
+          options.components = { ...options.components, ...this.components };
+        }
+      }
       if (style) {
         // To add the scope id attribute to each item in the html
         // this way when we add the scoped style sheet it will be aplied
