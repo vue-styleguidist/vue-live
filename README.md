@@ -35,6 +35,53 @@ export default {
 
 Check out the [demo](http://vue-live.surge.sh) for alternative syntaxes to write your showcases.
 
+## Enabling template compilation
+
+To compile templates in the browser, you need the compiler to be in your JS bundle.
+
+If you do not, you might see errors about using the runtime version of Vue.
+
+To bundle this, there is a simple solution: Add an alias in `webpack.config.js`.
+
+```js
+module.export = {
+  resolve: {
+    alias: {
+      // this enables loading the "full" version of vue
+      // instead of only loading the vue runtime
+      vue$: "vue/dist/vue.esm.js",
+    },
+  },
+};
+```
+
+in [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack/)
+
+```js
+export default {
+  build: {
+    extend(config, { isDev, isClient }) {
+      // ..
+      config.resolve.alias.vue$ = "vue/dist/vue.esm.js";
+    },
+  },
+};
+```
+
+and finally in [gridsome.config.js](https://gridsome.org/docs/config/#configurewebpack)
+
+```js
+module.exports = {
+  configureWebpack: {
+    resolve: {
+      alias: {
+        vue$: "vue/dist/vue.esm.js",
+      },
+    },
+  },
+};
+```
+
 ## How to contribute
 
 ```sh
