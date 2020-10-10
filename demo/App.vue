@@ -110,8 +110,6 @@ import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
 import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
 import all from "./assets/chicagoNeighbourhoods";
 import "prismjs/themes/prism-tomorrow.css";
-//vue-prism-editor dependency
-import "vue-prism-editor/dist/prismeditor.min.css";
 
 import GithubCorners from "vue-github-corners";
 

@@ -18,6 +18,7 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-markup";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-jsx";
+import "vue-prism-editor/dist/prismeditor.min.css";
 
 import debounce from "debounce";
 import getScript from "./utils/getScript";
@@ -40,14 +41,20 @@ const highlight = (lang, jsxInExamples) => {
         return scriptCodeHighlighted;
       }
       const templateCode = code.slice(scriptCode.length);
+      const templateHighlighted = prismHighlight(templateCode, languages["html"], lang)
       return (
         scriptCodeHighlighted +
-        prismHighlight(templateCode, languages["html"], lang)
+        templateHighlighted
       );
     };
   } else {
-    const langScheme = languages[lang];
-    return (code) => prismHighlight(code, langScheme, lang);
+    return (code) => {
+      const langScheme = languages[lang];
+      if(!langScheme){
+        return code
+      }
+      return prismHighlight(code, langScheme, lang);
+    }
   }
 };
 

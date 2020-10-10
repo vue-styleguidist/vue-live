@@ -1,6 +1,7 @@
 import * as path from "path";
 import commonjs from "@rollup/plugin-commonjs";
 import babel from "@rollup/plugin-babel";
+import node from "@rollup/plugin-node-resolve";
 import vue from "rollup-plugin-vue";
 import css from "rollup-plugin-css-only";
 import analyze from "rollup-plugin-analyzer";
@@ -12,6 +13,7 @@ const rootConfig = {
   input: resolve("./src/index.js"),
   plugins: [
     commonjs(),
+    node(),
     babel({
       babelrc: false,
       // avoid using babel.config.js. It kills es6 modules for ie compatibility
@@ -55,6 +57,9 @@ export default [
       file: pkg.main,
       exports: "named", // remove warning about mixed exports
     },
-    plugins: [...rootConfig.plugins, vue({ template: { optimizeSSR: true } })],
+    plugins: [
+      ...rootConfig.plugins,
+      vue({ css: false, template: { optimizeSSR: true } }),
+    ],
   },
 ];
