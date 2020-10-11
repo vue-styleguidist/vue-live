@@ -23,6 +23,7 @@ const rootConfig = {
     }),
     css(),
     analyze({ summaryOnly: true }),
+    vue({ css: false, template: { optimizeSSR: true } }),
   ],
   external: [
     ...Object.keys(pkg.dependencies),
@@ -47,7 +48,6 @@ export default [
       format: "esm",
       file: pkg.module,
     },
-    plugins: [...rootConfig.plugins, vue()],
   },
   // SSR build.
   {
@@ -57,9 +57,5 @@ export default [
       file: pkg.main,
       exports: "named", // remove warning about mixed exports
     },
-    plugins: [
-      ...rootConfig.plugins,
-      vue({ css: false, template: { optimizeSSR: true } }),
-    ],
   },
 ];
