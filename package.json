@@ -65,11 +65,11 @@
     "url": "https://github.com/vue-styleguidist/vue-live/issues"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "license": "MIT",
-  "main": "dist/vue-live.common.js",
-  "module": "dist/vue-live.esm.js",
+  "main": "lib/vue-live.common.js",
+  "module": "lib/vue-live.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vue-styleguidist/vue-live.git"
