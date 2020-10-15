@@ -1,22 +1,22 @@
 <template functional>
-  <div :class="$style.container">
-    <div :class="$style.editor">
+  <div class="VueLive-container">
+    <div class="VueLive-editor">
       <slot name="editor" />
     </div>
-    <div :class="$style.preview">
+    <div class="VueLivePreview">
       <slot name="preview" />
     </div>
   </div>
 </template>
 
-<style module="VueLive">
-.container {
+<style>
+.VueLive-container {
   display: flex;
 }
-.editor {
+.VueLive-editor {
   width: 50%;
 }
-.preview {
+.VueLivePreview {
   background-color: white;
   width: 50%;
 }

@@ -1,5 +1,5 @@
 <template>
-  <pre :class="$style.error" v-if="error">{{ this.error }}</pre>
+  <pre class="VueLive-error" v-if="error">{{ this.error }}</pre>
   <component
     v-else-if="previewedComponent"
     :id="scope"
@@ -200,8 +200,8 @@ export default {
 };
 </script>
 
-<style module>
-.error {
+<style>
+.VueLive-error {
   color: red;
   text-align: left;
   overflow: auto;
