@@ -2,4 +2,7 @@ let show = true
 let today = new Date();
 
 <input type="checkbox" v-model="show">
-<h1 v-if="show">Hello World</h1>
+<date-picker 
+  style="text-align:center;" 
+  v-if="show" 
+  v-model="today"/>
