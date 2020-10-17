@@ -23,6 +23,7 @@ node_js:
 branches:
   only:
     - master
+    - next
 
 stages:
   - test
