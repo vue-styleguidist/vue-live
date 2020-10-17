@@ -18,7 +18,6 @@
         :editorProps="{ lineNumbers: true }"
         :code="codeTemplate"
         :layout="CustomLayout"
-        :components="registeredComponents"
         @error="(e) => log('Error on first example', e)"
       />
     </div>
@@ -101,7 +100,6 @@
 import { markRaw } from "vue";
 import { VueLive, VueLiveEditor, VueLivePreview } from "../src";
 import CustomLayout from "./CustomLayout";
-import DatePicker from "vuejs-datepicker";
 import codeSfc from "!!raw-loader!./assets/Button.vue";
 import codeJs from "!!raw-loader!./assets/input.js";
 import realjsx from "!!raw-loader!./assets/real.jsx";
@@ -117,7 +115,6 @@ export default {
   components: { VueLive, VueLiveEditor, VueLivePreview, GithubCorners },
   data() {
     return {
-      registeredComponents: { DatePicker: markRaw(DatePicker) },
       codeSfc,
       codeTemplate,
       codeJs,

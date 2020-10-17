@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { markRaw } from "vue";
 import {
   compile as compileScript,
   isCodeVueSfc,
@@ -186,7 +187,7 @@ export default {
       }
 
       if (options.template || options.render) {
-        this.previewedComponent = options;
+        this.previewedComponent = markRaw(options);
         this.iteration = this.iteration + 1;
         this.error = false;
       } else {
