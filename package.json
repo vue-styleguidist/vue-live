@@ -51,7 +51,7 @@
     "vue": "^3.0.0",
     "vue-gh-corners": "^3.0.1",
     "vue-github-corners": "^1.2.3",
-    "vuejs-datepicker": "^1.6.2"
+    "vue3-datepicker": "^0.1.0"
   },
   "peerDependencies": {
     "vue": ">= 2.6.0"
