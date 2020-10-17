@@ -23,6 +23,8 @@ export default function(code, jsxInExamples) {
     return code;
   }
 
+  code = code || "";
+
   //else it will be considered pseudo jsx of vue-styleguidist
   return /^</.test(code.trim()) ? "" : code.split(/\n[\t ]*</)[0];
 }
