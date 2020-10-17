@@ -18,6 +18,7 @@
         :editorProps="{ lineNumbers: true }"
         :code="codeTemplate"
         :layout="CustomLayout"
+        :components="registeredComponents"
         @error="(e) => log('Error on first example', e)"
       />
     </div>
@@ -98,6 +99,7 @@
 </template>
 <script>
 import { markRaw } from "vue";
+import DatePicker from "vue3-datepicker";
 import { VueLive, VueLiveEditor, VueLivePreview } from "../src";
 import CustomLayout from "./CustomLayout";
 import codeSfc from "!!raw-loader!./assets/Button.vue";
@@ -107,6 +109,7 @@ import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
 import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
 import all from "./assets/chicagoNeighbourhoods";
 import "prismjs/themes/prism-tomorrow.css";
+import "vue3-datepicker/dist/vue3-datepicker.css";
 
 import GithubCorners from "vue-github-corners";
 
@@ -115,6 +118,7 @@ export default {
   components: { VueLive, VueLiveEditor, VueLivePreview, GithubCorners },
   data() {
     return {
+      registeredComponents: { DatePicker: markRaw(DatePicker) },
       codeSfc,
       codeTemplate,
       codeJs,

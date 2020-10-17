@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { markRaw } from "vue";
+import { markRaw, h } from "vue";
 import {
   compile as compileScript,
   isCodeVueSfc,
@@ -148,7 +148,8 @@ export default {
               script,
               (filepath) => requireAtRuntime(this.requires, filepath),
               adaptCreateElement,
-              concatenate
+              concatenate,
+              h
             ) || {};
 
           if (this.dataScope) {

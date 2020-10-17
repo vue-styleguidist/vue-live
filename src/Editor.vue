@@ -1,7 +1,7 @@
 <template>
   <PrismEditor
     v-model="stableCode"
-    @input="updatePreview"
+    @update:modelValue="updatePreview"
     :highlight="highlighter"
     v-bind="editorProps"
   />
@@ -41,20 +41,21 @@ const highlight = (lang, jsxInExamples) => {
         return scriptCodeHighlighted;
       }
       const templateCode = code.slice(scriptCode.length);
-      const templateHighlighted = prismHighlight(templateCode, languages["html"], lang)
-      return (
-        scriptCodeHighlighted +
-        templateHighlighted
+      const templateHighlighted = prismHighlight(
+        templateCode,
+        languages["html"],
+        lang
       );
+      return scriptCodeHighlighted + templateHighlighted;
     };
   } else {
     return (code) => {
       const langScheme = languages[lang];
-      if(!langScheme){
-        return code
+      if (!langScheme) {
+        return code;
       }
       return prismHighlight(code, langScheme, lang);
-    }
+    };
   }
 };
 
