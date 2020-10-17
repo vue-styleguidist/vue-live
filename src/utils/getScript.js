@@ -1,11 +1,14 @@
-import { parseComponent } from "vue-template-compiler";
 import { isCodeVueSfc } from "vue-inbrowser-compiler";
 
 export default function(code, jsxInExamples) {
   // In case we are loading a vue component as an example, extract script tag
   if (isCodeVueSfc(code)) {
-    const parts = parseComponent(code);
-    return parts && parts.script ? parts.script.content : "";
+    if (window.DOMParser) {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(code, "text/xml");
+      const parts = xmlDoc.getElementsByTagName("script");
+      return parts && parts.length ? parts[0].childNodes[0].nodeValue : "";
+    }
   }
 
   // if in JSX mode or litteral return examples code as is
