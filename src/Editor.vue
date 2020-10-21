@@ -61,6 +61,7 @@ const highlight = (lang, jsxInExamples) => {
 
 export default {
   name: "VueLiveEditor",
+  inheritAttrs: false,
   components: { PrismEditor },
   props: {
     code: {
