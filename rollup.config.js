@@ -36,6 +36,7 @@ const rootConfig = {
     "prismjs/components/prism-javascript",
     "prismjs/components/prism-jsx",
     "@vue/compiler-core/dist/compiler-core.cjs",
+    "vue"
   ],
 };
 
