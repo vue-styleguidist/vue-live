@@ -166,7 +166,7 @@ export default {
       }
 
       try {
-        checkTemplate(options, this.checkVariableAvailability, code);
+        checkTemplate(options, this.checkVariableAvailability);
       } catch (e) {
         this.handleError(e);
         return;

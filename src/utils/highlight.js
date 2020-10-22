@@ -32,7 +32,10 @@ export default (lang, jsxInExamples) => {
       );
 
       return (
-        getSquiggles(errorLoc, scriptCode.split("\n").length) +
+        getSquiggles(
+          errorLoc,
+          errorLoc && errorLoc.start ? scriptCode.split("\n").length : 0
+        ) +
         scriptCodeHighlighted +
         templateHighlighted
       );
@@ -44,23 +47,43 @@ export default (lang, jsxInExamples) => {
         return code;
       }
 
-      return getSquiggles(errorLoc) + prismHighlight(code, langScheme, lang);
+      let lineOffset = 0;
+      // if we look at a SFC code
+      if (lang === "html" && errorLoc && errorLoc.start) {
+        // offset the line to the block where the error has been discovered
+        // in the template if errorLoc has a start & end
+        const codeBeforeTemplate = code.split(/<template/)[0];
+
+        lineOffset = codeBeforeTemplate.split("\n").length;
+      }
+
+      return (
+        getSquiggles(errorLoc, lineOffset) +
+        prismHighlight(code, langScheme, lang)
+      );
     };
   }
 };
 
-function getSquiggles(errorLoc, lineOffset = 0) {
-  const errorWidth =
-    errorLoc && errorLoc.end
-      ? errorLoc.end.column - errorLoc.start.column + 1
-      : 2;
-  let { line, column } = errorLoc ? errorLoc.start || errorLoc : {};
-  return errorLoc
-    ? '<span class="VueLive-squiggles-wrapper"> ' +
-        Array(errorLoc.start ? line + lineOffset - 1 : line).join("\n") +
-        Array(column).join(" ") +
-        '<span class="VueLive-squiggles">' +
-        Array(errorWidth).join(" ") +
-        "</span></span>"
-    : "";
+function getSquiggles(errorLoc, lineOffset = 0, columnOffSet = 0) {
+  if (!errorLoc) return "";
+  const errorWidth = errorLoc.end
+    ? errorLoc.end.column - errorLoc.start.column + 1
+    : 2;
+  let line, column;
+  if (errorLoc.start) {
+    line = errorLoc.start.line - 1;
+    column = errorLoc.start.column;
+  } else {
+    line = errorLoc.line;
+    column = errorLoc.column;
+  }
+  return (
+    '<span class="VueLive-squiggles-wrapper"> ' +
+    Array(line + lineOffset).join("\n") +
+    Array(column + columnOffSet).join(" ") +
+    '<span class="VueLive-squiggles">' +
+    Array(errorWidth).join(" ") +
+    "</span></span>"
+  );
 }

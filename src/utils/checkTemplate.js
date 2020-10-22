@@ -8,7 +8,7 @@ const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
 const INTERPOLATION = 5;
 
-export default function($options, checkVariableAvailability, code) {
+export default function($options, checkVariableAvailability) {
   if (!$options.template) {
     return;
   }
@@ -49,6 +49,12 @@ export default function($options, checkVariableAvailability, code) {
       const templateVars = [];
       if (templateAst.type === ELEMENT) {
         templateAst.props.forEach((attr) => {
+          if (!/^[a-z,-,:]+$/g.test(attr.name)) {
+            throw new VueLiveParseTemplateAttrError(
+              "[VueLive] Invalid attribute name: " + attr.name,
+              attr.loc
+            );
+          }
           const exp =
             attr.type !== SIMPLE_EXPRESSION && attr.exp
               ? attr.exp.content
@@ -114,8 +120,7 @@ export default function($options, checkVariableAvailability, code) {
             e.message,
             templateAst.content,
             e,
-            templateAst.loc,
-            code
+            templateAst.loc
           );
         }
       }
@@ -184,6 +189,11 @@ export function traverse(templateAst, handlers, availableVarNames = []) {
 export function VueLiveUndefinedVariableError(message, varName) {
   this.message = message;
   this.varName = varName;
+}
+
+export function VueLiveParseTemplateAttrError(message, loc) {
+  this.message = message;
+  this.loc = loc;
 }
 
 export function VueLiveParseTemplateError(message, expression, subError, loc) {
