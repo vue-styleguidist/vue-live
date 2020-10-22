@@ -47,9 +47,12 @@ export default (lang, jsxInExamples) => {
         return code;
       }
 
+      const lineOffset = errorLoc && errorLoc.start ? 1 : 0;
+      const colOffset = errorLoc && errorLoc.start ? 0 : 1;
+
       return (
         // if the error is in the template no need for column padding
-        getSquiggles(errorLoc, 1, errorLoc && errorLoc.start ? 0 : 1) +
+        getSquiggles(errorLoc, lineOffset, colOffset) +
         prismHighlight(code, langScheme, lang)
       );
     };

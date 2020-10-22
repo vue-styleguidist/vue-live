@@ -1,5 +1,5 @@
 <template>
-  <main style="text-align: center;">
+  <main style="text-align: center">
     <h1>Vue Live renders vue code in the browser</h1>
     <p class="description">
       <em>vue-live</em> is a VueJs component. It renders the code passed in prop
@@ -35,9 +35,7 @@
       <h2>Pure JavaScript code</h2>
       <p>Or if you prefer to, use the <b>new Vue()</b> format</p>
       <VueLive :code="codeJs" :layout="CustomLayout" />
-      <h2>
-        Extra dependencies
-      </h2>
+      <h2>Extra dependencies</h2>
       <p>
         Use the <b>requires</b> prop to make libraries and packages available in
         the browser
@@ -60,7 +58,7 @@
       />
 
       <h2>Default Layout</h2>
-      <div style="width: 950px; max-width: 95vw; margin: 20px auto;">
+      <div style="width: 950px; max-width: 95vw; margin: 20px auto">
         <VueLive :code="`<input type='button' value='I am Groot' />`" />
       </div>
       <h2>Custom Layout</h2>
@@ -84,11 +82,19 @@
       <h2>Separate components for Editor and Preview</h2>
       <div class="separate">
         <div class="preview-separate">
-          <VueLivePreview :code="separateCode" />
+          <VueLivePreview
+            :code="separateCode"
+            @error="(e) => (error = e)"
+            @success="error = undefined"
+          />
         </div>
-        <hr style="width: 950px;" />
+        <hr style="width: 950px" />
         <p>Edit the code here</p>
-        <VueLiveEditor :code="separateCode" @change="updateCode" />
+        <VueLiveEditor
+          :code="separateCode"
+          @change="updateCode"
+          :error="error"
+        />
         <div class="button-bar"><button>Save</button></div>
       </div>
     </div>
@@ -128,6 +134,7 @@ export default {
       realjsx,
       separateCode: codeSfc,
       openExamples: false,
+      error: undefined,
     };
   },
   methods: {
