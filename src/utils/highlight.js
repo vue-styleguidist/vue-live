@@ -34,7 +34,7 @@ export default (lang, jsxInExamples) => {
       return (
         getSquiggles(
           errorLoc,
-          errorLoc && errorLoc.start ? scriptCode.split("\n").length : 0
+          errorLoc && errorLoc.start ? scriptCode.split("\n").length - 1 : 0
         ) +
         scriptCodeHighlighted +
         templateHighlighted
@@ -47,13 +47,9 @@ export default (lang, jsxInExamples) => {
         return code;
       }
 
-      const lineOffset = errorLoc && errorLoc.start ? 1 : 0;
-      const colOffset = errorLoc && errorLoc.start ? 0 : 1;
-
       return (
         // if the error is in the template no need for column padding
-        getSquiggles(errorLoc, lineOffset, colOffset) +
-        prismHighlight(code, langScheme, lang)
+        getSquiggles(errorLoc) + prismHighlight(code, langScheme, lang)
       );
     };
   }
@@ -64,18 +60,11 @@ function getSquiggles(errorLoc, lineOffset = 0, columnOffSet = 0) {
   const errorWidth = errorLoc.end
     ? errorLoc.end.column - errorLoc.start.column + 1
     : 2;
-  let line, column;
-  if (errorLoc.start) {
-    line = errorLoc.start.line - 1;
-    column = errorLoc.start.column;
-  } else {
-    line = errorLoc.line;
-    column = errorLoc.column;
-  }
+  let { line, column } = errorLoc.start ? errorLoc.start : errorLoc;
   return (
-    '<span class="VueLive-squiggles-wrapper"> ' +
+    '<span class="VueLive-squiggles-wrapper">' +
     Array(line + lineOffset).join("\n") +
-    Array(column + columnOffSet).join(" ") +
+    Array(column + columnOffSet + 1).join(" ") +
     '<span class="VueLive-squiggles">' +
     Array(errorWidth).join(" ") +
     "</span></span>"
