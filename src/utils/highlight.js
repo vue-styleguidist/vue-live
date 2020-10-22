@@ -22,7 +22,7 @@ export default (lang, jsxInExamples) => {
         lang
       );
       if (code.length === scriptCode.length) {
-        return scriptCodeHighlighted;
+        return getSquiggles(errorLoc) + scriptCodeHighlighted;
       }
       const templateCode = code.slice(scriptCode.length);
       const templateHighlighted = prismHighlight(
@@ -57,6 +57,7 @@ export default (lang, jsxInExamples) => {
 
 function getSquiggles(errorLoc, lineOffset = 0, columnOffSet = 0) {
   if (!errorLoc) return "";
+  columnOffSet = errorLoc.start ? 0 : 1;
   const errorWidth = errorLoc.end
     ? errorLoc.end.column - errorLoc.start.column + 1
     : 2;
@@ -64,7 +65,7 @@ function getSquiggles(errorLoc, lineOffset = 0, columnOffSet = 0) {
   return (
     '<span class="VueLive-squiggles-wrapper">' +
     Array(line + lineOffset).join("\n") +
-    Array(column + columnOffSet + 1).join(" ") +
+    Array(column + columnOffSet).join(" ") +
     '<span class="VueLive-squiggles">' +
     Array(errorWidth).join(" ") +
     "</span></span>"
