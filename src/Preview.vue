@@ -166,7 +166,7 @@ export default {
       }
 
       try {
-        checkTemplate(options, this.checkVariableAvailability);
+        checkTemplate(options, this.checkVariableAvailability, code);
       } catch (e) {
         this.handleError(e);
         return;
@@ -192,9 +192,10 @@ export default {
       } else {
         this.handleError({
           message:
-            "[Vue Live] no template or render function specified, you might have an issue in your example",
+            "[Vue Live] no template or render function specified. Example cannot be rendered.",
         });
       }
+      this.$emit("success");
     },
   },
 };

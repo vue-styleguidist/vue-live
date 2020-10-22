@@ -1,4 +1,5 @@
 import { parse as parseVue } from "@vue/compiler-dom";
+// force proper english errors
 import { createCompilerError } from "@vue/compiler-core/dist/compiler-core.cjs";
 import { parse as parseEs } from "acorn";
 import { visit } from "recast";
@@ -7,7 +8,7 @@ const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
 const INTERPOLATION = 5;
 
-export default function($options, checkVariableAvailability) {
+export default function($options, checkVariableAvailability, code) {
   if (!$options.template) {
     return;
   }
@@ -15,7 +16,7 @@ export default function($options, checkVariableAvailability) {
   try {
     ast = parseVue($options.template);
   } catch (e) {
-    throw createCompilerError(e.code);
+    throw createCompilerError(e.code, e.loc);
   }
 
   if (!checkVariableAvailability) {
@@ -95,7 +96,7 @@ export default function($options, checkVariableAvailability) {
                 ...templateVars,
               ]);
             } catch (e) {
-              throw new VueLiveParseTemplateError(e.message, exp, e);
+              throw new VueLiveParseTemplateError(e.message, exp, e, attr.loc);
             }
           }
         });
@@ -112,7 +113,9 @@ export default function($options, checkVariableAvailability) {
           throw new VueLiveParseTemplateError(
             e.message,
             templateAst.content,
-            e
+            e,
+            templateAst.loc,
+            code
           );
         }
       }
@@ -183,8 +186,9 @@ export function VueLiveUndefinedVariableError(message, varName) {
   this.varName = varName;
 }
 
-export function VueLiveParseTemplateError(message, expression, subError) {
+export function VueLiveParseTemplateError(message, expression, subError, loc) {
   this.message = message;
   this.expression = expression;
   this.subError = subError;
+  this.loc = loc;
 }
