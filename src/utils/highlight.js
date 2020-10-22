@@ -55,9 +55,9 @@ export default (lang, jsxInExamples) => {
   }
 };
 
-function getSquiggles(errorLoc, lineOffset = 0, columnOffSet = 0) {
+function getSquiggles(errorLoc, lineOffset = 0) {
   if (!errorLoc) return "";
-  columnOffSet = errorLoc.start ? 0 : 1;
+  const columnOffSet = errorLoc.start ? 0 : 1;
   const errorWidth = errorLoc.end
     ? errorLoc.end.column - errorLoc.start.column + 1
     : 2;
