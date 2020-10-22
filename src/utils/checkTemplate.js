@@ -142,6 +142,8 @@ export function checkExpression(expression, availableVars, templateVars) {
       if (
         identifier.name === "expression" ||
         identifier.name === "argument" ||
+        identifier.name === "left" ||
+        identifier.name === "right" ||
         identifier.parentPath.name === "arguments"
       ) {
         if (

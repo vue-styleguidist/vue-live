@@ -109,10 +109,31 @@ test("parse invalid template with an error if the value is not in data", () => {
   );
 });
 
-test("parse template interpolatio and detect undefined variables", () => {
+test("parse template interpolation and detect lonely undefined variables", () => {
   expect(() =>
     checkTemplate({
       template: "<div><compo>{{ hello }}</compo></div>",
+    })
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Variable \\"hello\\" is not defined."`
+  );
+});
+
+test("parse template interpolation and detect impacted undefined variables", () => {
+  expect(() =>
+    checkTemplate({
+      template: "<div><compo>{{ hello + 'bonjour' }}</compo></div>",
+    })
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Variable \\"hello\\" is not defined."`
+  );
+});
+
+test("parse template interpolation and detect impacted right variables", () => {
+  expect(() =>
+    checkTemplate({
+      template:
+        "<div><compo>{{ 'bonjour' + hello + 'sayonara' }}</compo></div>",
     })
   ).toThrowErrorMatchingInlineSnapshot(
     `"Variable \\"hello\\" is not defined."`

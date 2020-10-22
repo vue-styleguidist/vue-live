@@ -47,18 +47,9 @@ export default (lang, jsxInExamples) => {
         return code;
       }
 
-      let lineOffset = 0;
-      // if we look at a SFC code
-      if (lang === "html" && errorLoc && errorLoc.start) {
-        // offset the line to the block where the error has been discovered
-        // in the template if errorLoc has a start & end
-        const codeBeforeTemplate = code.split(/<template/)[0];
-
-        lineOffset = codeBeforeTemplate.split("\n").length;
-      }
-
       return (
-        getSquiggles(errorLoc, lineOffset) +
+        // if the error is in the template no need for column padding
+        getSquiggles(errorLoc, 1, errorLoc && errorLoc.start ? 0 : 1) +
         prismHighlight(code, langScheme, lang)
       );
     };
