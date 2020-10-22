@@ -46,6 +46,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    squiggles: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -62,7 +66,7 @@ export default {
     highlighter(code) {
       return highlight(this.prismLang, this.jsx)(
         code,
-        this.error && this.error.loc
+        this.squiggles && this.error && this.error.loc
       );
     },
   },

@@ -17,6 +17,7 @@
         :editor-props="editorProps"
         :error="error"
         :jsx="jsx"
+        :squiggles="squiggles"
         @change="updatePreview"
       />
     </template>
@@ -138,6 +139,14 @@ export default {
      * NOTE: if this is not checked, undefined vars will yield a blank output
      */
     checkVariableAvailability: {
+      type: Boolean,
+      default: true,
+    },
+    /**
+     * Show the red markings
+     * where the compiler found errors
+     */
+    squiggles: {
       type: Boolean,
       default: true,
     },
