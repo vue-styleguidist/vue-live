@@ -330,6 +330,12 @@ Makes sure that every variable in the template actually exists when the user sta
 
 Throws an error in te preview field when the variable dont exist.
 
+### `squiggles`
+
+**Type** Boolean default: `true`
+
+Shows a red indicator when the parser errors with the code given.
+
 ## How to contribute
 
 ```sh
