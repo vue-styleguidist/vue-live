@@ -15,7 +15,9 @@
         :delay="delay"
         :prism-lang="prismLang"
         :editor-props="editorProps"
+        :error="error"
         :jsx="jsx"
+        :squiggles="squiggles"
         @change="updatePreview"
       />
     </template>
@@ -30,7 +32,8 @@
         :key="codeKey"
         :code="model"
         @detect-language="switchLanguage"
-        @error="(e) => $emit('error', e)"
+        @error="handleError"
+        @success="error = undefined"
         :components="components"
         :requires="requires"
         :jsx="jsx"
@@ -55,7 +58,7 @@ const LANG_TO_PRISM = {
 const UPDATE_DELAY = 300;
 
 export default {
-  name: "VueLivePreview",
+  name: "VueLive",
   components: { Preview, Editor },
   props: {
     /**
@@ -139,6 +142,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    /**
+     * Show the red markings
+     * where the compiler found errors
+     */
+    squiggles: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -152,6 +163,7 @@ export default {
        * editor repainted every keystroke
        */
       stableCode: this.code,
+      error: undefined,
     };
   },
   computed: {
@@ -169,7 +181,6 @@ export default {
     updatePreview(code) {
       this.stableCode = code;
       this.model = code;
-
       this.$emit("change", code);
     },
     switchLanguage(newLang) {
@@ -179,6 +190,10 @@ export default {
         this.prismLang = newPrismLang;
         this.stableCode = this.model;
       }
+    },
+    handleError(e) {
+      this.error = e;
+      this.$emit("error", e);
     },
   },
 };

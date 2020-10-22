@@ -9,54 +9,13 @@
 
 <script>
 import { PrismEditor } from "vue-prism-editor";
+import debounce from "debounce";
 
-import {
-  highlight as prismHighlight,
-  languages,
-} from "prismjs/components/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-markup";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-jsx";
 import "vue-prism-editor/dist/prismeditor.min.css";
 
-import debounce from "debounce";
-import getScript from "./utils/getScript";
+import highlight from "./utils/highlight";
 
 const UPDATE_DELAY = 300;
-
-const highlight = (lang, jsxInExamples) => {
-  if (lang === "vsg") {
-    return (code) => {
-      if (!code) {
-        return "";
-      }
-      const scriptCode = getScript(code, jsxInExamples);
-      const scriptCodeHighlighted = prismHighlight(
-        scriptCode,
-        languages[jsxInExamples ? "jsx" : "js"],
-        lang
-      );
-      if (code.length === scriptCode.length) {
-        return scriptCodeHighlighted;
-      }
-      const templateCode = code.slice(scriptCode.length);
-      const templateHighlighted = prismHighlight(templateCode, languages["html"], lang)
-      return (
-        scriptCodeHighlighted +
-        templateHighlighted
-      );
-    };
-  } else {
-    return (code) => {
-      const langScheme = languages[lang];
-      if(!langScheme){
-        return code
-      }
-      return prismHighlight(code, langScheme, lang);
-    }
-  }
-};
 
 export default {
   name: "VueLiveEditor",
@@ -65,6 +24,10 @@ export default {
     code: {
       type: String,
       required: true,
+    },
+    error: {
+      type: [Error, Object],
+      default: undefined,
     },
     delay: {
       type: Number,
@@ -83,6 +46,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    squiggles: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -97,7 +64,10 @@ export default {
   },
   methods: {
     highlighter(code) {
-      return highlight(this.prismLang, this.jsx)(code);
+      return highlight(this.prismLang, this.jsx)(
+        code,
+        this.squiggles && this.error && this.error.loc
+      );
     },
   },
   watch: {
@@ -113,3 +83,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.VueLive-squiggles-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.VueLive-squiggles {
+  border-bottom: 2px dotted red;
+}
+</style>
