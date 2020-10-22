@@ -134,7 +134,7 @@ export default {
           // if so, change scheme used by editor
           // NOTE: vsg is a superset of JavaScript allowing
           // the template to succeed litterally code, very useful for examples
-          // vsg stands for vue-styleguidist
+          // NOTE2: vsg stands for vue-styleguidist
           this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
 
           // compile and execute the script
