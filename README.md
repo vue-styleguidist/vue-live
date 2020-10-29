@@ -49,7 +49,7 @@ module.exports = {
     alias: {
       // this enables loading the "full" version of vue
       // instead of only loading the vue runtime
-      vue$: "vue/dist/vue.esm.js",
+      vue$: "vue/dist/vue.esm-browser.js",
     },
   },
 };
@@ -63,7 +63,7 @@ module.exports = {
     configureWebpack: {
         resolve:{
             alias:{
-                vue$: "vue/dist/vue.esm.js",
+                vue$: "vue/dist/vue.esm-browser.js",
             }
         }
     }
@@ -78,7 +78,7 @@ export default {
   build: {
     extend(config, { isDev, isClient }) {
       // ..
-      config.resolve.alias.vue$ = "vue/dist/vue.esm.js";
+      config.resolve.alias.vue$ = "vue/dist/vue.esm-browser.js";
     },
   },
 };
@@ -91,7 +91,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        vue$: "vue/dist/vue.esm.js",
+        vue$: "vue/dist/vue.esm-browser.js",
       },
     },
   },
