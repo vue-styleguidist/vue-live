@@ -19,6 +19,8 @@ The simplest way to render components is as a VueJs template:
 
 <script>
 import { VueLive } from "vue-live";
+// import the css separately for easier SSR
+import "vue-live/lib/vue-live.esm.css"
 import DatePicker from "vuejs-datepicker"
 
 export default {
