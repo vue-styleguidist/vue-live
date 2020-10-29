@@ -44,7 +44,7 @@ If you do not, you might see errors about using the runtime version of Vue.
 To bundle this, there is a simple solution: Add an alias in `webpack.config.js`.
 
 ```js
-module.export = {
+module.exports = {
   resolve: {
     alias: {
       // this enables loading the "full" version of vue
@@ -54,6 +54,22 @@ module.export = {
   },
 };
 ```
+
+in [vue.config.js](https://cli.vuejs.org/guide/webpack.html)
+
+
+```js
+module.exports = {
+    configureWebpack: {
+        resolve:{
+            alias:{
+                vue$: "vue/dist/vue.esm.js",
+            }
+        }
+    }
+}
+```
+
 
 in [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack/)
 
