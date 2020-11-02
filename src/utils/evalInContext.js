@@ -17,7 +17,7 @@ export default function evalInContext(
     "__pragma__",
     "__concatenate__",
     "h",
-    // FIXME: this "replace" should be removed as soona s the compiler utils are updated to vue 3
+    // FIXME: this "replace" should be removed as soon as the compiler utils are updated to vue 3
     code.replace(/var h = this\.\$createElement;/, "")
   );
 
