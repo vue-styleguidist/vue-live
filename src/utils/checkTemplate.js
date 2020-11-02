@@ -1,7 +1,8 @@
 import { parse as parseVue } from "@vue/compiler-dom";
+// force proper english errors
 import { createCompilerError } from "@vue/compiler-core/dist/compiler-core.cjs";
 import { parse as parseEs } from "acorn";
-import { visit } from "recast";
+import { ancestor, simple } from "acorn-walk";
 
 const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
@@ -15,7 +16,7 @@ export default function($options, checkVariableAvailability) {
   try {
     ast = parseVue($options.template);
   } catch (e) {
-    throw createCompilerError(e.code);
+    throw createCompilerError(e.code, e.loc);
   }
 
   if (!checkVariableAvailability) {
@@ -48,6 +49,12 @@ export default function($options, checkVariableAvailability) {
       const templateVars = [];
       if (templateAst.type === ELEMENT) {
         templateAst.props.forEach((attr) => {
+          if (!/^[a-z,-,:]+$/g.test(attr.name)) {
+            throw new VueLiveParseTemplateAttrError(
+              "[VueLive] Invalid attribute name: " + attr.name,
+              attr.loc
+            );
+          }
           const exp =
             attr.type !== SIMPLE_EXPRESSION && attr.exp
               ? attr.exp.content
@@ -57,9 +64,10 @@ export default function($options, checkVariableAvailability) {
           }
           if (attr.name === "slot") {
             const astSlot = parseEs(`var ${exp}=1`);
-            visit(astSlot, {
-              visitVariableDeclarator(declarator) {
-                const { id } = declarator.node;
+            simple(astSlot, {
+              VariableDeclarator(declarator) {
+                // @ts-ignore
+                const { id } = declarator;
                 switch (id.type) {
                   case "ArrayPattern":
                     id.elements.forEach((e) => {
@@ -95,7 +103,7 @@ export default function($options, checkVariableAvailability) {
                 ...templateVars,
               ]);
             } catch (e) {
-              throw new VueLiveParseTemplateError(e.message, exp, e);
+              throw new VueLiveParseTemplateError(e.message, exp, e, attr.loc);
             }
           }
         });
@@ -112,7 +120,8 @@ export default function($options, checkVariableAvailability) {
           throw new VueLiveParseTemplateError(
             e.message,
             templateAst.content,
-            e
+            e,
+            templateAst.loc
           );
         }
       }
@@ -128,26 +137,25 @@ export function checkExpression(expression, availableVars, templateVars) {
   // identify all variables that would be undefined because
   // - not in the options object
   // - not defined in the template
-  visit(ast, {
-    visitIdentifier(identifier) {
-      const varName = identifier.value.name;
+  ancestor(ast, {
+    Identifier(identifier, ancestors) {
+      // @ts-ignore
+      const varName = identifier.name;
       if (
-        identifier.name === "expression" ||
-        identifier.name === "argument" ||
-        identifier.parentPath.name === "arguments"
+        ancestors.length >= 2 &&
+        ancestors[ancestors.length - 2].type === "CallExpression" &&
+        ancestors[ancestors.length - 2].callee.name === varName
       ) {
-        if (
-          availableVars.indexOf(varName) === -1 &&
-          templateVars.indexOf(varName) === -1
-        ) {
-          throw new VueLiveUndefinedVariableError(
-            `Variable "${varName}" is not defined.`,
-            varName
-          );
-        }
+        return;
+      } else if (
+        availableVars.indexOf(varName) === -1 &&
+        templateVars.indexOf(varName) === -1
+      ) {
+        throw new VueLiveUndefinedVariableError(
+          `Variable "${varName}" is not defined.`,
+          varName
+        );
       }
-
-      this.traverse(identifier);
     },
   });
 }
@@ -183,8 +191,14 @@ export function VueLiveUndefinedVariableError(message, varName) {
   this.varName = varName;
 }
 
-export function VueLiveParseTemplateError(message, expression, subError) {
+export function VueLiveParseTemplateAttrError(message, loc) {
+  this.message = message;
+  this.loc = loc;
+}
+
+export function VueLiveParseTemplateError(message, expression, subError, loc) {
   this.message = message;
   this.expression = expression;
   this.subError = subError;
+  this.loc = loc;
 }
