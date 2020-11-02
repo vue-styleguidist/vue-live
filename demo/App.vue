@@ -82,11 +82,19 @@
       <h2>Separate components for Editor and Preview</h2>
       <div class="separate">
         <div class="preview-separate">
-          <VueLivePreview :code="separateCode" />
+          <VueLivePreview
+            :code="separateCode"
+            @error="(e) => (error = e)"
+            @success="error = undefined"
+          />
         </div>
         <hr style="width: 950px" />
         <p>Edit the code here</p>
-        <VueLiveEditor :code="separateCode" @change="updateCode" />
+        <VueLiveEditor
+          :code="separateCode"
+          @change="updateCode"
+          :error="error"
+        />
         <div class="button-bar"><button>Save</button></div>
       </div>
     </div>
@@ -128,6 +136,7 @@ export default {
       realjsx,
       separateCode: codeSfc,
       openExamples: false,
+      error: undefined,
     };
   },
   methods: {
