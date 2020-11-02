@@ -1,7 +1,7 @@
 import { parse as parseVue } from "@vue/compiler-dom";
 import { createCompilerError } from "@vue/compiler-core/dist/compiler-core.cjs";
 import { parse as parseEs } from "acorn";
-import { visit } from "recast";
+import { simple } from "acorn-walk";
 
 const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
@@ -57,8 +57,8 @@ export default function($options, checkVariableAvailability) {
           }
           if (attr.name === "slot") {
             const astSlot = parseEs(`var ${exp}=1`);
-            visit(astSlot, {
-              visitVariableDeclarator(declarator) {
+            simple(astSlot, {
+              VariableDeclarator(declarator) {
                 const { id } = declarator.node;
                 switch (id.type) {
                   case "ArrayPattern":
@@ -128,8 +128,8 @@ export function checkExpression(expression, availableVars, templateVars) {
   // identify all variables that would be undefined because
   // - not in the options object
   // - not defined in the template
-  visit(ast, {
-    visitIdentifier(identifier) {
+  simple(ast, {
+    Identifier(identifier) {
       const varName = identifier.value.name;
       if (
         identifier.name === "expression" ||
