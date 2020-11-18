@@ -267,7 +267,7 @@ test("throw error when invalid character attributes", () => {
   ).toThrowError("[VueLive] Invalid attribute name: $s");
 });
 
-test("throw error when invalid character attributes", () => {
+test("throw error when invalid character attributes $", () => {
   expect(() =>
     checkTemplate({
       template: `<div $s="as">
@@ -277,14 +277,14 @@ test("throw error when invalid character attributes", () => {
   ).toThrowError("[VueLive] Invalid attribute name: $s");
 });
 
-test("throw error when invalid character attributes", () => {
+test("throw error when invalid character attributes +", () => {
   expect(() =>
     checkTemplate({
-      template: `<div s:tata="as">
+      template: `<div s+tata="as">
           <div/>
         </div>`,
     })
-  ).toThrowError("[VueLive] Invalid attribute name: s:tata");
+  ).toThrowError("[VueLive] Invalid attribute name: s+tata");
 });
 
 test("not error when all attributes are valid", () => {
