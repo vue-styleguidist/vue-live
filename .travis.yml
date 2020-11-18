@@ -23,13 +23,14 @@ node_js:
 branches:
   only:
     - master
+    - next
 
 stages:
   - test
   - name: demo
     if: type != pull_request AND branch = master
   - name: release
-    if: type != pull_request AND branch = master
+    if: type != pull_request AND (branch = master OR branch = next)
 
 jobs:
   include:

@@ -13,16 +13,16 @@ describe("Live Refresh", () => {
 
   it("changes the render after code change", () => {
     cy.get("@preview")
-      .find(".vdp-datepicker input")
+      .find(".v3dp__datepicker input")
       .should("not.have.value", "");
 
-    const codeToDelete = ' :value="today"/>';
+    const codeToDelete = ' v-model="today"/>';
     cy.get("@container")
       .find(".prism-editor-wrapper textarea")
       .type(`${"{backspace}".repeat(codeToDelete.length)}/>`);
 
     cy.get("@preview")
-      .find(".vdp-datepicker input")
+      .find(".v3dp__datepicker input")
       .should("have.value", "");
   });
 });

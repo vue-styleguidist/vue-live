@@ -19,6 +19,8 @@ The simplest way to render components is as a VueJs template:
 
 <script>
 import { VueLive } from "vue-live";
+// import the css separately for easier SSR
+import "vue-live/lib/vue-live.esm.css"
 import DatePicker from "vuejs-datepicker"
 
 export default {
@@ -44,16 +46,32 @@ If you do not, you might see errors about using the runtime version of Vue.
 To bundle this, there is a simple solution: Add an alias in `webpack.config.js`.
 
 ```js
-module.export = {
+module.exports = {
   resolve: {
     alias: {
       // this enables loading the "full" version of vue
       // instead of only loading the vue runtime
-      vue$: "vue/dist/vue.esm.js",
+      vue$: "vue/dist/vue.esm-browser.js",
     },
   },
 };
 ```
+
+in [vue.config.js](https://cli.vuejs.org/guide/webpack.html)
+
+
+```js
+module.exports = {
+    configureWebpack: {
+        resolve:{
+            alias:{
+                vue$: "vue/dist/vue.esm-browser.js",
+            }
+        }
+    }
+}
+```
+
 
 in [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack/)
 
@@ -62,7 +80,7 @@ export default {
   build: {
     extend(config, { isDev, isClient }) {
       // ..
-      config.resolve.alias.vue$ = "vue/dist/vue.esm.js";
+      config.resolve.alias.vue$ = "vue/dist/vue.esm-browser.js";
     },
   },
 };
@@ -75,7 +93,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        vue$: "vue/dist/vue.esm.js",
+        vue$: "vue/dist/vue.esm-browser.js",
       },
     },
   },

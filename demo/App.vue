@@ -106,9 +106,10 @@
   </main>
 </template>
 <script>
+import { markRaw } from "vue";
+import DatePicker from "vue3-datepicker";
 import { VueLive, VueLiveEditor, VueLivePreview } from "../src";
 import CustomLayout from "./CustomLayout";
-import DatePicker from "vuejs-datepicker";
 import codeSfc from "!!raw-loader!./assets/Button.vue";
 import codeJs from "!!raw-loader!./assets/input.js";
 import realjsx from "!!raw-loader!./assets/real.jsx";
@@ -116,6 +117,7 @@ import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
 import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
 import all from "./assets/chicagoNeighbourhoods";
 import "prismjs/themes/prism-tomorrow.css";
+import "vue3-datepicker/dist/vue3-datepicker.css";
 
 import GithubCorners from "vue-github-corners";
 
@@ -124,12 +126,12 @@ export default {
   components: { VueLive, VueLiveEditor, VueLivePreview, GithubCorners },
   data() {
     return {
-      registeredComponents: { DatePicker },
+      registeredComponents: { DatePicker: markRaw(DatePicker) },
       codeSfc,
       codeTemplate,
       codeJs,
       codeChicago,
-      CustomLayout,
+      CustomLayout: markRaw(CustomLayout),
       chicagoRequires: { "./chicagoNeighbourhoods": all },
       realjsx,
       separateCode: codeSfc,

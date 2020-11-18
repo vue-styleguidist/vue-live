@@ -8,10 +8,18 @@ export default function evalInContext(
   code,
   require,
   adaptCreateElement,
-  concatenate
+  concatenate,
+  h
 ) {
   // eslint-disable-next-line no-new-func
-  const func = new Function("require", "__pragma__", "__concatenate__", code);
+  const func = new Function(
+    "require",
+    "__pragma__",
+    "__concatenate__",
+    "h",
+    // FIXME: this "replace" should be removed as soon as the compiler utils are updated to vue 3
+    code.replace(/var h = this\.\$createElement;/, "")
+  );
 
-  return func(require, adaptCreateElement, concatenate);
+  return func(require, adaptCreateElement, concatenate, h);
 }

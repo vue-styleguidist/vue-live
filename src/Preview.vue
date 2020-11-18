@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { markRaw, h } from "vue";
 import {
   compile as compileScript,
   isCodeVueSfc,
@@ -147,7 +148,8 @@ export default {
               script,
               (filepath) => requireAtRuntime(this.requires, filepath),
               adaptCreateElement,
-              concatenate
+              concatenate,
+              h
             ) || {};
 
           if (this.dataScope) {
@@ -186,7 +188,7 @@ export default {
       }
 
       if (options.template || options.render) {
-        this.previewedComponent = options;
+        this.previewedComponent = markRaw(options);
         this.iteration = this.iteration + 1;
         this.error = false;
       } else {

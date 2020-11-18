@@ -1,4 +1,4 @@
-<template functional>
+<template>
   <div class="VueLive-container">
     <div class="VueLive-editor">
       <slot name="editor" />
