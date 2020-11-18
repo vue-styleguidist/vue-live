@@ -49,7 +49,7 @@ export default function($options, checkVariableAvailability) {
       const templateVars = [];
       if (templateAst.type === ELEMENT) {
         templateAst.props.forEach((attr) => {
-          if (!/^[a-z,-,:]+$/g.test(attr.name)) {
+          if (!/^[a-z-:]+$/g.test(attr.name)) {
             throw new VueLiveParseTemplateAttrError(
               "[VueLive] Invalid attribute name: " + attr.name,
               attr.loc
