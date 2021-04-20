@@ -16,7 +16,7 @@ export function install(Vue) {
   Vue.component("VueLiveEditor", VueLiveEditor);
 }
 
-// Create module definition for Vue.use()
+// Create module definition for Vue.use(plugin)
 const plugin = {
   install,
 };
