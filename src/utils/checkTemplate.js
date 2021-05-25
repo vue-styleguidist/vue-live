@@ -139,9 +139,9 @@ export function checkExpression(expression, availableVars, templateVars) {
   // - not defined in the template
   ancestor(ast, {
     Identifier(identifier, ancestors) {
-      // @ts-ignore
       const varName = identifier.name;
       if (
+        // if the identifier is a function call leave it alone
         ancestors.length >= 2 &&
         ancestors[ancestors.length - 2].type === "CallExpression" &&
         ancestors[ancestors.length - 2].callee.name === varName
@@ -149,8 +149,17 @@ export function checkExpression(expression, availableVars, templateVars) {
         return;
       } else if (
         availableVars.indexOf(varName) === -1 &&
-        templateVars.indexOf(varName) === -1
+        templateVars.indexOf(varName) === -1 &&
+        !/^\$/.test(varName)
       ) {
+        const funcs = ancestors.filter(
+          (node) =>
+            node.type === "ArrowFunctionExpression" ||
+            node.type === "FunctionExpression"
+        );
+        if (funcs.some((func) => func.params.some((p) => p.name === varName))) {
+          return;
+        }
         throw new VueLiveUndefinedVariableError(
           `Variable "${varName}" is not defined.`,
           varName

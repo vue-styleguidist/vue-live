@@ -99,6 +99,42 @@ test("parse invalid template with an error in a function call and a spread", () 
   ).toThrow();
 });
 
+test("if it starts with dollar, it should not throw", () => {
+  expect(() =>
+    checkTemplate({
+      template: '<div><compo :value="$today++">hello</compo></div>',
+    })
+  ).not.toThrow();
+});
+
+test("parse a valid arrow event handler properly", () => {
+  expect(() =>
+    checkTemplate({
+      template:
+        '<div><compo @click="( evt ) => { test(evt); }">hello</compo></div>',
+      methods: {
+        test(e) {
+          console.log(e.target);
+        },
+      },
+    })
+  ).not.toThrow();
+});
+
+test("parse a valid standard event handler properly", () => {
+  expect(() =>
+    checkTemplate({
+      template:
+        '<div><compo @click="function( evt ) { test(evt); }">hello</compo></div>',
+      methods: {
+        test(e) {
+          console.log(e.target);
+        },
+      },
+    })
+  ).not.toThrow();
+});
+
 test("parse invalid template with an error if the value is not in data", () => {
   expect(() =>
     checkTemplate({
