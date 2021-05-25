@@ -148,8 +148,26 @@ export function checkExpression(expression, availableVars, templateVars) {
       ) {
         if (
           availableVars.indexOf(varName) === -1 &&
-          templateVars.indexOf(varName) === -1
+          templateVars.indexOf(varName) === -1 &&
+          !/^\$/.test(varName)
         ) {
+          // check in the parents if the var has been declared
+          // as a parameter to a function
+          let parent = identifier.parentPath;
+          while (parent.node) {
+            const node = parent.node;
+            if (
+              node.type === "ArrowFunctionExpression" ||
+              node.type === "FunctionExpression"
+            ) {
+              if (node.params.some((p) => p.name === varName)) {
+                this.traverse(identifier);
+                return;
+              }
+            }
+            parent = parent.parentPath;
+          }
+
           throw new VueLiveUndefinedVariableError(
             `Variable "${varName}" is not defined.`,
             varName
