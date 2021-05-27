@@ -10,28 +10,36 @@ A lightweight playground for live editing VueJs code in the browser
 
 ## Usage
 
+Install the dependency:
+
+`npm install --save vue-live`
+
 The simplest way to render components is as a VueJs template:
 
 ```vue
 <template>
-    <VueLive :code="`<date-picker />`" :components="{ DatePicker }" @error="(e) => handleError(e)">
+  <VueLive
+    :code="`<date-picker />`"
+    :components="{ DatePicker }"
+    @error="(e) => handleError(e)"
+  />
 </template>
 
 <script>
 import { VueLive } from "vue-live";
 // import the css separately for easier SSR
-import "vue-live/lib/vue-live.esm.css"
-import DatePicker from "vuejs-datepicker"
+import "vue-live/lib/vue-live.esm.css";
+import DatePicker from "vuejs-datepicker";
 
 export default {
-    components: { VueLive },
-    data(){
-        return {
-            // make DatePicker available in template
-            DatePicker
-        }
-    }
-}
+  components: { VueLive },
+  data() {
+    return {
+      // make DatePicker available in template
+      DatePicker,
+    };
+  },
+};
 </script>
 ```
 
@@ -57,21 +65,19 @@ module.exports = {
 };
 ```
 
-in [vue.config.js](https://cli.vuejs.org/guide/webpack.html)
-
+In a [Vue CLI](https://cli.vuejs.org/) project use [vue.config.js](https://cli.vuejs.org/guide/webpack.html).
 
 ```js
 module.exports = {
-    configureWebpack: {
-        resolve:{
-            alias:{
-                vue$: "vue/dist/vue.esm-browser.js",
-            }
-        }
-    }
-}
+  configureWebpack: {
+    resolve: {
+      alias: {
+        vue$: "vue/dist/vue.esm.js",
+      },
+    },
+  },
+};
 ```
-
 
 in [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack/)
 
