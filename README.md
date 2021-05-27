@@ -23,6 +23,8 @@ The simplest way to render components is as a VueJs template:
 
 <script>
 import { VueLive } from "vue-live";
+// if you are using vue-cli, you have to import the css separately
+import "vue-live/lib/vue-live.esm.css";
 import DatePicker from "vuejs-datepicker"
 
 export default {
