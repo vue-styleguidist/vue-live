@@ -36,7 +36,7 @@ const rootConfig = {
     "prismjs/components/prism-javascript",
     "prismjs/components/prism-jsx",
     "@vue/compiler-core/dist/compiler-core.cjs",
-    "vue"
+    "vue",
   ],
 };
 
@@ -48,7 +48,7 @@ export default [
       format: "esm",
       file: pkg.module,
     },
-    plugins: [...rootConfig.plugins, vue({ css: false })],
+    plugins: [vue({ css: false }), ...rootConfig.plugins],
   },
   // SSR build.
   {
@@ -59,8 +59,8 @@ export default [
       exports: "named", // remove warning about mixed exports
     },
     plugins: [
-      ...rootConfig.plugins,
       vue({ css: false, template: { optimizeSSR: true } }),
+      ...rootConfig.plugins,
     ],
   },
 ];
