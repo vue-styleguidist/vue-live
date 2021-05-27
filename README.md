@@ -10,11 +10,15 @@ A lightweight playground for live editing VueJs code in the browser
 
 ## Usage
 
+Install the dependency:
+
+`npm install --save vue-live`
+
 The simplest way to render components is as a VueJs template:
 
 ```vue
 <template>
-    <VueLive :code="`<date-picker />`" :components="{ DatePicker }" @error="(e) => handleError(e)">
+    <VueLive :code="`<date-picker />`" :components="{ DatePicker }" @error="(e) => handleError(e)" />
 </template>
 
 <script>
@@ -44,7 +48,7 @@ If you do not, you might see errors about using the runtime version of Vue.
 To bundle this, there is a simple solution: Add an alias in `webpack.config.js`.
 
 ```js
-module.export = {
+module.exports = {
   resolve: {
     alias: {
       // this enables loading the "full" version of vue
@@ -52,6 +56,20 @@ module.export = {
       vue$: "vue/dist/vue.esm.js",
     },
   },
+};
+```
+
+In a [Vue CLI](https://cli.vuejs.org/) project use [vue.config.js](https://cli.vuejs.org/guide/webpack.html).
+
+```js
+module.exports = {
+  configureWebpack: {
+    resolve: {
+      alias: {
+        vue$: "vue/dist/vue.esm.js"
+      }
+    }
+  }
 };
 ```
 
