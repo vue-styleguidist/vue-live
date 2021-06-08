@@ -1,7 +1,7 @@
 module.exports = {
   branches: [
     { name: "master" },
-    { name: "next", channel: "next", prerelease: "alpha" }, // Only after the `next` is created in the repo
+    { name: "next", channel: "next", prerelease: "beta" }, // Only after the `next` is created in the repo
   ],
   plugins: [
     "@semantic-release/commit-analyzer",
