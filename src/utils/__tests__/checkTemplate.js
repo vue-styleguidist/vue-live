@@ -1,4 +1,5 @@
 import checkTemplateDummy from "../checkTemplate";
+import defaultAttrAllowList from "../defaultAttrAllowList";
 
 const checkTemplate = (opts) => checkTemplateDummy(opts, true);
 
@@ -291,6 +292,16 @@ test("throw error when mixed case attributes", () => {
         </div>`,
     })
   ).toThrowError("[VueLive] Invalid attribute name: aA");
+});
+
+test.each(defaultAttrAllowList)("don't throw error for allowed SVG attribute %s", (attr) => {
+  expect(() =>
+    checkTemplate({
+      template: `<svg ${attr}="as">
+          <g/>
+        </svg>`,
+    })
+  ).not.toThrowError(`[VueLive] Invalid attribute name: ${attr}`);
 });
 
 test("throw error when invalid character attributes", () => {
