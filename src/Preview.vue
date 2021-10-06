@@ -125,8 +125,8 @@ export default {
         const renderedComponent = compileScript(
           code,
           this.jsx
-            ? { jsx: "__pragma__(h)", objectAssign: "__concatenate__" }
-            : {}
+            ? { jsx: "__pragma__(h)", objectAssign: "__concatenate__", transforms: {asyncAwait: false} }
+            : { {transforms: {asyncAwait: false} }
         );
         style = renderedComponent.style;
         if (renderedComponent.script) {
