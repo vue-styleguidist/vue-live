@@ -117,6 +117,19 @@ When the template compilation or the script evaluation fail, errors are returned
 </template>
 ```
 
+### `@success`
+
+When the template compilation and the script evaluation succeed, the `@success` event is emitted. If you provided extra info to your user about previous errors, you can use this event to clear the error message.
+
+```vue
+<template>
+  <VueLive
+    :code="code"
+    @success="error = undefined"
+  />
+</template>
+```
+
 ## Props
 
 ### `code`

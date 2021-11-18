@@ -110,12 +110,12 @@ export default {
        * @event
        * @property { Error } - the error thrown
        */
-      this.$emit("error", e);
       if (e.constructor === VueLiveParseTemplateError) {
         e.message = `Cannot parse template expression: ${JSON.stringify(
           e.expression.content || e.expression
         )}\n\n${e.message}`;
       }
+      this.$emit("error", e);
       this.error = e.message;
     },
     renderComponent(code) {
@@ -125,7 +125,11 @@ export default {
         const renderedComponent = compileScript(
           code,
           this.jsx
-            ? { jsx: "__pragma__(h)", objectAssign: "__concatenate__", transforms: {asyncAwait: false} }
+            ? {
+                jsx: "__pragma__(h)",
+                objectAssign: "__concatenate__",
+                transforms: { asyncAwait: false },
+              }
             : { transforms: { asyncAwait: false } }
         );
         style = renderedComponent.style;

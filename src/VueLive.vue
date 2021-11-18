@@ -4,7 +4,7 @@
     v-bind="layoutProps"
     :code="stableCode"
     :language="lang"
-    :prismLang="prismLang"
+    :prism-lang="prismLang"
     :requires="requires"
     :data-scope="dataScope"
     :components="components"
@@ -33,7 +33,7 @@
         :code="model"
         @detect-language="switchLanguage"
         @error="handleError"
-        @success="error = undefined"
+        @success="handleSuccess"
         :components="components"
         :requires="requires"
         :jsx="jsx"
@@ -190,6 +190,10 @@ export default {
         this.prismLang = newPrismLang;
         this.stableCode = this.model;
       }
+    },
+    handleSuccess() {
+      this.error = undefined;
+      this.$emit("success");
     },
     handleError(e) {
       this.error = e;
