@@ -86,6 +86,9 @@ export default {
   created() {
     this.renderComponent(this.code.trim());
   },
+  destroyed() {
+    this.removeScopedStyle();
+  },
   watch: {
     code(value) {
       this.renderComponent(value.trim());
@@ -117,6 +120,11 @@ export default {
       }
       this.$emit("error", e);
       this.error = e.message;
+    },
+    removeStyle() {
+      if (this.removeScopedStyle) {
+        this.removeScopedStyle();
+      }
     },
     renderComponent(code) {
       let options = {};
@@ -182,11 +190,14 @@ export default {
           options.components = { ...options.components, ...this.components };
         }
       }
+
+      this.removeStyle();
+
       if (style) {
         // To add the scope id attribute to each item in the html
         // this way when we add the scoped style sheet it will be aplied
         options._scopeId = `data-${this.scope}`;
-        addScopedStyle(style, this.scope);
+        this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
 
       if (options.template || options.render) {
