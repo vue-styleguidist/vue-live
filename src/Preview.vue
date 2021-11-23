@@ -87,7 +87,7 @@ export default {
     this.renderComponent(this.code.trim());
   },
   destroyed() {
-    this.removeScopedStyle();
+    this.removeStyle();
   },
   watch: {
     code(value) {
