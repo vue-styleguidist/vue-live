@@ -5,10 +5,7 @@ module.exports = {
       include: ["node_modules"],
       presets: [
         [
-          "@babel/env",
-          {
-            modules: "cjs"
-          }
+          "@babel/env"
         ]
       ]
     }
