@@ -10,6 +10,7 @@
     "start": "vue-cli-service serve",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
+    "test": "npm run test:unit && npm run test:e2e",
     "cy:verify": "cypress verify"
   },
   "dependencies": {
