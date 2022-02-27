@@ -2,7 +2,7 @@
 
 A lightweight playground for live editing VueJs code in the browser
 
-[![Build Status](https://travis-ci.com/vue-styleguidist/vue-live.svg?branch=master)](https://travis-ci.com/vue-styleguidist/vue-live)
+[![Build Status](https://travis-ci.com/vue-styleguidist/vue-live.svg?branch=master)](https://app.travis-ci.com/github/vue-styleguidist/vue-live)
 [![NPM Version](https://img.shields.io/npm/v/vue-live.svg)](https://www.npmjs.com/package/vue-live) [![NPM Downloads](https://img.shields.io/npm/dm/vue-live.svg)](https://www.npmjs.com/package/vue-live)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
@@ -117,6 +117,19 @@ When the template compilation or the script evaluation fail, errors are returned
   <VueLive
     code="<h1>make this example {{ fail }}</h1>"
     @error="(e) => log('Error on first example', e)"
+  />
+</template>
+```
+
+### `@success`
+
+When the template compilation and the script evaluation succeed, the `@success` event is emitted. If you provided extra info to your user about previous errors, you can use this event to clear the error message.
+
+```vue
+<template>
+  <VueLive
+    :code="code"
+    @success="error = undefined"
   />
 </template>
 ```

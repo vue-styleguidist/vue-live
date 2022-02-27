@@ -87,6 +87,9 @@ export default {
   created() {
     this.renderComponent(this.code.trim());
   },
+  destroyed() {
+    this.removeStyle();
+  },
   watch: {
     code(value) {
       this.renderComponent(value.trim());
@@ -111,13 +114,18 @@ export default {
        * @event
        * @property { Error } - the error thrown
        */
-      this.$emit("error", e);
       if (e.constructor === VueLiveParseTemplateError) {
         e.message = `Cannot parse template expression: ${JSON.stringify(
           e.expression.content || e.expression
         )}\n\n${e.message}`;
       }
+      this.$emit("error", e);
       this.error = e.message;
+    },
+    removeStyle() {
+      if (this.removeScopedStyle) {
+        this.removeScopedStyle();
+      }
     },
     renderComponent(code) {
       let options = {};
@@ -126,8 +134,12 @@ export default {
         const renderedComponent = compileScript(
           code,
           this.jsx
-            ? { jsx: "__pragma__(h)", objectAssign: "__concatenate__" }
-            : {}
+            ? {
+                jsx: "__pragma__(h)",
+                objectAssign: "__concatenate__",
+                transforms: { asyncAwait: false },
+              }
+            : { transforms: { asyncAwait: false } }
         );
         style = renderedComponent.style;
         if (renderedComponent.script) {
@@ -180,11 +192,14 @@ export default {
           options.components = { ...options.components, ...this.components };
         }
       }
+
+      this.removeStyle();
+
       if (style) {
         // To add the scope id attribute to each item in the html
-        // this way when we add the scoped style sheet it will be aplied
+        // this way when we add the scoped style sheet it will be applied
         options.__scopeId = `data-${this.scope}`;
-        addScopedStyle(style, this.scope);
+        this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
 
       if (options.template || options.render) {
