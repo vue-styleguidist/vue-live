@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/eslint-parser": "^7.17.0",
     "@rollup/plugin-babel": "^5.1.0",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
@@ -37,7 +38,6 @@
     "@vue/cli-plugin-unit-jest": "^5.0.1",
     "@vue/cli-service": "^5.0.1",
     "@vue/test-utils": "^2.0.0-rc.17",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^25.3.0",
     "cross-env": "^7.0.2",
     "eslint": "^8.10.0",
