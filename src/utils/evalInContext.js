@@ -1,7 +1,7 @@
 /**
  * evaluate es5 code in the browser
  * and return value if there s a return statement
- * @param {String} code the body of the funtion to execute
+ * @param {String} code the body of the function to execute
  * @param {Function} require the fake function require
  */
 export default function evalInContext(
@@ -11,14 +11,14 @@ export default function evalInContext(
   concatenate,
   h
 ) {
+  console.log({ code })
   // eslint-disable-next-line no-new-func
   const func = new Function(
     "require",
     "__pragma__",
     "__concatenate__",
     "h",
-    // FIXME: this "replace" should be removed as soon as the compiler utils are updated to vue 3
-    code.replace(/var h = this\.\$createElement;/, "")
+    code
   );
 
   return func(require, adaptCreateElement, concatenate, h);
