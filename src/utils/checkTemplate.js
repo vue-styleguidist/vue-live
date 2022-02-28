@@ -68,7 +68,7 @@ export default function($options, checkVariableAvailability) {
             return;
           }
           if (attr.name === "slot") {
-            const astSlot = parseEs(`var ${exp}=1`);
+            const astSlot = parseEs(`var ${exp}=1`, {ecmaVersion:2020});
             simple(astSlot, {
               VariableDeclarator(declarator) {
                 // @ts-ignore
@@ -137,7 +137,7 @@ export default function($options, checkVariableAvailability) {
 
 export function checkExpression(expression, availableVars, templateVars) {
   // try and parse the expression
-  const ast = parseEs(`(function(){return ${expression}})()`);
+  const ast = parseEs(`(function(){return ${expression}})()`, {ecmaVersion:2020});
 
   // identify all variables that would be undefined because
   // - not in the options object
