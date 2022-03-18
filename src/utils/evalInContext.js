@@ -11,7 +11,6 @@ export default function evalInContext(
   concatenate,
   h
 ) {
-  console.log({ code })
   // eslint-disable-next-line no-new-func
   const func = new Function(
     "require",
