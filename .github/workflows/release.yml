@@ -24,6 +24,10 @@ jobs:
           npm run test:unit -- --runInBand
           npm run test:e2e -- --headless
 
+      - name: Build
+        run: |
+          npm run build:demo
+
       - name: Deploy to vue-live.surge.sh
         uses: dswistowski/surge-sh-action@v1
         with:
