@@ -1,7 +1,7 @@
 <template>
   <PrismEditor
     v-model="stableCode"
-    @input="updatePreview"
+    @update:modelValue="updatePreview"
     :highlight="highlighter"
     v-bind="editorProps"
   />
@@ -19,6 +19,7 @@ const UPDATE_DELAY = 300;
 
 export default {
   name: "VueLiveEditor",
+  inheritAttrs: false,
   components: { PrismEditor },
   props: {
     code: {

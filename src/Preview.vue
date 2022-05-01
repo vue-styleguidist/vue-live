@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { markRaw, h } from "vue";
 import {
   compile as compileScript,
   isCodeVueSfc,
@@ -159,7 +160,8 @@ export default {
               script,
               (filepath) => requireAtRuntime(this.requires, filepath),
               adaptCreateElement,
-              concatenate
+              concatenate,
+              h
             ) || {};
 
           if (this.dataScope) {
@@ -195,13 +197,13 @@ export default {
 
       if (style) {
         // To add the scope id attribute to each item in the html
-        // this way when we add the scoped style sheet it will be aplied
-        options._scopeId = `data-${this.scope}`;
+        // this way when we add the scoped style sheet it will be applied
+        options.__scopeId = `data-${this.scope}`;
         this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
 
       if (options.template || options.render) {
-        this.previewedComponent = options;
+        this.previewedComponent = markRaw(options);
         this.iteration = this.iteration + 1;
         this.error = false;
       } else {

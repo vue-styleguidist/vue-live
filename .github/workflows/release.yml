@@ -1,0 +1,39 @@
+name: Release
+on:
+  push:
+    branches: master
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: |
+          npm run lint
+          npm run test:unit -- --runInBand
+          npm run test:e2e -- --headless
+
+      - name: Deploy to vue-live.surge.sh
+        uses: dswistowski/surge-sh-action@v1
+        with:
+          domain: 'vue-live.surge.sh'
+          project: './dist/'
+          login: ${{ secrets.SURGE_LOGIN }}
+          token: ${{ secrets.SURGE_TOKEN }}
+
+      - name: Build
+        run: npm run build
+
+      - name: Release
+        run: npx semantic-release

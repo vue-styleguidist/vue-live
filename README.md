@@ -18,24 +18,28 @@ The simplest way to render components is as a VueJs template:
 
 ```vue
 <template>
-    <VueLive :code="`<date-picker />`" :components="{ DatePicker }" @error="(e) => handleError(e)" />
+  <VueLive
+    :code="`<date-picker />`"
+    :components="{ DatePicker }"
+    @error="(e) => handleError(e)"
+  />
 </template>
 
 <script>
 import { VueLive } from "vue-live";
-// if you are using vue-cli, you have to import the css separately
+// import the css separately for easier SSR
 import "vue-live/lib/vue-live.esm.css";
-import DatePicker from "vuejs-datepicker"
+import DatePicker from "vuejs-datepicker";
 
 export default {
-    components: { VueLive },
-    data(){
-        return {
-            // make DatePicker available in template
-            DatePicker
-        }
-    }
-}
+  components: { VueLive },
+  data() {
+    return {
+      // make DatePicker available in template
+      DatePicker,
+    };
+  },
+};
 </script>
 ```
 
@@ -55,7 +59,7 @@ module.exports = {
     alias: {
       // this enables loading the "full" version of vue
       // instead of only loading the vue runtime
-      vue$: "vue/dist/vue.esm.js",
+      vue$: "vue/dist/vue.esm-browser.js",
     },
   },
 };
@@ -68,10 +72,10 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        vue$: "vue/dist/vue.esm.js"
-      }
-    }
-  }
+        vue$: "vue/dist/vue.esm.js",
+      },
+    },
+  },
 };
 ```
 
@@ -82,7 +86,7 @@ export default {
   build: {
     extend(config, { isDev, isClient }) {
       // ..
-      config.resolve.alias.vue$ = "vue/dist/vue.esm.js";
+      config.resolve.alias.vue$ = "vue/dist/vue.esm-browser.js";
     },
   },
 };
@@ -95,7 +99,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        vue$: "vue/dist/vue.esm.js",
+        vue$: "vue/dist/vue.esm-browser.js",
       },
     },
   },

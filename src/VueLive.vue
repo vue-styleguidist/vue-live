@@ -22,11 +22,11 @@
       />
     </template>
     <template v-slot:preview>
-      <!-- 
+      <!--
         * Emitted every time the component rendered throws an error
         * Catches runtime and compilation errors
         * @event error
-        * @property { Error } - the error thrown 
+        * @property { Error } - the error thrown
       -->
       <Preview
         :key="codeKey"
@@ -44,6 +44,7 @@
   </component>
 </template>
 <script>
+import { markRaw } from "vue";
 import hash from "hash-sum";
 
 import Preview from "./Preview.vue";
@@ -156,7 +157,7 @@ export default {
       model: this.code,
       lang: "vue",
       prismLang: "html",
-      VueLiveDefaultLayout,
+      VueLiveDefaultLayout: markRaw(VueLiveDefaultLayout),
       /**
        * this data only gets changed when changing language.
        * it allows for copy and pasting without having the code

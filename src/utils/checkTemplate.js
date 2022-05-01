@@ -2,7 +2,8 @@ import { parse as parseVue } from "@vue/compiler-dom";
 // force proper english errors
 import { createCompilerError } from "@vue/compiler-core/dist/compiler-core.cjs";
 import { parse as parseEs } from "acorn";
-import { visit } from "recast";
+import { ancestor, simple } from "acorn-walk";
+import defaultAttrAllowList from "./defaultAttrAllowList";
 
 const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
@@ -44,12 +45,16 @@ export default function($options, checkVariableAvailability) {
     ...methodsArray,
   ];
 
+  // Define list of attributes for which name check will be skipped. Defaults to known camelCased SVG attributes.
+  // Allow future enhancement via $options.attrAllowList
+  const attrAllowList = $options.attrAllowList || defaultAttrAllowList;
+
   traverse(ast, [
     (templateAst, parentTemplateVars) => {
       const templateVars = [];
       if (templateAst.type === ELEMENT) {
         templateAst.props.forEach((attr) => {
-          if (!/^[a-z-:]+$/g.test(attr.name)) {
+          if (!attrAllowList.includes(attr.name) && !/^[a-z-:]+$/g.test(attr.name)) {
             throw new VueLiveParseTemplateAttrError(
               "[VueLive] Invalid attribute name: " + attr.name,
               attr.loc
@@ -63,10 +68,11 @@ export default function($options, checkVariableAvailability) {
             return;
           }
           if (attr.name === "slot") {
-            const astSlot = parseEs(`var ${exp}=1`);
-            visit(astSlot, {
-              visitVariableDeclarator(declarator) {
-                const { id } = declarator.node;
+            const astSlot = parseEs(`var ${exp}=1`, {ecmaVersion:2020});
+            simple(astSlot, {
+              VariableDeclarator(declarator) {
+                // @ts-ignore
+                const { id } = declarator;
                 switch (id.type) {
                   case "ArrayPattern":
                     id.elements.forEach((e) => {
@@ -131,51 +137,39 @@ export default function($options, checkVariableAvailability) {
 
 export function checkExpression(expression, availableVars, templateVars) {
   // try and parse the expression
-  const ast = parseEs(`(function(){return ${expression}})()`);
+  const ast = parseEs(`(function(){return ${expression}})()`, {ecmaVersion:2020});
 
   // identify all variables that would be undefined because
   // - not in the options object
   // - not defined in the template
-  visit(ast, {
-    visitIdentifier(identifier) {
-      const varName = identifier.value.name;
+  ancestor(ast, {
+    Identifier(identifier, ancestors) {
+      const varName = identifier.name;
       if (
-        identifier.name === "expression" ||
-        identifier.name === "argument" ||
-        identifier.name === "left" ||
-        identifier.name === "right" ||
-        identifier.parentPath.name === "arguments"
+        // if the identifier is a function call leave it alone
+        ancestors.length >= 2 &&
+        ancestors[ancestors.length - 2].type === "CallExpression" &&
+        ancestors[ancestors.length - 2].callee.name === varName
       ) {
-        if (
-          availableVars.indexOf(varName) === -1 &&
-          templateVars.indexOf(varName) === -1 &&
-          !/^\$/.test(varName)
-        ) {
-          // check in the parents if the var has been declared
-          // as a parameter to a function
-          let parent = identifier.parentPath;
-          while (parent.node) {
-            const node = parent.node;
-            if (
-              node.type === "ArrowFunctionExpression" ||
-              node.type === "FunctionExpression"
-            ) {
-              if (node.params.some((p) => p.name === varName)) {
-                this.traverse(identifier);
-                return;
-              }
-            }
-            parent = parent.parentPath;
-          }
-
-          throw new VueLiveUndefinedVariableError(
-            `Variable "${varName}" is not defined.`,
-            varName
-          );
+        return;
+      } else if (
+        availableVars.indexOf(varName) === -1 &&
+        templateVars.indexOf(varName) === -1 &&
+        !/^\$/.test(varName)
+      ) {
+        const funcs = ancestors.filter(
+          (node) =>
+            node.type === "ArrowFunctionExpression" ||
+            node.type === "FunctionExpression"
+        );
+        if (funcs.some((func) => func.params.some((p) => p.name === varName))) {
+          return;
         }
+        throw new VueLiveUndefinedVariableError(
+          `Variable "${varName}" is not defined.`,
+          varName
+        );
       }
-
-      this.traverse(identifier);
     },
   });
 }
