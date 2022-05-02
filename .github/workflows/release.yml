@@ -41,3 +41,5 @@ jobs:
 
       - name: Release
         run: npx semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
