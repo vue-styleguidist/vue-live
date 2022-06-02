@@ -1,7 +1,7 @@
 name: Release
 on:
   push:
-    branches: master
+    branches: [master,next]
 
 concurrency:
   group: release-${{ github.ref }}
@@ -32,10 +32,12 @@ jobs:
           npm run test:e2e -- --headless
 
       - name: Build
+        if: ${{ github.ref == 'refs/heads/master' }}
         run: |
           npm run build:demo
 
       - name: Deploy to vue-live.surge.sh
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: dswistowski/surge-sh-action@v1
         with:
           domain: 'vue-live.surge.sh'
