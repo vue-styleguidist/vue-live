@@ -12,7 +12,9 @@ A lightweight playground for live editing VueJs code in the browser
 
 Install the dependency:
 
-`npm install --save vue-live`
+```
+npm install --save vue-live
+```
 
 The simplest way to render components is as a VueJs template:
 
@@ -44,6 +46,16 @@ export default {
 ```
 
 Check out the [demo](http://vue-live.surge.sh) for alternative syntaxes to write your showcases.
+
+### Install for Vue 2.X
+
+The default version at `@latest` is for vue 3 and up.
+
+To install the version for vue 2, use the following:
+
+```
+npm install --save vue-live@1
+```
 
 ## Enabling template compilation
 

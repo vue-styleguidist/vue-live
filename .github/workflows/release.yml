@@ -1,0 +1,53 @@
+name: Release
+on:
+  push:
+    branches: master
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: |
+          npm run lint
+          npm run test:unit -- --runInBand
+          npm run test:e2e -- --headless
+
+      - name: Build
+        run: |
+          npm run build:demo
+
+      - name: Deploy to vue-live.surge.sh
+        uses: dswistowski/surge-sh-action@v1
+        with:
+          domain: 'vue-live.surge.sh'
+          project: './dist/'
+          login: ${{ secrets.SURGE_LOGIN }}
+          token: ${{ secrets.SURGE_TOKEN }}
+
+      - name: Build
+        run: npm run build
+
+      - name: Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
