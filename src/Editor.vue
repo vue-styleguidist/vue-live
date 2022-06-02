@@ -13,7 +13,7 @@ import debounce from "debounce";
 
 import "vue-prism-editor/dist/prismeditor.min.css";
 
-import highlight from "./utils/highlight";
+import makeHighlight from "./utils/highlight";
 
 const UPDATE_DELAY = 300;
 
@@ -56,16 +56,25 @@ export default {
     return {
       updatePreview: () => {},
       /**
-       * this data only gets changed when changing language.
+       * This data only gets changed when changing language.
        * it allows for copy and pasting without having the code
        * editor repainted every keystroke
        */
       stableCode: this.code,
+      highlight: () => (code) => code,
     };
+  },
+  async beforeMount() {
+    /**
+     * To load the prism jsx language with ESmodules we need to
+     * load javascript first then load jsx
+     * order is not guaranteed to work in ESmodules imports
+     */
+    this.highlight = await makeHighlight()
   },
   methods: {
     highlighter(code) {
-      return highlight(this.prismLang, this.jsx)(
+      return this.highlight(this.prismLang, this.jsx)(
         code,
         this.squiggles && this.error && this.error.loc
       );

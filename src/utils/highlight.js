@@ -7,54 +7,56 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-markup";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-css";
-import "prismjs/components/prism-jsx";
 import getScript from "./getScript";
 
-export default (lang, jsxInExamples) => {
-  if (lang === "vsg") {
-    return (code, errorLoc) => {
-      if (!code) {
-        return "";
-      }
-      const scriptCode = getScript(code, jsxInExamples);
-      const scriptCodeHighlighted = prismHighlight(
-        scriptCode,
-        languages[jsxInExamples ? "jsx" : "js"],
-        lang
-      );
-      if (code.length === scriptCode.length) {
-        return getSquiggles(errorLoc) + scriptCodeHighlighted;
-      }
-      const templateCode = code.slice(scriptCode.length);
-      const templateHighlighted = prismHighlight(
-        templateCode,
-        languages["html"],
-        lang
-      );
+export default async function() {
+  await import("prismjs/components/prism-jsx");
+  return function (lang, jsxInExamples) {
+    if (lang === "vsg") {
+      return (code, errorLoc) => {
+        if (!code) {
+          return "";
+        }
+        const scriptCode = getScript(code, jsxInExamples);
+        const scriptCodeHighlighted = prismHighlight(
+          scriptCode,
+          languages[jsxInExamples ? "jsx" : "js"],
+          lang
+        );
+        if (code.length === scriptCode.length) {
+          return getSquiggles(errorLoc) + scriptCodeHighlighted;
+        }
+        const templateCode = code.slice(scriptCode.length);
+        const templateHighlighted = prismHighlight(
+          templateCode,
+          languages["html"],
+          lang
+        );
 
-      return (
-        getSquiggles(
-          errorLoc,
-          errorLoc && errorLoc.start ? scriptCode.split("\n").length - 1 : 0
-        ) +
-        scriptCodeHighlighted +
-        templateHighlighted
-      );
-    };
-  } else {
-    return (code, errorLoc) => {
-      const langScheme = languages[lang];
-      if (!langScheme) {
-        return code;
-      }
+        return (
+          getSquiggles(
+            errorLoc,
+            errorLoc && errorLoc.start ? scriptCode.split("\n").length - 1 : 0
+          ) +
+          scriptCodeHighlighted +
+          templateHighlighted
+        );
+      };
+    } else {
+      return (code, errorLoc) => {
+        const langScheme = languages[lang];
+        if (!langScheme) {
+          return code;
+        }
 
-      return (
-        // if the error is in the template no need for column padding
-        getSquiggles(errorLoc) + prismHighlight(code, langScheme, lang)
-      );
-    };
+        return (
+          // if the error is in the template no need for column padding
+          getSquiggles(errorLoc) + prismHighlight(code, langScheme, lang)
+        );
+      };
+    }
   }
-};
+}
 
 function getSquiggles(errorLoc, lineOffset = 0) {
   if (!errorLoc) return "";
