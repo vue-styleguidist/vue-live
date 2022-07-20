@@ -10,6 +10,7 @@
 
 <script>
 import { markRaw, h } from "vue";
+import * as vue from "vue"
 import {
   compile as compileScript,
   isCodeVueSfc,
@@ -81,8 +82,13 @@ export default {
       scope: this.generateScope(),
       previewedComponent: undefined,
       iteration: 0,
-      error: false,
+      error: false
     };
+  },
+  computed:{
+    requiresPlusVue() {
+      return { vue, ...this.requires}
+    }
   },
   created() {
     this.renderComponent(this.code.trim());
@@ -146,7 +152,7 @@ export default {
           // if the compiled code contains a script it might be "just" a script
           // if so, change scheme used by editor
           // NOTE: vsg is a superset of JavaScript allowing
-          // the template to succeed litterally code, very useful for examples
+          // the template to succeed literally code, very useful for examples
           // NOTE2: vsg stands for vue-styleguidist
           this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
 
@@ -158,33 +164,40 @@ export default {
           options =
             evalInContext(
               script,
-              (filepath) => requireAtRuntime(this.requires, filepath),
+              (filepath) => requireAtRuntime(this.requiresPlusVue, filepath),
               adaptCreateElement,
               concatenate,
               h
             ) || {};
+            if(options.render){
+              const preview = this
+              const originalRender = options.render
+              console.log(options.render)
+              options.render = function(...args){
+                try{
+                  return originalRender.apply(this, args)
+                }catch(e){
+                  preview.handleError(e);
+                  return;
+                }
+              }
+            }
+            options.name = 'VueLiveCompiledExample'
 
           if (this.dataScope) {
             const mergeData = { ...options.data(), ...this.dataScope };
             options.data = () => mergeData;
           }
         }
-        if (renderedComponent.template) {
-          // if this is a pure template or if we are in hybrid vsg mode,
-          // we need to set the template up.
-          options.template = `<div>${renderedComponent.template}</div>`;
-        }
+        checkTemplate({
+          template:renderedComponent.raw.template, 
+          ...options
+        }, this.checkVariableAvailability);
       } catch (e) {
         this.handleError(e);
         return;
       }
 
-      try {
-        checkTemplate(options, this.checkVariableAvailability);
-      } catch (e) {
-        this.handleError(e);
-        return;
-      }
       if (this.components) {
         if (!options.components) {
           options.components = this.components;
@@ -201,7 +214,6 @@ export default {
         options.__scopeId = `data-${this.scope}`;
         this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
-
       if (options.template || options.render) {
         this.previewedComponent = markRaw(options);
         this.iteration = this.iteration + 1;

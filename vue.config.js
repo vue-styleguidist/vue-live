@@ -4,8 +4,6 @@ module.exports = {
       .entry("app")
       .clear()
       .add("./demo/main.js");
-
-    config.resolve.alias.set("vue$", "vue/dist/vue.esm-bundler.js");
   },
   transpileDependencies: [
     "regexpu-core",
