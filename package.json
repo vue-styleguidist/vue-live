@@ -11,7 +11,8 @@
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
     "test": "npm run test:unit && npm run test:e2e",
-    "cy:verify": "cypress verify"
+    "cy:verify": "cypress verify",
+    "postinstall": "node ./postinstall.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.2",
@@ -68,7 +69,8 @@
     "url": "https://github.com/vue-styleguidist/vue-live/issues"
   },
   "files": [
-    "lib"
+    "lib",
+    "postinstall.js"
   ],
   "license": "MIT",
   "main": "lib/vue-live.common.js",
