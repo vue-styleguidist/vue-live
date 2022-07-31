@@ -11,7 +11,7 @@ export default function(code, jsxInExamples) {
     }
   }
 
-  // if in JSX mode or litteral return examples code as is
+  // if in JSX mode or literal return examples code as is
   if (jsxInExamples || /new Vue\(/.test(code)) {
     return code;
   }
