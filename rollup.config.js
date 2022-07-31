@@ -3,6 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import babel from "@rollup/plugin-babel";
 import node from "@rollup/plugin-node-resolve";
 import vue from "rollup-plugin-vue";
+import vue2 from "rollup-plugin-vue2";
 import css from "rollup-plugin-css-only";
 import analyze from "rollup-plugin-analyzer";
 import pkg from "./package.json";
@@ -40,27 +41,37 @@ const rootConfig = {
   ],
 };
 
-export default [
+export default ['vue2', 'vue3'].reduce((acc, currentValue) => ([].concat(acc, [
   // ESM build to be used with webpack/rollup.
   {
     ...rootConfig,
     output: {
       format: "esm",
-      file: pkg.module,
+      file: currentValue === 'vue2' ? pkg.module : pkg.module.replace('vue-live.', 'vue3/vue-live.'),
     },
-    plugins: [vue({ css: false }), ...rootConfig.plugins],
+    plugins: [
+      (currentValue === 'vue2' ? vue2 : vue)({ 
+        css: false 
+      }), 
+      ...rootConfig.plugins
+    ],
   },
   // SSR build.
   {
     ...rootConfig,
     output: {
       format: "cjs",
-      file: pkg.main,
+      file: currentValue === 'vue2' ? pkg.main : pkg.main.replace('vue-live.', 'vue3/vue-live.'),
       exports: "named", // remove warning about mixed exports
     },
     plugins: [
-      vue({ css: false, template: { optimizeSSR: true } }),
+      (currentValue === 'vue2' ? vue2 : vue)({ 
+        css: false, 
+        template: { 
+          optimizeSSR: true
+        } 
+      }),
       ...rootConfig.plugins,
     ],
   },
-];
+])), []);
