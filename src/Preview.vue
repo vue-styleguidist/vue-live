@@ -119,7 +119,7 @@ export default {
        */
       if (e.constructor === VueLiveParseTemplateError) {
         e.message = `Cannot parse template expression: ${JSON.stringify(
-          e.expression.content || e.expression
+          (e.expression as any).content || e.expression
         )}\n\n${e.message}`;
       }
       this.$emit("error", e);
@@ -131,7 +131,7 @@ export default {
       }
     },
     renderComponent(code) {
-      let options = {};
+      let options:Record<string, any> = {};
       let style;
       try {
         const renderedComponent = compileScript(
@@ -160,13 +160,13 @@ export default {
           const calcOptions = () => {
             const script = renderedComponent.script;
             options =
-              evalInContext(
+              (evalInContext(
                 script,
                 (filepath) => requireAtRuntime(this.requiresPlusVue, filepath),
                 adaptCreateElement,
                 concatenate,
                 h
-              ) || {};
+              ) || {}) as Record<string, any>;
             if (options.render) {
               const preview = this
               const originalRender = options.render

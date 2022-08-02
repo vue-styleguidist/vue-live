@@ -11,12 +11,12 @@ const SIMPLE_EXPRESSION = 4;
 const INTERPOLATION = 5;
 
 interface Options {
-  template: string;
-  props: any;
-  data: () => Record<string, any> | Record<string, any>;
-  computed: Record<string, any>;
-  methods: Record<string, any>;
-  attrAllowList: string[];
+  template?: string;
+  props?: any;
+  data?: () => Record<string, any> | Record<string, any>;
+  computed?: Record<string, any>;
+  methods?: Record<string, any>;
+  attrAllowList?: string[];
 }
 
 export default function (
@@ -263,10 +263,10 @@ export class VueLiveParseTemplateAttrError extends Error {
 }
 
 export class VueLiveParseTemplateError extends Error {
-  expression: string;
+  expression: {content:string} | string;
   subError: Error;
   loc: any;
-  constructor(message: string, expression: string, subError: Error, loc: any) {
+  constructor(message: string, expression: {content:string} | string, subError: Error, loc: any) {
     super(message);
     this.expression = expression;
     this.subError = subError;
