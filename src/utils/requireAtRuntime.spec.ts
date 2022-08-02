@@ -1,4 +1,5 @@
-import requireAtRuntime from "../requireAtRuntime";
+import {expect, test} from "vitest"
+import requireAtRuntime from "./requireAtRuntime";
 
 const map = {
   a: () => "a"

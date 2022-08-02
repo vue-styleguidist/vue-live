@@ -105,21 +105,22 @@
     />
   </main>
 </template>
-<script>
+<script lang="ts">
 import { markRaw } from "vue";
 import DatePicker from "vue3-datepicker";
 import { VueLive, VueLiveEditor, VueLivePreview } from "../src";
-import CustomLayout from "./CustomLayout";
-import codeSfc from "!!raw-loader!./assets/Button.vue";
-import codeJs from "!!raw-loader!./assets/input.js";
-import realjsx from "!!raw-loader!./assets/real.jsx";
-import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
-import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
+import CustomLayout from "./CustomLayout.vue";
+import codeSfc from "./assets/Button.vue?raw";
+import codeJs from "./assets/input.js?raw";
+import realjsx from "./assets/real.jsx?raw";
+import codeTemplate from "./assets/PureTemplate.html?raw";
+import codeChicago from "./assets/Chicago.jsx?raw";
 import all from "./assets/chicagoNeighbourhoods";
 import "prismjs/themes/prism-tomorrow.css";
 import "vue3-datepicker/dist/vue3-datepicker.css";
 
-import GithubCorners from "vue-github-corners";
+// @ts-ignore
+import GithubCorners from "@uivjs/vue-github-corners";
 
 export default {
   name: "VueLiveDemo",

@@ -1,19 +1,19 @@
 import {
   highlight as prismHighlight,
   languages,
-} from "prismjs/components/prism-core";
+} from "prismjs";
 
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-markup";
-import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-css";
 import getScript from "./getScript";
 
 export default async function() {
-  await import("prismjs/components/prism-jsx");
-  return function (lang, jsxInExamples) {
+  return function (lang:'vsg'|'vue', jsxInExamples:boolean) {
     if (lang === "vsg") {
-      return (code, errorLoc) => {
+      return (code:string, errorLoc: any) => {
         if (!code) {
           return "";
         }
@@ -43,7 +43,7 @@ export default async function() {
         );
       };
     } else {
-      return (code, errorLoc) => {
+      return (code:string, errorLoc: any) => {
         const langScheme = languages[lang];
         if (!langScheme) {
           return code;
@@ -58,7 +58,7 @@ export default async function() {
   }
 }
 
-function getSquiggles(errorLoc, lineOffset = 0) {
+function getSquiggles(errorLoc: any, lineOffset = 0) {
   if (!errorLoc) return "";
   const columnOffSet = errorLoc.start ? 0 : 1;
   const errorWidth = errorLoc.end

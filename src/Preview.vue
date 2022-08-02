@@ -1,9 +1,9 @@
 <template>
-  <pre class="VueLive-error" v-if="error">{{ this.error }}</pre>
+  <pre class="VueLive-error" v-if="error">{{ error }}</pre>
   <component v-else-if="previewedComponent" :is="previewedComponent" :key="iteration" />
 </template>
 
-<script>
+<script lang="ts">
 import { markRaw, h } from "vue";
 import * as vue from "vue"
 import {

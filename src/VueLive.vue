@@ -43,7 +43,7 @@
     </template>
   </component>
 </template>
-<script>
+<script lang="ts">
 import { markRaw } from "vue";
 import hash from "hash-sum";
 

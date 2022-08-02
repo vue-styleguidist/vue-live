@@ -7,7 +7,7 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import { PrismEditor } from "vue-prism-editor";
 import debounce from "debounce";
 
