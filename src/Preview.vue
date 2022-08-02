@@ -1,21 +1,18 @@
 <template>
   <pre class="VueLive-error" v-if="error">{{ this.error }}</pre>
-  <component
-    v-else-if="previewedComponent"
-    :id="scope"
-    :is="previewedComponent"
-    :key="iteration"
-  />
+  <component v-else-if="previewedComponent" :is="previewedComponent" :key="iteration" />
 </template>
 
 <script>
 import { markRaw, h } from "vue";
+import * as vue from "vue"
 import {
   compile as compileScript,
   isCodeVueSfc,
   addScopedStyle,
   adaptCreateElement,
   concatenate,
+  compileTemplateForEval
 } from "vue-inbrowser-compiler";
 import checkTemplate, {
   VueLiveParseTemplateError,
@@ -25,6 +22,7 @@ import requireAtRuntime from "./utils/requireAtRuntime";
 
 export default {
   name: "VueLivePreviewComponent",
+  emits: ["error", "success", "detect-language"],
   components: {},
   errorCaptured(err) {
     this.handleError(err);
@@ -44,7 +42,7 @@ export default {
      */
     components: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -54,7 +52,7 @@ export default {
      */
     requires: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     jsx: {
       type: Boolean,
@@ -66,7 +64,7 @@ export default {
      */
     dataScope: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Avoid checking variables for availability it template
@@ -81,8 +79,13 @@ export default {
       scope: this.generateScope(),
       previewedComponent: undefined,
       iteration: 0,
-      error: false,
+      error: false
     };
+  },
+  computed: {
+    requiresPlusVue() {
+      return { vue, ...this.requires }
+    }
   },
   created() {
     this.renderComponent(this.code.trim());
@@ -135,10 +138,10 @@ export default {
           code,
           this.jsx
             ? {
-                jsx: "__pragma__(h)",
-                objectAssign: "__concatenate__",
-                transforms: { asyncAwait: false },
-              }
+              jsx: "__pragma__(h)",
+              objectAssign: "__concatenate__",
+              transforms: { asyncAwait: false },
+            }
             : { transforms: { asyncAwait: false } }
         );
         style = renderedComponent.style;
@@ -146,7 +149,7 @@ export default {
           // if the compiled code contains a script it might be "just" a script
           // if so, change scheme used by editor
           // NOTE: vsg is a superset of JavaScript allowing
-          // the template to succeed litterally code, very useful for examples
+          // the template to succeed literally code, very useful for examples
           // NOTE2: vsg stands for vue-styleguidist
           this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
 
@@ -154,37 +157,55 @@ export default {
           // it can be:
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
-          const script = renderedComponent.script;
-          options =
-            evalInContext(
-              script,
-              (filepath) => requireAtRuntime(this.requires, filepath),
-              adaptCreateElement,
-              concatenate,
-              h
-            ) || {};
+          const calcOptions = () => {
+            const script = renderedComponent.script;
+            options =
+              evalInContext(
+                script,
+                (filepath) => requireAtRuntime(this.requiresPlusVue, filepath),
+                adaptCreateElement,
+                concatenate,
+                h
+              ) || {};
+            if (options.render) {
+              const preview = this
+              const originalRender = options.render
+              options.render = function (...args) {
+                try {
+                  return originalRender.call(this, ...args)
+                } catch (e) {
+                  preview.handleError(e);
+                  return;
+                }
+              }
+            }
+            options.name = 'VueLiveCompiledExample'
+          }
+          calcOptions()
+
+          // In case the template is inlined in the script, 
+          // we need to compile it
+          if (options.template) {
+            renderedComponent.template = options.template;
+            compileTemplateForEval(renderedComponent)
+            calcOptions()
+            delete options.template
+          }
 
           if (this.dataScope) {
             const mergeData = { ...options.data(), ...this.dataScope };
             options.data = () => mergeData;
           }
         }
-        if (renderedComponent.template) {
-          // if this is a pure template or if we are in hybrid vsg mode,
-          // we need to set the template up.
-          options.template = `<div>${renderedComponent.template}</div>`;
-        }
+        checkTemplate({
+          template: renderedComponent.raw.template,
+          ...options
+        }, this.checkVariableAvailability);
       } catch (e) {
         this.handleError(e);
         return;
       }
 
-      try {
-        checkTemplate(options, this.checkVariableAvailability);
-      } catch (e) {
-        this.handleError(e);
-        return;
-      }
       if (this.components) {
         if (!options.components) {
           options.components = this.components;
@@ -201,17 +222,17 @@ export default {
         options.__scopeId = `data-${this.scope}`;
         this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
-
-      if (options.template || options.render) {
-        this.previewedComponent = markRaw(options);
-        this.iteration = this.iteration + 1;
-        this.error = false;
-      } else {
+      if (!options.render) {
         this.handleError({
           message:
             "[Vue Live] no template or render function specified. Example cannot be rendered.",
         });
+        return
       }
+
+      this.previewedComponent = markRaw(options);
+      this.iteration = this.iteration + 1;
+      this.error = false;
       this.$emit("success");
     },
   },
