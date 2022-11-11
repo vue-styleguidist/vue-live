@@ -41,7 +41,7 @@ export default {
     prismLang: {
       type: String,
       default: "html",
-      validator: (val) => ["html", "vsg"].includes(val),
+      validator: (val: string) => ["html", "vsg"].includes(val),
     },
     jsx: {
       type: Boolean,
