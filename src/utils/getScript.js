@@ -1,4 +1,4 @@
-import { isCodeVueSfc, parseComponent } from "vue-inbrowser-compiler";
+import { isCodeVueSfc, parseComponent } from "vue-inbrowser-compiler-sucrase";
 
 export default function(code, jsxInExamples) {
   // In case we are loading a vue component as an example, extract script tag

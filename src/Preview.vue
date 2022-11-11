@@ -13,7 +13,7 @@ import {
   adaptCreateElement,
   concatenate,
   compileTemplateForEval
-} from "vue-inbrowser-compiler";
+} from "vue-inbrowser-compiler-sucrase";
 import checkTemplate, {
   VueLiveParseTemplateError,
 } from "./utils/checkTemplate";
