@@ -10,9 +10,7 @@
     "preview": "vite preview --port 4173",
     "test:e2e": "start-server-and-test preview http://localhost:4173/ 'cypress run --e2e'",
     "test:unit": "vitest run",
-    "test": "npm run test:unit && npm run test:e2e",
-    "cy": "cypress open --e2e",
-    "cy:verify": "cypress verify"
+    "cy": "cypress open --e2e"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.2",
@@ -24,10 +22,11 @@
     "debounce": "^1.2.0",
     "hash-sum": "^2.0.0",
     "prismjs": "^1.28.0",
-    "vue-inbrowser-compiler": "^4.50.0",
+    "vue-inbrowser-compiler": "^4.54.1",
     "vue-prism-editor": "^2.0.0-alpha.2"
   },
   "devDependencies": {
+    "@types/hash-sum": "^1.0.0",
     "@types/jsdom": "^16.2.14",
     "@types/node": "^16.11.45",
     "@types/prismjs": "^1.26.0",

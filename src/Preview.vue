@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-import { markRaw, h } from "vue";
+import { markRaw, h, defineComponent } from "vue";
 import * as vue from "vue"
 import {
   compile as compileScript,
@@ -20,7 +20,7 @@ import checkTemplate, {
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
-export default {
+export default defineComponent({
   name: "VueLivePreviewComponent",
   emits: ["error", "success", "detect-language"],
   components: {},
@@ -77,9 +77,10 @@ export default {
   data() {
     return {
       scope: this.generateScope(),
-      previewedComponent: undefined,
+      previewedComponent: {},
       iteration: 0,
-      error: false
+      error: false,
+      removeScopedStyle: () => {},
     };
   },
   computed: {
@@ -110,7 +111,7 @@ export default {
         return v.toString(16);
       });
     },
-    handleError(e) {
+    handleError(e:any) {
       /**
        * Emitted every time the component rendered throws an error
        * Catches runtime and compilation errors
@@ -130,7 +131,7 @@ export default {
         this.removeScopedStyle();
       }
     },
-    renderComponent(code) {
+    renderComponent(code:string) {
       let options:Record<string, any> = {};
       let style;
       try {
@@ -170,7 +171,7 @@ export default {
             if (options.render) {
               const preview = this
               const originalRender = options.render
-              options.render = function (...args) {
+              options.render = function (...args: any[]) {
                 try {
                   return originalRender.call(this, ...args)
                 } catch (e) {
@@ -236,7 +237,7 @@ export default {
       this.$emit("success");
     },
   },
-};
+});
 </script>
 
 <style>
