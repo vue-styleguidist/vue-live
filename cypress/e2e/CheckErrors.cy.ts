@@ -8,3 +8,4 @@ describe("Render Errors", () => {
     cy.get("[class*='Preview_error']").should("not.exist");
   });
 });
+
