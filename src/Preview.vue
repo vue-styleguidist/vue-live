@@ -4,8 +4,8 @@
 </template>
 
 <script lang="ts">
-import { markRaw, h, defineComponent } from "vue";
-import * as vue from "vue"
+import { markRaw, h } from "vue";
+import * as Vue from "vue"
 import {
   compile as compileScript,
   isCodeVueSfc,
@@ -20,7 +20,7 @@ import checkTemplate, {
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
-export default defineComponent({
+export default {
   name: "VueLivePreviewComponent",
   emits: ["error", "success", "detect-language"],
   components: {},
@@ -85,7 +85,7 @@ export default defineComponent({
   },
   computed: {
     requiresPlusVue() {
-      return { vue, ...this.requires }
+      return { vue: Vue, ...this.requires }
     }
   },
   created() {
@@ -237,7 +237,7 @@ export default defineComponent({
       this.$emit("success");
     },
   },
-});
+};
 </script>
 
 <style>

@@ -1,13 +1,9 @@
 <template>
-  <PrismEditor
-    v-model="stableCode"
-    @update:modelValue="updatePreview"
-    :highlight="highlighter"
-    v-bind="editorProps"
-  />
+  <PrismEditor v-model="stableCode" @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" />
 </template>
 
 <script lang="ts">
+import type { PropType } from "vue";
 import { PrismEditor } from "vue-prism-editor";
 import debounce from "debounce";
 
@@ -27,7 +23,7 @@ export default {
       required: true,
     },
     error: {
-      type: [Error, Object],
+      type: [Error, Object] as PropType<(Error | Object) & { loc: any }>,
       default: undefined,
     },
     delay: {
@@ -54,14 +50,14 @@ export default {
   },
   data() {
     return {
-      updatePreview: () => {},
+      updatePreview: (() => { }) as ((code: string) => void),
       /**
        * This data only gets changed when changing language.
        * it allows for copy and pasting without having the code
        * editor repainted every keystroke
        */
       stableCode: this.code,
-      highlight: () => (code) => code,
+      highlight: (() => (code: string) => code) as (lang: "vue" | "vsg", jsxInExamples: boolean) => (code: string, errorLoc: any) => string,
     };
   },
   async beforeMount() {
@@ -73,8 +69,8 @@ export default {
     this.highlight = await makeHighlight()
   },
   methods: {
-    highlighter(code) {
-      return this.highlight(this.prismLang, this.jsx)(
+    highlighter(code: string) {
+      return this.highlight(this.prismLang as "vue" | "vsg", this.jsx)(
         code,
         this.squiggles && this.error && this.error.loc
       );
@@ -86,7 +82,7 @@ export default {
     },
   },
   created() {
-    this.updatePreview = debounce((value) => {
+    this.updatePreview = debounce((value: string) => {
       this.stableCode = value;
       this.$emit("change", value);
     }, this.delay);

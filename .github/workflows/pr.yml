@@ -1,4 +1,4 @@
-name: Lint & Test
+name: Build & Test
 on:
   pull_request:
     types: [opened,synchronize]
@@ -19,11 +19,8 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: List
-        run: npm run lint
-
       - name: Test unit
-        run: npm run test:unit -- --runInBand
+        run: npm run test:unit
       
       - name: Test e2e
-        run: npm run test:e2e -- --headless
+        run: npm run test:e2e
