@@ -17,11 +17,11 @@ Please remove \`package-lock.json\` changes from your pull request. Try to run \
 }
 
 // Check test exclusion (.only) is included
-var modifiedSpecFiles = danger.git.modified_files.filter(function(filePath) {
+var modifiedSpecFiles = danger.git.modified_files.filter(function (filePath) {
   return filePath.match(/__tests__\/.+\.(js|jsx|ts|tsx)$/gi);
 });
 
-var testFilesIncludeExclusion = modifiedSpecFiles.reduce(function(acc, value) {
+var testFilesIncludeExclusion = modifiedSpecFiles.reduce(function (acc, value) {
   var content = fs.readFileSync(value).toString();
   var invalid =
     content.indexOf("it.only") >= 0 || content.indexOf("describe.only") >= 0;
@@ -36,7 +36,7 @@ if (testFilesIncludeExclusion.length > 0) {
 }
 
 //validate commit message in PR if it conforms conventional change log, notify if it doesn't.
-var messageConventionValid = danger.git.commits.reduce(function(acc, value) {
+var messageConventionValid = danger.git.commits.reduce(function (acc, value) {
   var valid = validateMessage(value.message);
   return valid && acc;
 }, true);

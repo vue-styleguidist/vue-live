@@ -139,10 +139,7 @@ When the template compilation and the script evaluation succeed, the `@success` 
 
 ```vue
 <template>
-  <VueLive
-    :code="code"
-    @success="error = undefined"
-  />
+  <VueLive :code="code" @success="error = undefined" />
 </template>
 ```
 

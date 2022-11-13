@@ -1,0 +1,9 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["cypress/**/*.ts"],
+  "compilerOptions": {
+    "composite": true,
+    "isolatedModules": false,
+    "types": ["cypress"]
+  }
+}

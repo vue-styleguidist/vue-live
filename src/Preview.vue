@@ -1,11 +1,11 @@
 <template>
-  <pre class="VueLive-error" v-if="error">{{ this.error }}</pre>
+  <pre class="VueLive-error" v-if="error">{{ error }}</pre>
   <component v-else-if="previewedComponent" :is="previewedComponent" :key="iteration" />
 </template>
 
-<script>
-import { markRaw, h } from "vue";
-import * as vue from "vue"
+<script lang="ts">
+import { markRaw, h, defineComponent } from "vue";
+import * as Vue from "vue";
 import {
   compile as compileScript,
   isCodeVueSfc,
@@ -20,7 +20,7 @@ import checkTemplate, {
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
-export default {
+export default defineComponent({
   name: "VueLivePreviewComponent",
   emits: ["error", "success", "detect-language"],
   components: {},
@@ -77,15 +77,16 @@ export default {
   data() {
     return {
       scope: this.generateScope(),
-      previewedComponent: undefined,
+      previewedComponent: {},
       iteration: 0,
-      error: false
+      error: false,
+      removeScopedStyle: () => { },
     };
   },
   computed: {
     requiresPlusVue() {
-      return { vue, ...this.requires }
-    }
+      return { vue: Vue, ...this.requires };
+    },
   },
   created() {
     this.renderComponent(this.code.trim());
@@ -110,7 +111,7 @@ export default {
         return v.toString(16);
       });
     },
-    handleError(e) {
+    handleError(e: any) {
       /**
        * Emitted every time the component rendered throws an error
        * Catches runtime and compilation errors
@@ -119,7 +120,7 @@ export default {
        */
       if (e.constructor === VueLiveParseTemplateError) {
         e.message = `Cannot parse template expression: ${JSON.stringify(
-          e.expression.content || e.expression
+          (e.expression as any).content || e.expression
         )}\n\n${e.message}`;
       }
       this.$emit("error", e);
@@ -130,8 +131,8 @@ export default {
         this.removeScopedStyle();
       }
     },
-    renderComponent(code) {
-      let options = {};
+    renderComponent(code: string) {
+      let options: Record<string, any> = {};
       let style;
       try {
         const renderedComponent = compileScript(
@@ -159,37 +160,36 @@ export default {
           // - a `new Vue()` script that will return a full config object
           const calcOptions = () => {
             const script = renderedComponent.script;
-            options =
-              evalInContext(
-                script,
-                (filepath) => requireAtRuntime(this.requiresPlusVue, filepath),
-                adaptCreateElement,
-                concatenate,
-                h
-              ) || {};
+            options = (evalInContext(
+              script,
+              (filepath) => requireAtRuntime(this.requiresPlusVue, filepath),
+              adaptCreateElement,
+              concatenate,
+              h
+            ) || {}) as Record<string, any>;
             if (options.render) {
-              const preview = this
-              const originalRender = options.render
-              options.render = function (...args) {
+              const preview = this;
+              const originalRender = options.render;
+              options.render = function (...args: any[]) {
                 try {
-                  return originalRender.call(this, ...args)
+                  return originalRender.call(this, ...args);
                 } catch (e) {
                   preview.handleError(e);
                   return;
                 }
-              }
+              };
             }
-            options.name = 'VueLiveCompiledExample'
-          }
-          calcOptions()
+            options.name = "VueLiveCompiledExample";
+          };
+          calcOptions();
 
-          // In case the template is inlined in the script, 
+          // In case the template is inlined in the script,
           // we need to compile it
           if (options.template) {
             renderedComponent.template = options.template;
-            compileTemplateForEval(renderedComponent)
-            calcOptions()
-            delete options.template
+            compileTemplateForEval(renderedComponent);
+            calcOptions();
+            delete options.template;
           }
 
           if (this.dataScope) {
@@ -197,10 +197,13 @@ export default {
             options.data = () => mergeData;
           }
         }
-        checkTemplate({
-          template: renderedComponent.raw.template,
-          ...options
-        }, this.checkVariableAvailability);
+        checkTemplate(
+          {
+            template: renderedComponent.raw.template,
+            ...options,
+          },
+          this.checkVariableAvailability
+        );
       } catch (e) {
         this.handleError(e);
         return;
@@ -227,7 +230,7 @@ export default {
           message:
             "[Vue Live] no template or render function specified. Example cannot be rendered.",
         });
-        return
+        return;
       }
 
       this.previewedComponent = markRaw(options);
@@ -236,7 +239,7 @@ export default {
       this.$emit("success");
     },
   },
-};
+});
 </script>
 
 <style>

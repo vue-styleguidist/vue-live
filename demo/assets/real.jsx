@@ -1,10 +1,10 @@
 const args = {
   type: "button",
-  value: "update me"
+  value: "update me",
 };
 
 export default {
   render() {
     return <input {...args} />;
-  }
+  },
 };

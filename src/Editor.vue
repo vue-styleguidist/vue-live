@@ -1,13 +1,9 @@
 <template>
-  <PrismEditor
-    v-model="stableCode"
-    @update:modelValue="updatePreview"
-    :highlight="highlighter"
-    v-bind="editorProps"
-  />
+  <PrismEditor v-model="stableCode" @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, type PropType } from "vue";
 import { PrismEditor } from "vue-prism-editor";
 import debounce from "debounce";
 
@@ -17,7 +13,7 @@ import makeHighlight from "./utils/highlight";
 
 const UPDATE_DELAY = 300;
 
-export default {
+export default defineComponent({
   name: "VueLiveEditor",
   inheritAttrs: false,
   components: { PrismEditor },
@@ -27,7 +23,7 @@ export default {
       required: true,
     },
     error: {
-      type: [Error, Object],
+      type: [Error, Object] as PropType<(Error | Object) & { loc: any }>,
       default: undefined,
     },
     delay: {
@@ -41,7 +37,7 @@ export default {
     prismLang: {
       type: String,
       default: "html",
-      validator: (val) => ["html", "vsg"].includes(val),
+      validator: (val: string) => ["html", "vsg"].includes(val),
     },
     jsx: {
       type: Boolean,
@@ -54,14 +50,17 @@ export default {
   },
   data() {
     return {
-      updatePreview: () => {},
+      updatePreview: (() => { }) as (code: string) => void,
       /**
        * This data only gets changed when changing language.
        * it allows for copy and pasting without having the code
        * editor repainted every keystroke
        */
       stableCode: this.code,
-      highlight: () => (code) => code,
+      highlight: (() => (code: string) => code) as (
+        lang: "vue" | "vsg",
+        jsxInExamples: boolean
+      ) => (code: string, errorLoc: any) => string,
     };
   },
   async beforeMount() {
@@ -70,11 +69,11 @@ export default {
      * load javascript first then load jsx
      * order is not guaranteed to work in ESmodules imports
      */
-    this.highlight = await makeHighlight()
+    this.highlight = await makeHighlight();
   },
   methods: {
-    highlighter(code) {
-      return this.highlight(this.prismLang, this.jsx)(
+    highlighter(code: string) {
+      return this.highlight(this.prismLang as "vue" | "vsg", this.jsx)(
         code,
         this.squiggles && this.error && this.error.loc
       );
@@ -86,12 +85,12 @@ export default {
     },
   },
   created() {
-    this.updatePreview = debounce((value) => {
+    this.updatePreview = debounce((value: string) => {
       this.stableCode = value;
       this.$emit("change", value);
     }, this.delay);
   },
-};
+});
 </script>
 
 <style>

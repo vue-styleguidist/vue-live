@@ -1,8 +1,8 @@
-name: Lint & Test
+name: Build & Test
 on:
   pull_request:
-    types: [opened,synchronize]
-    branches: master 
+    types: [opened, synchronize]
+    branches: master
 
 concurrency:
   group: test-${{ github.ref }}
@@ -19,11 +19,14 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: List
-        run: npm run lint
+      - name: Check types
+        run: npm run types:check
 
       - name: Test unit
-        run: npm run test:unit -- --runInBand
-      
+        run: npm run test:unit
+
+      - name: Build Demo
+        run: npm run build:demo
+
       - name: Test e2e
-        run: npm run test:e2e -- --headless
+        run: npm run test:e2e
