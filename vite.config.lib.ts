@@ -29,6 +29,8 @@ export default Object.assign(
           "prismjs/components/prism-jsx",
           "prismjs/components/prism-css",
           "@vue/compiler-core/dist/compiler-core.cjs",
+          "@vue/compiler-dom/dist/compiler-dom.cjs",
+          "@vue/compiler-dom",
           "vue",
         ],
         output: {

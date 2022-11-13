@@ -1,14 +1,9 @@
 <template>
-  <PrismEditor
-    v-model="stableCode"
-    @update:modelValue="updatePreview"
-    :highlight="highlighter"
-    v-bind="editorProps"
-  />
+  <PrismEditor v-model="stableCode" @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" />
 </template>
 
 <script lang="ts">
-import type { PropType } from "vue";
+import { defineComponent, type PropType } from "vue";
 import { PrismEditor } from "vue-prism-editor";
 import debounce from "debounce";
 
@@ -18,7 +13,7 @@ import makeHighlight from "./utils/highlight";
 
 const UPDATE_DELAY = 300;
 
-export default {
+export default defineComponent({
   name: "VueLiveEditor",
   inheritAttrs: false,
   components: { PrismEditor },
@@ -55,7 +50,7 @@ export default {
   },
   data() {
     return {
-      updatePreview: (() => {}) as (code: string) => void,
+      updatePreview: (() => { }) as (code: string) => void,
       /**
        * This data only gets changed when changing language.
        * it allows for copy and pasting without having the code
@@ -95,7 +90,7 @@ export default {
       this.$emit("change", value);
     }, this.delay);
   },
-};
+});
 </script>
 
 <style>

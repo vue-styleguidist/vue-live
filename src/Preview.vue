@@ -1,14 +1,10 @@
 <template>
   <pre class="VueLive-error" v-if="error">{{ error }}</pre>
-  <component
-    v-else-if="previewedComponent"
-    :is="previewedComponent"
-    :key="iteration"
-  />
+  <component v-else-if="previewedComponent" :is="previewedComponent" :key="iteration" />
 </template>
 
 <script lang="ts">
-import { markRaw, h } from "vue";
+import { markRaw, h, defineComponent } from "vue";
 import * as Vue from "vue";
 import {
   compile as compileScript,
@@ -24,7 +20,7 @@ import checkTemplate, {
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
-export default {
+export default defineComponent({
   name: "VueLivePreviewComponent",
   emits: ["error", "success", "detect-language"],
   components: {},
@@ -46,7 +42,7 @@ export default {
      */
     components: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -56,7 +52,7 @@ export default {
      */
     requires: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     jsx: {
       type: Boolean,
@@ -68,7 +64,7 @@ export default {
      */
     dataScope: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Avoid checking variables for availability it template
@@ -84,7 +80,7 @@ export default {
       previewedComponent: {},
       iteration: 0,
       error: false,
-      removeScopedStyle: () => {},
+      removeScopedStyle: () => { },
     };
   },
   computed: {
@@ -143,10 +139,10 @@ export default {
           code,
           this.jsx
             ? {
-                jsx: "__pragma__(h)",
-                objectAssign: "__concatenate__",
-                transforms: { asyncAwait: false },
-              }
+              jsx: "__pragma__(h)",
+              objectAssign: "__concatenate__",
+              transforms: { asyncAwait: false },
+            }
             : { transforms: { asyncAwait: false } }
         );
         style = renderedComponent.style;
@@ -243,7 +239,7 @@ export default {
       this.$emit("success");
     },
   },
-};
+});
 </script>
 
 <style>

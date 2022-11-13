@@ -1,25 +1,9 @@
 <template>
-  <component
-    :is="layout ? layout : VueLiveDefaultLayout"
-    v-bind="layoutProps"
-    :code="stableCode"
-    :language="lang"
-    :prism-lang="prismLang"
-    :requires="requires"
-    :data-scope="dataScope"
-    :components="components"
-  >
+  <component :is="layout ? layout : VueLiveDefaultLayout" v-bind="layoutProps" :code="stableCode" :language="lang"
+    :prism-lang="prismLang" :requires="requires" :data-scope="dataScope" :components="components">
     <template v-slot:editor>
-      <Editor
-        :code="stableCode"
-        :delay="delay"
-        :prism-lang="prismLang"
-        :editor-props="editorProps"
-        :error="error"
-        :jsx="jsx"
-        :squiggles="squiggles"
-        @change="updatePreview"
-      />
+      <Editor :code="stableCode" :delay="delay" :prism-lang="prismLang" :editor-props="editorProps" :error="error"
+        :jsx="jsx" :squiggles="squiggles" @change="updatePreview" />
     </template>
     <template v-slot:preview>
       <!--
@@ -28,23 +12,14 @@
         * @event error
         * @property { Error } - the error thrown
       -->
-      <Preview
-        :key="codeKey"
-        :code="model"
-        @detect-language="switchLanguage"
-        @error="handleError"
-        @success="handleSuccess"
-        :components="components"
-        :requires="requires"
-        :jsx="jsx"
-        :data-scope="dataScope"
-        :check-variable-availability="checkVariableAvailability"
-      />
+      <Preview :key="codeKey" :code="model" @detect-language="switchLanguage" @error="handleError"
+        @success="handleSuccess" :components="components" :requires="requires" :jsx="jsx" :data-scope="dataScope"
+        :check-variable-availability="checkVariableAvailability" />
     </template>
   </component>
 </template>
 <script lang="ts">
-import { markRaw } from "vue";
+import { defineComponent, markRaw } from "vue";
 import hash from "hash-sum";
 
 import Preview from "./Preview.vue";
@@ -58,7 +33,7 @@ const LANG_TO_PRISM = {
 
 const UPDATE_DELAY = 300;
 
-export default {
+export default defineComponent({
   name: "VueLive",
   components: { Preview, Editor },
   props: {
@@ -83,7 +58,7 @@ export default {
      */
     components: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -93,7 +68,7 @@ export default {
      */
     requires: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Time in ms debouncing updates to the preview
@@ -132,7 +107,7 @@ export default {
      */
     dataScope: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Set if checking variables for availability
@@ -201,5 +176,5 @@ export default {
       this.$emit("error", e);
     },
   },
-};
+});
 </script>

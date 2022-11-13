@@ -1,7 +1,11 @@
+export default {};
+
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, "find", {
-    value: function (predicate) {
+    value: function (
+      predicate: (kValue: any, k: number, o: Record<number, any>) => boolean
+    ) {
       // 1. Let O be ? ToObject(this value).
       if (this == null) {
         throw TypeError('"this" is null or not defined');
