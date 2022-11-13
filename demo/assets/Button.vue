@@ -9,9 +9,9 @@
 export default {
   data() {
     return {
-      msg: "Push Me"
+      msg: "Push Me",
     };
-  }
+  },
 };
 </script>
 

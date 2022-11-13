@@ -5,12 +5,12 @@
  * @param {Function} require the fake function require
  */
 export default function evalInContext(
-  code:string,
-  require: (path:string) => any,
-  adaptCreateElement: (h:any) => any,
+  code: string,
+  require: (path: string) => any,
+  adaptCreateElement: (h: any) => any,
   concatenate: (...ags: any[]) => any,
-  h: (...ags: any[]) => any,
-):Record<string, any> {
+  h: (...ags: any[]) => any
+): Record<string, any> {
   // eslint-disable-next-line no-new-func
   const func = new Function(
     "require",

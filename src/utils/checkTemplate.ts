@@ -200,7 +200,9 @@ export function checkExpression(
             node.type === "FunctionExpression"
         );
         if (
-          funcs.some((func: any) => func.params.some((p:any) => p.name === varName))
+          funcs.some((func: any) =>
+            func.params.some((p: any) => p.name === varName)
+          )
         ) {
           return;
         }
@@ -263,10 +265,15 @@ export class VueLiveParseTemplateAttrError extends Error {
 }
 
 export class VueLiveParseTemplateError extends Error {
-  expression: {content:string} | string;
+  expression: { content: string } | string;
   subError: Error;
   loc: any;
-  constructor(message: string, expression: {content:string} | string, subError: Error, loc: any) {
+  constructor(
+    message: string,
+    expression: { content: string } | string,
+    subError: Error,
+    loc: any
+  ) {
     super(message);
     this.expression = expression;
     this.subError = subError;

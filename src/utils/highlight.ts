@@ -48,7 +48,9 @@ export default async function () {
         const comp = parseComponent(code);
 
         const newCode = comp.script
-          ? code.slice(0, comp.script.loc.start.offset) + " " + code.slice(comp.script.loc.end.offset)
+          ? code.slice(0, comp.script.loc.start.offset) +
+            " " +
+            code.slice(comp.script.loc.end.offset)
           : code;
 
         const htmlHighlighted = prismHighlight(newCode, langScheme, "html");

@@ -1,8 +1,8 @@
-import {expect, test} from "vitest"
+import { expect, test } from "vitest";
 import checkTemplateDummy from "./checkTemplate";
 import defaultAttrAllowList from "./defaultAttrAllowList";
 
-const checkTemplate = (opts:any) => checkTemplateDummy(opts, true);
+const checkTemplate = (opts: any) => checkTemplateDummy(opts, true);
 
 test("parse valid template without error with a function", () => {
   expect(() =>
@@ -115,7 +115,7 @@ test("parse a valid arrow event handler properly", () => {
       template:
         '<div><compo @click="( evt ) => { test(evt); }">hello</compo></div>',
       methods: {
-        test(e:any) {
+        test(e: any) {
           console.log(e.target);
         },
       },
@@ -129,7 +129,7 @@ test("parse a valid standard event handler properly", () => {
       template:
         '<div><compo @click="function( evt ) { test(evt); }">hello</compo></div>',
       methods: {
-        test(e:any) {
+        test(e: any) {
           console.log(e.target);
         },
       },
@@ -295,15 +295,18 @@ test("throw error when mixed case attributes", () => {
   ).toThrowError("[VueLive] Invalid attribute name: aA");
 });
 
-test.each(defaultAttrAllowList)("don't throw error for allowed SVG attribute %s", (attr) => {
-  expect(() =>
-    checkTemplate({
-      template: `<svg ${attr}="as">
+test.each(defaultAttrAllowList)(
+  "don't throw error for allowed SVG attribute %s",
+  (attr) => {
+    expect(() =>
+      checkTemplate({
+        template: `<svg ${attr}="as">
           <g/>
         </svg>`,
-    })
-  ).not.toThrowError(`[VueLive] Invalid attribute name: ${attr}`);
-});
+      })
+    ).not.toThrowError(`[VueLive] Invalid attribute name: ${attr}`);
+  }
+);
 
 test("throw error when invalid character attributes", () => {
   expect(() =>

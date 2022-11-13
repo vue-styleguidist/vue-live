@@ -1,5 +1,10 @@
 <template>
-  <PrismEditor v-model="stableCode" @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" />
+  <PrismEditor
+    v-model="stableCode"
+    @update:modelValue="updatePreview"
+    :highlight="highlighter"
+    v-bind="editorProps"
+  />
 </template>
 
 <script lang="ts">
@@ -50,14 +55,17 @@ export default {
   },
   data() {
     return {
-      updatePreview: (() => { }) as ((code: string) => void),
+      updatePreview: (() => {}) as (code: string) => void,
       /**
        * This data only gets changed when changing language.
        * it allows for copy and pasting without having the code
        * editor repainted every keystroke
        */
       stableCode: this.code,
-      highlight: (() => (code: string) => code) as (lang: "vue" | "vsg", jsxInExamples: boolean) => (code: string, errorLoc: any) => string,
+      highlight: (() => (code: string) => code) as (
+        lang: "vue" | "vsg",
+        jsxInExamples: boolean
+      ) => (code: string, errorLoc: any) => string,
     };
   },
   async beforeMount() {
@@ -66,7 +74,7 @@ export default {
      * load javascript first then load jsx
      * order is not guaranteed to work in ESmodules imports
      */
-    this.highlight = await makeHighlight()
+    this.highlight = await makeHighlight();
   },
   methods: {
     highlighter(code: string) {

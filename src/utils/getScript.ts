@@ -1,10 +1,10 @@
 import { isCodeVueSfc, parseComponent } from "vue-inbrowser-compiler";
 
-export default function(code:string, jsxInExamples:boolean):string {
+export default function (code: string, jsxInExamples: boolean): string {
   // In case we are loading a vue component as an example, extract script tag
   if (isCodeVueSfc(code)) {
     const parts = parseComponent(code);
-    return parts && parts.script || ''
+    return (parts && parts.script) || "";
   }
 
   // if in JSX mode or literal return examples code as is

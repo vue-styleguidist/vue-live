@@ -6,9 +6,7 @@ describe("Live Refresh", () => {
 
     cy.get(".preview-code:first").as("container");
 
-    cy.get("@container")
-      .children("div:last-child")
-      .as("preview");
+    cy.get("@container").children("div:last-child").as("preview");
   });
 
   it("changes the render after code change", () => {
@@ -21,8 +19,6 @@ describe("Live Refresh", () => {
       .find(".prism-editor-wrapper textarea")
       .type(`${"{backspace}".repeat(codeToDelete.length)}/>`);
 
-    cy.get("@preview")
-      .find(".v3dp__datepicker input")
-      .should("have.value", "");
+    cy.get("@preview").find(".v3dp__datepicker input").should("have.value", "");
   });
 });

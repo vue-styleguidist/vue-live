@@ -179,12 +179,12 @@ export default {
     },
   },
   methods: {
-    updatePreview(code:string) {
+    updatePreview(code: string) {
       this.stableCode = code;
       this.model = code;
       this.$emit("change", code);
     },
-    switchLanguage(newLang: 'vue' | 'vsg') {
+    switchLanguage(newLang: "vue" | "vsg") {
       this.lang = newLang;
       const newPrismLang = LANG_TO_PRISM[newLang];
       if (this.prismLang !== newPrismLang) {
