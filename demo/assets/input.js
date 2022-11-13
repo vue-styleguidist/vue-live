@@ -6,7 +6,7 @@ new Vue({
 </div>`,
   data() {
     return {
-      value: false
+      value: false,
     };
-  }
+  },
 });

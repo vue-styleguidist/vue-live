@@ -1,7 +1,10 @@
 /**
  * Return module from a given map (like {app: require('app')}) or throw.
  */
-export default function requireAtRuntime(requires, filepath) {
+export default function requireAtRuntime(
+  requires: Record<string, any>,
+  filepath: string
+) {
   requires = requires || {};
   if (!(filepath in requires)) {
     throw new Error(

@@ -1,7 +1,7 @@
 name: Release
 on:
   push:
-    branches: [master,next]
+    branches: [master, next]
 
 concurrency:
   group: release-${{ github.ref }}
@@ -40,13 +40,16 @@ jobs:
         if: ${{ github.ref == 'refs/heads/master' }}
         uses: dswistowski/surge-sh-action@v1
         with:
-          domain: 'vue-live.surge.sh'
-          project: './dist/'
+          domain: "vue-live.surge.sh"
+          project: "./dist/"
           login: ${{ secrets.SURGE_LOGIN }}
           token: ${{ secrets.SURGE_TOKEN }}
 
       - name: Build
-        run: npm run build
+        run: npm run lib:build
+
+      - name: Typings
+        run: npm run lib:types
 
       - name: Release
         run: npx semantic-release

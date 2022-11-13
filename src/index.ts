@@ -8,8 +8,11 @@ export { VueLivePreview };
 export { VueLiveEditor };
 
 // What should happen if the user installs the library as a plugin
+// @ts-ignore
 export function install(Vue) {
+  // @ts-ignore
   if (install.installed) return;
+  // @ts-ignore
   install.installed = true;
   Vue.component("VueLive", VueLive);
   Vue.component("VueLivePreview", VueLivePreview);
@@ -24,8 +27,10 @@ const plugin = {
 // Auto-install when vue is found (eg. in browser via <script> tag)
 let GlobalVue = null;
 if (typeof window !== "undefined") {
+  // @ts-ignore
   GlobalVue = window.Vue;
 } else if (typeof global !== "undefined") {
+  // @ts-ignore
   GlobalVue = global.Vue;
 }
 if (GlobalVue) {

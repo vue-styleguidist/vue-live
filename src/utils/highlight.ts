@@ -1,19 +1,18 @@
-import {
-  highlight as prismHighlight,
-  languages,
-} from "prismjs/components/prism-core";
+import { highlight as prismHighlight, languages } from "prismjs";
 
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-markup";
 import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-css";
 import getScript from "./getScript";
+import { parseComponent } from "vue-inbrowser-compiler";
 
-export default async function() {
-  await import("prismjs/components/prism-jsx");
-  return function (lang, jsxInExamples) {
+export default async function () {
+  return function (lang: "vsg" | "vue", jsxInExamples: boolean) {
     if (lang === "vsg") {
-      return (code, errorLoc) => {
+      return (code: string, errorLoc: any) => {
         if (!code) {
           return "";
         }
@@ -43,22 +42,35 @@ export default async function() {
         );
       };
     } else {
-      return (code, errorLoc) => {
-        const langScheme = languages[lang];
-        if (!langScheme) {
-          return code;
-        }
+      const langScheme = languages.html;
 
-        return (
-          // if the error is in the template no need for column padding
-          getSquiggles(errorLoc) + prismHighlight(code, langScheme, lang)
-        );
+      return (code: string) => {
+        const comp = parseComponent(code);
+
+        const newCode = comp.script
+          ? code.slice(0, comp.script.loc.start.offset) +
+            " " +
+            code.slice(comp.script.loc.end.offset)
+          : code;
+
+        const htmlHighlighted = prismHighlight(newCode, langScheme, "html");
+
+        return comp.script
+          ? htmlHighlighted.replace(
+              /<span class="token language-javascript"> <\/span>/g,
+              `<span class="token language-typescript">${prismHighlight(
+                comp.script.content,
+                languages[comp.script.lang || "ts"],
+                comp.script.lang || "ts"
+              )}</span>`
+            )
+          : htmlHighlighted;
       };
     }
-  }
+  };
 }
 
-function getSquiggles(errorLoc, lineOffset = 0) {
+function getSquiggles(errorLoc: any, lineOffset = 0) {
   if (!errorLoc) return "";
   const columnOffSet = errorLoc.start ? 0 : 1;
   const errorWidth = errorLoc.end

@@ -14,13 +14,8 @@
 
     <div class="livebox">
       <div class="hint">You can edit this <span>-></span></div>
-      <VueLive
-        :editorProps="{ lineNumbers: true }"
-        :code="codeTemplate"
-        :layout="CustomLayout"
-        :components="registeredComponents"
-        @error="(e) => log('Error on first example', e)"
-      />
+      <VueLive :editorProps="{ lineNumbers: true }" :code="codeTemplate" :layout="CustomLayout"
+        :components="registeredComponents" @error="(e: any) => log('Error on first example', e)" />
     </div>
 
     <span v-if="!openExamples">+</span><span v-else>-</span>&nbsp;
@@ -40,22 +35,14 @@
         Use the <b>requires</b> prop to make libraries and packages available in
         the browser
       </p>
-      <VueLive
-        :code="codeChicago"
-        :layout="CustomLayout"
-        :requires="chicagoRequires"
-      />
+      <VueLive :code="codeChicago" :layout="CustomLayout" :requires="chicagoRequires" />
       <h2>Custom delay</h2>
       <p>
         When updates should not happen too often, for instance when a component
         need a lot of computing power to render, one can change the standard
         throttle timing.
       </p>
-      <VueLive
-        :code="`<input type='button' value='update me' />`"
-        :layout="CustomLayout"
-        :delay="2000"
-      />
+      <VueLive :code="`<input type='button' value='update me' />`" :layout="CustomLayout" :delay="2000" />
 
       <h2>Default Layout</h2>
       <div style="width: 950px; max-width: 95vw; margin: 20px auto">
@@ -70,10 +57,7 @@
           all props passed in the
           <code>layoutProps</code>
         </p>
-        <VueLive
-          :code="`<input type='button' value='I am Groot' />`"
-          :layout="CustomLayout"
-        />
+        <VueLive :code="`<input type='button' value='I am Groot' />`" :layout="CustomLayout" />
       </div>
 
       <h2>JSX</h2>
@@ -82,46 +66,36 @@
       <h2>Separate components for Editor and Preview</h2>
       <div class="separate">
         <div class="preview-separate">
-          <VueLivePreview
-            :code="separateCode"
-            @error="(e) => (error = e)"
-            @success="error = undefined"
-          />
+          <VueLivePreview :code="separateCode" @error="(e: any) => (error = e)" @success="error = undefined" />
         </div>
         <hr style="width: 950px" />
         <p>Edit the code here</p>
-        <VueLiveEditor
-          :code="separateCode"
-          @change="updateCode"
-          :error="error"
-        />
+        <VueLiveEditor :code="separateCode" @change="updateCode" :error="error" />
         <div class="button-bar"><button>Save</button></div>
       </div>
     </div>
 
-    <github-corners
-      url="https://github.com/vue-styleguidist/vue-live"
-      gitColor="#FFFFFF"
-    />
+    <github-corners url="https://github.com/vue-styleguidist/vue-live" gitColor="#FFFFFF" />
   </main>
 </template>
-<script>
-import { markRaw } from "vue";
+<script lang="ts">
+import { defineComponent, markRaw } from "vue";
 import DatePicker from "vue3-datepicker";
 import { VueLive, VueLiveEditor, VueLivePreview } from "../src";
-import CustomLayout from "./CustomLayout";
-import codeSfc from "!!raw-loader!./assets/Button.vue";
-import codeJs from "!!raw-loader!./assets/input.js";
-import realjsx from "!!raw-loader!./assets/real.jsx";
-import codeTemplate from "!!raw-loader!./assets/PureTemplate.html";
-import codeChicago from "!!raw-loader!./assets/Chicago.jsx";
+import CustomLayout from "./CustomLayout.vue";
+import codeSfc from "./assets/Button.vue?raw";
+import codeJs from "./assets/input.js?raw";
+import realjsx from "./assets/real.jsx?raw";
+import codeTemplate from "./assets/PureTemplate.html?raw";
+import codeChicago from "./assets/Chicago.jsx?raw";
 import all from "./assets/chicagoNeighbourhoods";
 import "prismjs/themes/prism-tomorrow.css";
 import "vue3-datepicker/dist/vue3-datepicker.css";
 
-import GithubCorners from "vue-github-corners";
+// @ts-ignore
+import GithubCorners from "@uivjs/vue-github-corners";
 
-export default {
+export default defineComponent({
   name: "VueLiveDemo",
   components: { VueLive, VueLiveEditor, VueLivePreview, GithubCorners },
   data() {
@@ -140,14 +114,14 @@ export default {
     };
   },
   methods: {
-    updateCode(code) {
+    updateCode(code: string) {
       this.separateCode = code;
     },
-    log() {
-      console.log(...arguments);
+    log(...args: any[]) {
+      console.log(...args);
     },
   },
-};
+});
 </script>
 
 <style>
@@ -165,6 +139,7 @@ body {
   padding: 8px 12px;
   box-sizing: border-box;
 }
+
 .separate {
   display: flex;
   flex-direction: column;
@@ -208,10 +183,12 @@ body {
     top: -35px;
     left: 0;
   }
+
   .hint span {
     transform: rotate(80deg) translate(10px, 10px);
     display: inline-block;
   }
+
   .separate {
     width: 90vw;
   }
