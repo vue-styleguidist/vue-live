@@ -25,16 +25,15 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Test
-        run: |
-          npm run lint
-          npm run test:unit -- --runInBand
-          npm run test:e2e -- --headless
+      - name: Run Unit Test
+        run: npm run test:unit
 
       - name: Build
         if: ${{ github.ref == 'refs/heads/master' }}
-        run: |
-          npm run build:demo
+        run: npm run build:demo
+
+      - name: Run E2E Test
+        run: npm run test:e2e
 
       - name: Deploy to vue-live.surge.sh
         if: ${{ github.ref == 'refs/heads/master' }}
