@@ -19,6 +19,9 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Check types
+        run: npm run types:check
+
       - name: Test unit
         run: npm run test:unit
 

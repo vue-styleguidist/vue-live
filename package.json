@@ -4,8 +4,9 @@
   "author": "Bart Ledoux <ledouxb@me.com>",
   "scripts": {
     "serve": "vite serve",
-    "build": "vite build --config ./vite.config.lib.ts",
-    "types": "vue-tsc --declaration --emitDeclarationOnly --project ./tsconfig.app.json",
+    "lib:build": "vite build --config ./vite.config.lib.ts",
+    "lib:types": "vue-tsc --declaration --emitDeclarationOnly --project ./tsconfig.lib.json",
+    "types:check": "vue-tsc --project ./tsconfig.app.json",
     "build:demo": "vite build",
     "start": "vite serve",
     "preview": "vite preview --port 4173",
@@ -65,10 +66,12 @@
   "license": "MIT",
   "main": "lib/vue-live.umd.js",
   "module": "lib/vue-live.mjs",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": "./lib/vue-live.mjs",
-      "require": "./lib/vue-live.umd.js"
+      "require": "./lib/vue-live.umd.js",
+      "types": "./lib/index.d.ts"
     },
     "./style.css": "./lib/style.css"
   },
