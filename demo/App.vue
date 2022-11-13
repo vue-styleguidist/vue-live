@@ -63,6 +63,9 @@
       <h2>JSX</h2>
       <VueLive :code="realjsx" :layout="CustomLayout" :jsx="true" />
 
+      <h2>Double Root</h2>
+      <VueLive :code="doubleRoot" :layout="CustomLayout" />
+
       <h2>Separate components for Editor and Preview</h2>
       <div class="separate">
         <div class="preview-separate">
@@ -75,7 +78,7 @@
       </div>
     </div>
 
-    <github-corners url="https://github.com/vue-styleguidist/vue-live" gitColor="#FFFFFF" />
+    <github-corners href="https://github.com/vue-styleguidist/vue-live" gitColor="#FFFFFF" />
   </main>
 </template>
 <script lang="ts">
@@ -87,6 +90,7 @@ import codeSfc from "./assets/Button.vue?raw";
 import codeJs from "./assets/input.js?raw";
 import realjsx from "./assets/real.jsx?raw";
 import codeTemplate from "./assets/PureTemplate.html?raw";
+import doubleRoot from "./assets/PureTemplateDoubleRoot.html?raw";
 import codeChicago from "./assets/Chicago.jsx?raw";
 import all from "./assets/chicagoNeighbourhoods";
 import "prismjs/themes/prism-tomorrow.css";
@@ -109,6 +113,7 @@ export default defineComponent({
       chicagoRequires: { "./chicagoNeighbourhoods": all },
       realjsx,
       separateCode: codeSfc,
+      doubleRoot,
       openExamples: false,
       error: undefined,
     };
