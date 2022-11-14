@@ -7,7 +7,7 @@ import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-css";
 import getScript from "./getScript";
-import { parseComponent } from "vue-inbrowser-compiler";
+import { parseComponent } from "vue-inbrowser-compiler-sucrase";
 
 export default async function () {
   return function (lang: "vsg" | "vue", jsxInExamples: boolean) {

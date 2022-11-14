@@ -12,8 +12,8 @@ import {
   addScopedStyle,
   adaptCreateElement,
   concatenate,
-  compileTemplateForEval,
-} from "vue-inbrowser-compiler";
+  compileTemplateForEval
+} from "vue-inbrowser-compiler-sucrase";
 import checkTemplate, {
   VueLiveParseTemplateError,
 } from "./utils/checkTemplate";
@@ -139,11 +139,8 @@ export default defineComponent({
           code,
           this.jsx
             ? {
-              jsx: "__pragma__(h)",
-              objectAssign: "__concatenate__",
-              transforms: { asyncAwait: false },
-            }
-            : { transforms: { asyncAwait: false } }
+              jsxPragma: "__pragma__(h)",
+            } : {}
         );
         style = renderedComponent.style;
         if (renderedComponent.script) {
