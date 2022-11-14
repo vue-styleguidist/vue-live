@@ -57,67 +57,6 @@ To install the version for vue 2, use the following:
 npm install --save vue-live@1
 ```
 
-## Enabling template compilation
-
-To compile templates in the browser, you need the compiler to be in your JS bundle.
-
-If you do not, you might see errors about using the runtime version of Vue.
-
-To bundle this, there is a simple solution: Add an alias in `webpack.config.js`.
-
-```js
-module.exports = {
-  resolve: {
-    alias: {
-      // this enables loading the "full" version of vue
-      // instead of only loading the vue runtime
-      vue$: "vue/dist/vue.esm-browser.js",
-    },
-  },
-};
-```
-
-In a [Vue CLI](https://cli.vuejs.org/) project use [vue.config.js](https://cli.vuejs.org/guide/webpack.html).
-
-```js
-module.exports = {
-  configureWebpack: {
-    resolve: {
-      alias: {
-        vue$: "vue/dist/vue.esm.js",
-      },
-    },
-  },
-};
-```
-
-in [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack/)
-
-```js
-export default {
-  build: {
-    extend(config, { isDev, isClient }) {
-      // ..
-      config.resolve.alias.vue$ = "vue/dist/vue.esm-browser.js";
-    },
-  },
-};
-```
-
-and finally in [gridsome.config.js](https://gridsome.org/docs/config/#configurewebpack)
-
-```js
-module.exports = {
-  configureWebpack: {
-    resolve: {
-      alias: {
-        vue$: "vue/dist/vue.esm-browser.js",
-      },
-    },
-  },
-};
-```
-
 ## Events
 
 ### `@error`
