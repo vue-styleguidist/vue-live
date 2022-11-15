@@ -4,9 +4,9 @@
   "author": "Bart Ledoux <ledouxb@me.com>",
   "scripts": {
     "serve": "vite serve",
-    "lib:build": "vite build --config ./vite.config.lib.ts",
-    "lib:types": "vue-tsc --declaration --emitDeclarationOnly --project ./tsconfig.lib.json",
-    "types:check": "vue-tsc --project ./tsconfig.app.json",
+    "types": "vue-tsc --project ./tsconfig.app.json",
+    "build:lib": "vite build --config ./vite.config.lib.ts",
+    "types:lib": "vue-tsc --declaration --emitDeclarationOnly --project ./tsconfig.lib.json",
     "build:demo": "vite build",
     "start": "vite serve",
     "preview": "vite preview --port 4173",

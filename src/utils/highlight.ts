@@ -1,11 +1,15 @@
-import { highlight as prismHighlight, languages } from "prismjs";
+// NOTE: this weird way of importing prism is necessary because 
+// prism is not a ESM ready library
+import pkg from "prismjs";
+const { highlight: prismHighlight, languages } = pkg;
 
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-markup";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-jsx";
-import "prismjs/components/prism-css";
+import "prismjs/components/prism-clike.js";
+import "prismjs/components/prism-markup.js";
+import "prismjs/components/prism-javascript.js";
+import "prismjs/components/prism-typescript.js";
+import "prismjs/components/prism-jsx.js";
+import "prismjs/components/prism-css.js";
+
 import getScript from "./getScript";
 import { parseComponent } from "vue-inbrowser-compiler-sucrase";
 

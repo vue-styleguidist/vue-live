@@ -45,10 +45,10 @@ jobs:
           token: ${{ secrets.SURGE_TOKEN }}
 
       - name: Build
-        run: npm run lib:build
+        run: npm run build:lib
 
       - name: Typings
-        run: npm run lib:types
+        run: npm run types:lib
 
       - name: Release
         run: npx semantic-release
