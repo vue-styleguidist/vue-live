@@ -147,7 +147,7 @@ export default defineComponent({
           // if the compiled code contains a script it might be "just" a script
           // if so, change scheme used by editor
           // NOTE: vsg is a superset of JavaScript allowing
-          // the template to succeed literally code, very useful for examples
+          // the template to add javascript code above the template without fluff, very useful for examples
           // NOTE2: vsg stands for vue-styleguidist
           this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
 
