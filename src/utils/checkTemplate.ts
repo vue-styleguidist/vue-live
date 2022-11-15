@@ -1,7 +1,5 @@
 import { parse as parseVue } from "@vue/compiler-dom";
-// force proper english errors
-// @ts-ignore
-import { createCompilerError } from "@vue/compiler-core/dist/compiler-core.cjs";
+import { createCompilerError } from "@vue/compiler-core";
 import { parse as parseEs } from "acorn";
 import { ancestor, simple } from "acorn-walk";
 import defaultAttrAllowList from "./defaultAttrAllowList";
