@@ -244,5 +244,5 @@ export default [
   "Woodlawn",
   "Wrightwood",
   "Wrightwood Neighbors",
-  "Wrigleyville"
+  "Wrigleyville",
 ];

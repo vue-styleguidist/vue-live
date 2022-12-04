@@ -1,7 +1,7 @@
 name: Release
 on:
   push:
-    branches: [master,next]
+    branches: [master, next]
 
 concurrency:
   group: release-${{ github.ref }}
@@ -25,28 +25,30 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Test
-        run: |
-          npm run lint
-          npm run test:unit -- --runInBand
-          npm run test:e2e -- --headless
+      - name: Run Unit Test
+        run: npm run test:unit
 
       - name: Build
         if: ${{ github.ref == 'refs/heads/master' }}
-        run: |
-          npm run build:demo
+        run: npm run build:demo
+
+      - name: Run E2E Test
+        run: npm run test:e2e
 
       - name: Deploy to vue-live.surge.sh
         if: ${{ github.ref == 'refs/heads/master' }}
         uses: dswistowski/surge-sh-action@v1
         with:
-          domain: 'vue-live.surge.sh'
-          project: './dist/'
+          domain: "vue-live.surge.sh"
+          project: "./dist/"
           login: ${{ secrets.SURGE_LOGIN }}
           token: ${{ secrets.SURGE_TOKEN }}
 
       - name: Build
-        run: npm run build
+        run: npm run build:lib
+
+      - name: Typings
+        run: npm run types:lib
 
       - name: Release
         run: npx semantic-release

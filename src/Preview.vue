@@ -1,30 +1,28 @@
 <template>
-  <pre class="VueLive-error" v-if="error">{{ this.error }}</pre>
-  <component
-    v-else-if="previewedComponent"
-    :id="scope"
-    :is="previewedComponent"
-    :key="iteration"
-  />
+  <pre class="VueLive-error" v-if="error">{{ error }}</pre>
+  <component v-else-if="previewedComponent" :is="previewedComponent" :key="iteration" />
 </template>
 
-<script>
-import { markRaw, h } from "vue";
+<script lang="ts">
+import { markRaw, h, defineComponent } from "vue";
+import * as Vue from "vue";
 import {
   compile as compileScript,
   isCodeVueSfc,
   addScopedStyle,
   adaptCreateElement,
   concatenate,
-} from "vue-inbrowser-compiler";
+  compileTemplateForEval
+} from "vue-inbrowser-compiler-sucrase";
 import checkTemplate, {
   VueLiveParseTemplateError,
 } from "./utils/checkTemplate";
 import evalInContext from "./utils/evalInContext";
 import requireAtRuntime from "./utils/requireAtRuntime";
 
-export default {
+export default defineComponent({
   name: "VueLivePreviewComponent",
+  emits: ["error", "success", "detect-language"],
   components: {},
   errorCaptured(err) {
     this.handleError(err);
@@ -44,7 +42,7 @@ export default {
      */
     components: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -54,7 +52,7 @@ export default {
      */
     requires: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     jsx: {
       type: Boolean,
@@ -66,7 +64,7 @@ export default {
      */
     dataScope: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     /**
      * Avoid checking variables for availability it template
@@ -79,10 +77,16 @@ export default {
   data() {
     return {
       scope: this.generateScope(),
-      previewedComponent: undefined,
+      previewedComponent: {},
       iteration: 0,
       error: false,
+      removeScopedStyle: () => { },
     };
+  },
+  computed: {
+    requiresPlusVue() {
+      return { vue: Vue, ...this.requires };
+    },
   },
   created() {
     this.renderComponent(this.code.trim());
@@ -107,7 +111,7 @@ export default {
         return v.toString(16);
       });
     },
-    handleError(e) {
+    handleError(e: any) {
       /**
        * Emitted every time the component rendered throws an error
        * Catches runtime and compilation errors
@@ -116,7 +120,7 @@ export default {
        */
       if (e.constructor === VueLiveParseTemplateError) {
         e.message = `Cannot parse template expression: ${JSON.stringify(
-          e.expression.content || e.expression
+          (e.expression as any).content || e.expression
         )}\n\n${e.message}`;
       }
       this.$emit("error", e);
@@ -127,26 +131,23 @@ export default {
         this.removeScopedStyle();
       }
     },
-    renderComponent(code) {
-      let options = {};
+    renderComponent(code: string) {
+      let options: Record<string, any> = {};
       let style;
       try {
         const renderedComponent = compileScript(
           code,
           this.jsx
             ? {
-                jsx: "__pragma__(h)",
-                objectAssign: "__concatenate__",
-                transforms: { asyncAwait: false },
-              }
-            : { transforms: { asyncAwait: false } }
+              jsxPragma: "__pragma__(h)",
+            } : {}
         );
         style = renderedComponent.style;
         if (renderedComponent.script) {
           // if the compiled code contains a script it might be "just" a script
           // if so, change scheme used by editor
           // NOTE: vsg is a superset of JavaScript allowing
-          // the template to succeed litterally code, very useful for examples
+          // the template to add javascript code above the template without fluff, very useful for examples
           // NOTE2: vsg stands for vue-styleguidist
           this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
 
@@ -154,37 +155,57 @@ export default {
           // it can be:
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
-          const script = renderedComponent.script;
-          options =
-            evalInContext(
+          const calcOptions = () => {
+            const script = renderedComponent.script;
+            options = (evalInContext(
               script,
-              (filepath) => requireAtRuntime(this.requires, filepath),
+              (filepath) => requireAtRuntime(this.requiresPlusVue, filepath),
               adaptCreateElement,
               concatenate,
               h
-            ) || {};
+            ) || {}) as Record<string, any>;
+            if (options.render) {
+              const preview = this;
+              const originalRender = options.render;
+              options.render = function (...args: any[]) {
+                try {
+                  return originalRender.call(this, ...args);
+                } catch (e) {
+                  preview.handleError(e);
+                  return;
+                }
+              };
+            }
+            options.name = "VueLiveCompiledExample";
+          };
+          calcOptions();
+
+          // In case the template is inlined in the script,
+          // we need to compile it
+          if (options.template) {
+            renderedComponent.template = options.template;
+            compileTemplateForEval(renderedComponent);
+            calcOptions();
+            delete options.template;
+          }
 
           if (this.dataScope) {
             const mergeData = { ...options.data(), ...this.dataScope };
             options.data = () => mergeData;
           }
         }
-        if (renderedComponent.template) {
-          // if this is a pure template or if we are in hybrid vsg mode,
-          // we need to set the template up.
-          options.template = `<div>${renderedComponent.template}</div>`;
-        }
+        checkTemplate(
+          {
+            template: renderedComponent.raw.template,
+            ...options,
+          },
+          this.checkVariableAvailability
+        );
       } catch (e) {
         this.handleError(e);
         return;
       }
 
-      try {
-        checkTemplate(options, this.checkVariableAvailability);
-      } catch (e) {
-        this.handleError(e);
-        return;
-      }
       if (this.components) {
         if (!options.components) {
           options.components = this.components;
@@ -201,21 +222,21 @@ export default {
         options.__scopeId = `data-${this.scope}`;
         this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
-
-      if (options.template || options.render) {
-        this.previewedComponent = markRaw(options);
-        this.iteration = this.iteration + 1;
-        this.error = false;
-      } else {
+      if (!options.render) {
         this.handleError({
           message:
             "[Vue Live] no template or render function specified. Example cannot be rendered.",
         });
+        return;
       }
+
+      this.previewedComponent = markRaw(options);
+      this.iteration = this.iteration + 1;
+      this.error = false;
       this.$emit("success");
     },
   },
-};
+});
 </script>
 
 <style>

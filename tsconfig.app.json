@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.lib.json",
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "demo/**/*.vue",
+    "demo/**/*.ts"
+  ],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "noEmit": true
+  }
+}
