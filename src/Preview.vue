@@ -45,6 +45,15 @@ export default defineComponent({
       default: () => { },
     },
     /**
+     * Hashtable of auto-registered directives
+     * @example { Tooltip: VueTooltip }
+     * @example { VueTooltip }
+     */
+    directives: {
+      type: Object,
+      default: () => { },
+    },
+    /**
      * Hashtable of modules available in require and import statements
      * in the code prop
      * @example { lodash: require("lodash") }
@@ -131,7 +140,7 @@ export default defineComponent({
         this.removeScopedStyle();
       }
     },
-    renderComponent(code: string) {
+    async renderComponent(code: string) {
       let options: Record<string, any> = {};
       let style;
       try {
@@ -155,11 +164,15 @@ export default defineComponent({
           // it can be:
           // - a script setting up variables => we set up the data property of renderedComponent
           // - a `new Vue()` script that will return a full config object
-          const calcOptions = () => {
+          const calcOptions = async () => {
             const script = renderedComponent.script;
+            const requires = {}
+            await Promise.allSettled(Object.keys(this.requiresPlusVue).map(async (key) => {
+              requires[key] = this.requiresPlusVue[key] instanceof Promise ? (await Promise.resolve(this.requiresPlusVue[key])).default : this.requiresPlusVue[key]
+				    }))
             options = (evalInContext(
               script,
-              (filepath) => requireAtRuntime(this.requiresPlusVue, filepath),
+              (filepath) => requireAtRuntime(requires, filepath),
               adaptCreateElement,
               concatenate,
               h
@@ -178,7 +191,7 @@ export default defineComponent({
             }
             options.name = "VueLiveCompiledExample";
           };
-          calcOptions();
+          await calcOptions();
 
           // In case the template is inlined in the script,
           // we need to compile it
@@ -211,6 +224,14 @@ export default defineComponent({
           options.components = this.components;
         } else {
           options.components = { ...options.components, ...this.components };
+        }
+      }
+
+      if (this.directives) {
+        if (!options.directives) {
+          options.directives = this.directives;
+        } else {
+          options.directives = { ...options.directives, ...this.directives };
         }
       }
 

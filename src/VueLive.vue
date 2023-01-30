@@ -73,7 +73,7 @@ export default defineComponent({
      * Hashtable of modules available in require and import statements
      * in the Preview component
      * @example { lodash: require("lodash") }
-     * @example { moment: require("moment") }
+     * @example { "foo/bar.js": import("foo/bar.js") }
      */
     requires: {
       type: Object,
