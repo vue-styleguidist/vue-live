@@ -13,7 +13,7 @@
         * @property { Error } - the error thrown
       -->
       <Preview :key="codeKey" :code="model" @detect-language="switchLanguage" @error="handleError"
-        @success="handleSuccess" :components="components" :requires="requires" :jsx="jsx" :data-scope="dataScope"
+        @success="handleSuccess" :components="components" :directives="directives" :requires="requires" :jsx="jsx" :data-scope="dataScope"
         :check-variable-availability="checkVariableAvailability" />
     </template>
   </component>
@@ -57,6 +57,15 @@ export default defineComponent({
      * @example { VueDatePicker }
      */
     components: {
+      type: Object,
+      default: () => { },
+    },
+    /**
+     * Hashtable of auto-registered directives
+     * @example { Tooltip: VueTooltip }
+     * @example { VueTooltip }
+     */
+    directives: {
       type: Object,
       default: () => { },
     },
