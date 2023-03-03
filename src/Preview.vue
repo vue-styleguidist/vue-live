@@ -86,7 +86,9 @@ export default defineComponent({
   data() {
     return {
       scope: this.generateScope(),
-      previewedComponent: {},
+      previewedComponent: markRaw({
+				render: () => h("div"),
+			}),
       iteration: 0,
       error: false,
       removeScopedStyle: () => { },
