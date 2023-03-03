@@ -27,6 +27,8 @@
         file components as well
       </p>
       <VueLive :code="codeSfc" :layout="CustomLayout" />
+			<h2>SFC with setup</h2>
+      <VueLive :code="codeSfcSetup" :layout="CustomLayout" />
       <h2>Pure JavaScript code</h2>
       <p>Or if you prefer to, use the <b>new Vue()</b> format</p>
       <VueLive :code="codeJs" :layout="CustomLayout" />
@@ -87,6 +89,7 @@ import DatePicker from "vue3-datepicker";
 import { VueLive, VueLiveEditor, VueLivePreview } from "../src";
 import CustomLayout from "./CustomLayout.vue";
 import codeSfc from "./assets/Button.vue?raw";
+import codeSfcSetup from "./assets/ButtonSetup.vue?raw";
 import codeJs from "./assets/input.js?raw";
 import realjsx from "./assets/real.jsx?raw";
 import codeTemplate from "./assets/PureTemplate.html?raw";
@@ -106,6 +109,7 @@ export default defineComponent({
     return {
       registeredComponents: { DatePicker: markRaw(DatePicker) },
       codeSfc,
+			codeSfcSetup,
       codeTemplate,
       codeJs,
       codeChicago,
