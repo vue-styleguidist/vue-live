@@ -198,7 +198,7 @@ export default defineComponent({
           if (options.template) {
             renderedComponent.template = options.template;
             compileTemplateForEval(renderedComponent);
-            calcOptions();
+            await calcOptions();
             delete options.template;
           }
 
@@ -243,6 +243,9 @@ export default defineComponent({
         options.__scopeId = `data-${this.scope}`;
         this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
+
+			console.log({ options })
+
       if (!options.render) {
         this.handleError({
           message:
