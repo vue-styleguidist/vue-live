@@ -244,8 +244,6 @@ export default defineComponent({
         this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
 
-			console.log({ options })
-
       if (!options.render) {
         this.handleError({
           message:
