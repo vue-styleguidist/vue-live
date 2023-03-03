@@ -15,6 +15,7 @@ interface Options {
   computed?: Record<string, any>;
   methods?: Record<string, any>;
   attrAllowList?: string[];
+	setup?: () => (Record<string, any> | void)
 }
 
 export default function (
@@ -48,12 +49,16 @@ export default function (
 
   const methodsArray =
     $options && $options.methods ? Object.keys($options.methods) : [];
+	
+	const setupOutput =
+    $options && typeof $options.setup === 'function' ? Object.keys($options.setup() ?? {}) : [];
 
   const scriptVars = [
     ...propNamesArray,
     ...dataArray,
     ...computedArray,
     ...methodsArray,
+		...setupOutput
   ];
 
   // Define list of attributes for which name check will be skipped. Defaults to known camelCased SVG attributes.
