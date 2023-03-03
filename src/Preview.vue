@@ -93,7 +93,7 @@ export default defineComponent({
     };
   },
   computed: {
-    requiresPlusVue() {
+    requiresPlusVue(): Record<string, any> {
       return { vue: Vue, ...this.requires };
     },
   },
@@ -166,9 +166,9 @@ export default defineComponent({
           // - a `new Vue()` script that will return a full config object
           const calcOptions = async () => {
             const script = renderedComponent.script;
-            const requires = {}
+            const requires: typeof this.requires = {}
             await Promise.allSettled(Object.keys(this.requiresPlusVue).map(async (key) => {
-              requires[key] = this.requiresPlusVue[key] instanceof Promise ? (await Promise.resolve(this.requiresPlusVue[key])).default : this.requiresPlusVue[key]
+              requires[key] = this.requiresPlusVue[key] instanceof Promise ? (await this.requiresPlusVue[key]).default : this.requiresPlusVue[key]
 				    }))
             options = (evalInContext(
               script,
