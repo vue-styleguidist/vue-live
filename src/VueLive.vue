@@ -13,7 +13,7 @@
         * @property { Error } - the error thrown
       -->
       <Preview :key="codeKey" :code="model" @detect-language="switchLanguage" @error="handleError"
-        @success="handleSuccess" :components="components" :requires="requires" :jsx="jsx" :data-scope="dataScope"
+        @success="handleSuccess" :components="components" :directives="directives" :requires="requires" :jsx="jsx" :data-scope="dataScope"
         :check-variable-availability="checkVariableAvailability" />
     </template>
   </component>
@@ -61,10 +61,19 @@ export default defineComponent({
       default: () => { },
     },
     /**
+     * Hashtable of auto-registered directives
+     * @example { Tooltip: VueTooltip }
+     * @example { VueTooltip }
+     */
+    directives: {
+      type: Object,
+      default: () => { },
+    },
+    /**
      * Hashtable of modules available in require and import statements
      * in the Preview component
      * @example { lodash: require("lodash") }
-     * @example { moment: require("moment") }
+     * @example { "foo/bar.js": import("foo/bar.js") }
      */
     requires: {
       type: Object,
