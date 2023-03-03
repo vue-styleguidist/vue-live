@@ -20,7 +20,7 @@ jobs:
         run: npm ci
 
       - name: Check types
-        run: npm run types:check
+        run: npm run types
 
       - name: Test unit
         run: npm run test:unit
