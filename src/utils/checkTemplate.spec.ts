@@ -60,6 +60,22 @@ test("parse valid template without error with a value in methods", () => {
   ).not.toThrow();
 });
 
+test("parse valid template without error with values returned from setup", () => {
+  expect(() =>
+    checkTemplate({
+      template: '<div><compo :value="today">{{ msg }}</compo></div>',
+      setup() {
+        return {
+          today() {
+						return "bonjour";
+					},
+					msg: "hello"
+        }
+      },
+    })
+  ).not.toThrow();
+});
+
 test("parse false value as a valid value", () => {
   expect(() =>
     checkTemplate({
