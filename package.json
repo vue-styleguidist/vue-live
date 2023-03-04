@@ -50,7 +50,7 @@
     "vue3-datepicker": "^0.3.4"
   },
   "peerDependencies": {
-    "vue": ">= 3.0.8"
+    "vue": ">= 2.6.14"
   },
   "browserslist": [
     "> 1%",
@@ -61,7 +61,8 @@
     "url": "https://github.com/vue-styleguidist/vue-live/issues"
   },
   "files": [
-    "lib"
+    "lib",
+    "postinstall.js"
   ],
   "license": "MIT",
   "main": "lib/vue-live.umd.js",
