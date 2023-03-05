@@ -100,6 +100,7 @@ export default defineComponent({
 		},
 	},
 	created() {
+		console.log(this.requiresPlusVue)
 		this.renderComponent(this.code.trim());
 	},
 	destroyed() {
@@ -176,6 +177,7 @@ export default defineComponent({
 						await Promise.allSettled(Object.keys(this.requiresPlusVue).map(async (key) => {
 							requires[key] = this.requiresPlusVue[key] instanceof Promise ? (await this.requiresPlusVue[key]).default : this.requiresPlusVue[key]
 						}))
+						console.log({ requires })
 						options = defineComponent((evalInContext(
 							script,
 							(filepath) => requireAtRuntime(requires, filepath),
@@ -214,11 +216,11 @@ export default defineComponent({
 					}
 				}
 				const template = renderedComponent.raw.template
-				if (template && typeof options.data === "function") {
+				if (template) {
 					checkTemplate({
-							...(options as any),
-							template,
-						},
+						...(options as any),
+						template,
+					},
 						this.checkVariableAvailability
 					);
 				}
