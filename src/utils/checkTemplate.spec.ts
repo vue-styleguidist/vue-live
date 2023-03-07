@@ -1,6 +1,5 @@
 import { expect, test } from "vitest";
 import checkTemplateDummy from "./checkTemplate";
-import defaultAttrAllowList from "./defaultAttrAllowList";
 
 const checkTemplate = (opts: any) => checkTemplateDummy(opts, true);
 
