@@ -2,7 +2,6 @@ import { parse as parseVue } from "@vue/compiler-dom";
 import { createCompilerError } from "@vue/compiler-core";
 import { parse as parseEs } from "acorn";
 import { ancestor, simple } from "acorn-walk";
-import defaultAttrAllowList from "./defaultAttrAllowList";
 
 const ELEMENT = 1;
 const SIMPLE_EXPRESSION = 4;
@@ -66,10 +65,6 @@ export default function (
     ...setupOutput,
   ];
 
-  // Define list of attributes for which name check will be skipped. Defaults to known camelCased SVG attributes.
-  // Allow future enhancement via $options.attrAllowList
-  const attrAllowList = $options.attrAllowList || defaultAttrAllowList;
-
   traverse(ast, [
     (templateAst: any, parentTemplateVars: any) => {
       const templateVars: string[] = [];
@@ -81,15 +76,6 @@ export default function (
             type: number;
             exp?: { content: string };
           }) => {
-            if (
-              !attrAllowList.includes(attr.name) &&
-              !/^[a-z-:]+$/g.test(attr.name)
-            ) {
-              throw new VueLiveParseTemplateAttrError(
-                "[VueLive] Invalid attribute name: " + attr.name,
-                attr.loc
-              );
-            }
             const exp =
               attr.type !== SIMPLE_EXPRESSION && attr.exp
                 ? attr.exp.content

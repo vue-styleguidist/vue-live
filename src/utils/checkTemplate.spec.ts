@@ -218,7 +218,7 @@ test("parse valid object not to throw", () => {
   ).not.toThrow();
 });
 
-test("parse expression using mutiple lines to throw", () => {
+test("parse expression using multiple lines to throw", () => {
   expect(() =>
     checkTemplate({
       template: `<div><CustomSelect @event="
@@ -301,69 +301,3 @@ test("parse v-for nested expressions and add their vars to available data", () =
   ).not.toThrow();
 });
 
-test("throw error when mixed case attributes", () => {
-  expect(() =>
-    checkTemplate({
-      template: `<div aA="as">
-          <div/>
-        </div>`,
-    })
-  ).toThrowError("[VueLive] Invalid attribute name: aA");
-});
-
-test.each(defaultAttrAllowList)(
-  "don't throw error for allowed SVG attribute %s",
-  (attr) => {
-    expect(() =>
-      checkTemplate({
-        template: `<svg ${attr}="as">
-          <g/>
-        </svg>`,
-      })
-    ).not.toThrowError(`[VueLive] Invalid attribute name: ${attr}`);
-  }
-);
-
-test("throw error when invalid character attributes", () => {
-  expect(() =>
-    checkTemplate({
-      template: `<div $s="as">
-          <div/>
-        </div>`,
-    })
-  ).toThrowError("[VueLive] Invalid attribute name: $s");
-});
-
-test("throw error when invalid character attributes $", () => {
-  expect(() =>
-    checkTemplate({
-      template: `<div $s="as">
-          <div/>
-        </div>`,
-    })
-  ).toThrowError("[VueLive] Invalid attribute name: $s");
-});
-
-test("throw error when invalid character attributes +", () => {
-  expect(() =>
-    checkTemplate({
-      template: `<div s+tata="as">
-          <div/>
-        </div>`,
-    })
-  ).toThrowError("[VueLive] Invalid attribute name: s+tata");
-});
-
-test("not error when all attributes are valid", () => {
-  expect(() =>
-    checkTemplate({
-      template: `<div>
-          <div ja-da="0" />
-          <div v-bind:da="0" />
-          <div v-on:da="0" />
-          <div :da="0" />
-          <div @da="co()" />
-        </div>`,
-    })
-  ).not.toThrow();
-});
