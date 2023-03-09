@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, h } from 'vue'
+
+const MyButton = () => h('button', 'Push Me')
 
 const msg = ref("Push Me")
 </script>
@@ -8,6 +10,7 @@ const msg = ref("Push Me")
   <div class="hello">
     <h1>Colored Text</h1>
     <button>{{ msg }}</button>
+		<MyButton/>
   </div>
 </template>
 
