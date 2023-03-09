@@ -9,7 +9,7 @@ import debounce from "debounce";
 
 import "vue-prism-editor/dist/prismeditor.min.css";
 
-import makeHighlight from "./utils/highlight";
+import makeHighlight, { CONFIGURED_LANGS, type CONFIGURED_LANGS_TYPE } from "./utils/highlight";
 
 const UPDATE_DELAY = 300;
 
@@ -35,9 +35,9 @@ export default defineComponent({
       default: () => ({}),
     },
     prismLang: {
-      type: String,
+      type: String as PropType<CONFIGURED_LANGS_TYPE>,
       default: "html",
-      validator: (val: string) => ["html", "vsg"].includes(val),
+      validator: (val: string) => CONFIGURED_LANGS.includes(val as CONFIGURED_LANGS_TYPE),
     },
     jsx: {
       type: Boolean,
@@ -58,7 +58,7 @@ export default defineComponent({
        */
       stableCode: this.code,
       highlight: (() => (code: string) => code) as (
-        lang: "vue" | "vsg",
+        lang: CONFIGURED_LANGS_TYPE,
         jsxInExamples: boolean
       ) => (code: string, errorLoc: any) => string,
     };
@@ -73,7 +73,7 @@ export default defineComponent({
   },
   methods: {
     highlighter(code: string) {
-      return this.highlight(this.prismLang as "vue" | "vsg", this.jsx)(
+      return this.highlight(this.prismLang, this.jsx)(
         code,
         this.squiggles && this.error && this.error.loc
       );
