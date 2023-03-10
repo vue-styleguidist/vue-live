@@ -8,12 +8,13 @@ import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-javascript.js";
 import "prismjs/components/prism-typescript.js";
 import "prismjs/components/prism-jsx.js";
+import "prismjs/components/prism-tsx.js";
 import "prismjs/components/prism-css.js";
 
 import getScript from "./getScript";
 import { parseComponent } from "vue-inbrowser-compiler-sucrase";
 
-export const CONFIGURED_LANGS = ["html", "vsg", "tsx", "jsx"] as const;
+export const CONFIGURED_LANGS = ["html", "vsg", "jsx", "tsx"] as const;
 export type CONFIGURED_LANGS_TYPE = (typeof CONFIGURED_LANGS)[number];
 
 export default async function () {
@@ -27,7 +28,7 @@ export default async function () {
         const scriptCode = getScript(code, jsxInExamples);
         const scriptCodeHighlighted = prismHighlight(
           scriptCode,
-          languages[jsxInExamples ? "jsx" : "js"],
+          languages[jsxInExamples ? "tsx" : "ts"],
           lang
         );
         if (code.length === scriptCode.length) {
