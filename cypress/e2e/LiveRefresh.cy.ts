@@ -10,15 +10,26 @@ describe("Live Refresh", () => {
   });
 
   it("changes the render after code change", () => {
+    const textToReplace = "inline component";
+    const textReplaced = "red component";
+
     cy.get("@preview")
-      .find(".v3dp__datepicker input")
-      .should("not.have.value", "");
+      .get("[data-cy=my-button]")
+      .should("have.text", textToReplace);
 
-    const codeToDelete = ' v-model="today"/>';
     cy.get("@container")
-      .find(".prism-editor-wrapper textarea")
-      .type(`${"{backspace}".repeat(codeToDelete.length)}/>`);
+      .find(".prism-editor-wrapper textarea").as("editor");
+    
+		cy.get("@editor").invoke("val")
+      .then((val) => {
+        cy.get("@editor")
+          .clear()
+          .invoke('val', `${val}`.replace(textToReplace, textReplaced))
+					.trigger('input');
 
-    cy.get("@preview").find(".v3dp__datepicker input").should("have.value", "");
+        cy.get("@preview")
+          .get("[data-cy=my-button]")
+          .should("have.text", textReplaced);
+      });
   });
 });

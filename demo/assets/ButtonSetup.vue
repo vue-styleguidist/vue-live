@@ -4,7 +4,8 @@ import { ref, h } from 'vue'
 const MyButton = () => {
 	return h('button', 
 		{
-			style: { color: 'red' }
+			style: { color: 'red' },
+			"data-cy": "my-button"
 		},
 		'inline component'
 	)
