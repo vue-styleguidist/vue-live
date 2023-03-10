@@ -33,7 +33,16 @@ jobs:
         run: npm run build:demo
 
       - name: Run E2E Test
-        run: npm run test:e2e
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run preview
+          record: true
+          browser: chrome
+        env:
+          # Recommended: pass the GitHub token lets this action correctly
+          # determine the unique run id necessary to re-run the checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
       - name: Deploy to vue-live.surge.sh
         if: ${{ github.ref == 'refs/heads/master' }}
