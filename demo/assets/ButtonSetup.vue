@@ -4,11 +4,9 @@ import { ref, h } from 'vue'
 const MyButton = () => {
 	return h('button', 
 		{
-			style: {
-				color: 'red'
-			}
+			style: { color: 'red' }
 		},
-		'Push Me'
+		'inline component'
 	)
 }
 
@@ -18,14 +16,12 @@ const msg = ref("Push Me")
 <template>
   <div class="hello">
     <h1>Colored Text</h1>
-    <button>{{ msg }}</button>
-		<MyButton/>
+    <input v-model="msg">
+		<div>
+			{{ msg }}
+		</div>
+		<div>
+			<MyButton/>
+		</div>
   </div>
 </template>
-
-<style>
-.hello {
-  text-align: center;
-  color: #900;
-}
-</style>
