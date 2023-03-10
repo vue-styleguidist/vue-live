@@ -1,4 +1,4 @@
-// NOTE: this weird way of importing prism is necessary because 
+// NOTE: this weird way of importing prism is necessary because
 // prism is not a ESM ready library
 import pkg from "prismjs";
 const { highlight: prismHighlight, languages } = pkg;
@@ -8,14 +8,19 @@ import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-javascript.js";
 import "prismjs/components/prism-typescript.js";
 import "prismjs/components/prism-jsx.js";
+import "prismjs/components/prism-tsx.js";
 import "prismjs/components/prism-css.js";
 
 import getScript from "./getScript";
 import { parseComponent } from "vue-inbrowser-compiler-sucrase";
 
+export const CONFIGURED_LANGS = ["html", "vsg", "jsx", "tsx"] as const;
+export type CONFIGURED_LANGS_TYPE = (typeof CONFIGURED_LANGS)[number];
+
 export default async function () {
-  return function (lang: "vsg" | "vue", jsxInExamples: boolean) {
+  return function (lang: CONFIGURED_LANGS_TYPE, jsxInExamples: boolean) {
     if (lang === "vsg") {
+			// render vsg format
       return (code: string, errorLoc: any) => {
         if (!code) {
           return "";
@@ -23,7 +28,7 @@ export default async function () {
         const scriptCode = getScript(code, jsxInExamples);
         const scriptCodeHighlighted = prismHighlight(
           scriptCode,
-          languages[jsxInExamples ? "jsx" : "js"],
+          languages[jsxInExamples ? "tsx" : "ts"],
           lang
         );
         if (code.length === scriptCode.length) {
@@ -45,7 +50,8 @@ export default async function () {
           templateHighlighted
         );
       };
-    } else {
+    } else if (lang === "html") {
+			// render vue SFC component format
       const langScheme = languages.html;
 
       return (code: string) => {
@@ -69,6 +75,12 @@ export default async function () {
               )}</span>`
             )
           : htmlHighlighted;
+      };
+    } else {
+			// all other formats
+      const langScheme = languages[lang];
+      return (code: string) => {
+        return prismHighlight(code, langScheme, lang);
       };
     }
   };

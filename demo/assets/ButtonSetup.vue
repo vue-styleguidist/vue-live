@@ -1,5 +1,15 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, h } from 'vue'
+
+const MyButton = () => {
+	return h('button', 
+		{
+			style: { color: 'red' },
+			"data-cy": "my-button"
+		},
+		'inline component'
+	)
+}
 
 const msg = ref("Push Me")
 </script>
@@ -7,13 +17,12 @@ const msg = ref("Push Me")
 <template>
   <div class="hello">
     <h1>Colored Text</h1>
-    <button>{{ msg }}</button>
+    <input v-model="msg">
+		<div>
+			{{ msg }}
+		</div>
+		<div>
+			<MyButton/>
+		</div>
   </div>
 </template>
-
-<style>
-.hello {
-  text-align: center;
-  color: #900;
-}
-</style>

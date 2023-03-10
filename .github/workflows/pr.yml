@@ -28,5 +28,14 @@ jobs:
       - name: Build Demo
         run: npm run build:demo
 
-      - name: Test e2e
-        run: npm run test:e2e
+      - name: Run E2E Test
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run preview
+          record: true
+          browser: chrome
+        env:
+          # Recommended: pass the GitHub token lets this action correctly
+          # determine the unique run id necessary to re-run the checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

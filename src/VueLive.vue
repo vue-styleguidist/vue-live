@@ -25,11 +25,12 @@ import hash from "hash-sum";
 import Preview from "./Preview.vue";
 import Editor from "./Editor.vue";
 import VueLiveDefaultLayout from "./VueLiveDefaultLayout.vue";
+import type { CONFIGURED_LANGS_TYPE } from "./utils/highlight";
 
 const LANG_TO_PRISM = {
   vue: "html",
   vsg: "vsg",
-};
+} as const;
 
 const UPDATE_DELAY = 300;
 
@@ -140,7 +141,7 @@ export default defineComponent({
     return {
       model: this.code,
       lang: "vue",
-      prismLang: "html",
+      prismLang: "html" as CONFIGURED_LANGS_TYPE,
       VueLiveDefaultLayout: markRaw(VueLiveDefaultLayout),
       /**
        * this data only gets changed when changing language.

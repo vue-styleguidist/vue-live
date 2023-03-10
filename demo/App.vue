@@ -14,7 +14,7 @@
 
     <div class="livebox">
       <div class="hint">You can edit this <span>-></span></div>
-      <VueLive :editorProps="{ lineNumbers: true }" :code="codeTemplate" :layout="CustomLayout"
+      <VueLive :editorProps="{ lineNumbers: true }" :code="codeSfcSetup" :layout="CustomLayout"
         :components="registeredComponents" @error="(e: any) => log('Error on first example', e)" />
     </div>
 
@@ -27,8 +27,8 @@
         file components as well
       </p>
       <VueLive :code="codeSfc" :layout="CustomLayout" />
-			<h2>SFC with setup</h2>
-      <VueLive :code="codeSfcSetup" :layout="CustomLayout" />
+			<h2>VSG partial mode or pure template</h2>
+      <VueLive :code="codeTemplate" :layout="CustomLayout" />
       <h2>Pure JavaScript code</h2>
       <p>Or if you prefer to, use the <b>new Vue()</b> format</p>
       <VueLive :code="codeJs" :layout="CustomLayout" />
@@ -65,6 +65,9 @@
       <h2>JSX</h2>
       <VueLive :code="realjsx" :layout="CustomLayout" :jsx="true" />
 
+			<h2>TSX</h2>
+      <VueLive :code="blobtsx" :layout="CustomLayout" lang="tsx" :jsx="true" />
+
       <h2>Double Root</h2>
       <VueLive :code="doubleRoot" :layout="CustomLayout" />
 
@@ -92,6 +95,7 @@ import codeSfc from "./assets/Button.vue?raw";
 import codeSfcSetup from "./assets/ButtonSetup.vue?raw";
 import codeJs from "./assets/input.js?raw";
 import realjsx from "./assets/real.jsx?raw";
+import blobtsx from "./assets/blob.tsx?raw";
 import codeTemplate from "./assets/PureTemplate.html?raw";
 import doubleRoot from "./assets/PureTemplateDoubleRoot.html?raw";
 import codeChicago from "./assets/Chicago.jsx?raw";
@@ -116,6 +120,7 @@ export default defineComponent({
       CustomLayout: markRaw(CustomLayout),
       chicagoRequires: { "./chicagoNeighbourhoods": all },
       realjsx,
+			blobtsx,
       separateCode: codeSfc,
       doubleRoot,
       openExamples: false,

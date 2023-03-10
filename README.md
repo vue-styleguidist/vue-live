@@ -178,6 +178,15 @@ export default {
 </script>
 ```
 
+### `directives`
+
+**Type** Object:
+
+- key: registration name
+- value: VueJs directive object
+
+You can use this prop in the same fashion as `components` above.
+
 ### `requires`
 
 **Type** Object:

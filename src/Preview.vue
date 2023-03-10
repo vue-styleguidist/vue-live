@@ -143,11 +143,7 @@ export default defineComponent({
 			}
 		},
 		async renderComponent(code: string) {
-			let options = defineComponent({
-				render() {
-					return h("div");
-				},
-			});
+			let options = defineComponent({});
 			let style;
 			try {
 				const renderedComponent = compileScript(
@@ -183,18 +179,6 @@ export default defineComponent({
 							concatenate,
 							h
 						) || {}));
-						if (options.render) {
-							const preview = this;
-							const originalRender = options.render;
-							options.render = function (...args: any[]) {
-								try {
-									return originalRender.call(this, ...args);
-								} catch (e) {
-									preview.handleError(e);
-									return;
-								}
-							};
-						}
 						options.name = "VueLiveCompiledExample";
 					};
 					await calcOptions();
@@ -218,7 +202,7 @@ export default defineComponent({
 						options.data = () => mergeData;
 					}
 				}
-				
+
 				const template = renderedComponent.raw.template
 				if (template) {
 					checkTemplate({
@@ -265,6 +249,8 @@ export default defineComponent({
 				});
 				return;
 			}
+
+			console.log({render:options.render})
 
 			this.previewedComponent = markRaw(options);
 			this.iteration = this.iteration + 1;
