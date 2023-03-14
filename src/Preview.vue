@@ -250,8 +250,6 @@ export default defineComponent({
 				return;
 			}
 
-			console.log({render:options.render})
-
 			this.previewedComponent = markRaw(options);
 			this.iteration = this.iteration + 1;
 			this.error = false;
