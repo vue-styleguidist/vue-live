@@ -250,6 +250,11 @@ export default defineComponent({
 				return;
 			}
 
+			options.errorCaptured = (e: any) => {
+				this.handleError(e);
+				return false;
+			};
+
 			this.previewedComponent = markRaw(options);
 			this.iteration = this.iteration + 1;
 			this.error = false;
