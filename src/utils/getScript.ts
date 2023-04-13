@@ -21,6 +21,6 @@ export default function (code: string, jsxInExamples: boolean): string {
 
   code = code || "";
 
-  //else it will be considered pseudo jsx of vue-styleguidist
+  // else it will be considered pseudo jsx of vue-styleguidist
   return /^</.test(code.trim()) ? "" : code.split(/\n[\t ]*</)[0];
 }
