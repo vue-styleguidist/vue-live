@@ -84,8 +84,8 @@ function getCodeWithoutScript(code: string, script: any, scriptSetup?: any) {
 
 export default async function () {
   return (
-    lang: "vsg" | "vue-sfc" | "html",
-    jsxInExamples: boolean
+    lang: "vsg" | "html" | "jsx" | "tsx",
+    jsxInExamples?: boolean
   ): ((code: string, errorLoc: any) => string) => {
     if (lang === "vsg") {
       // render vsg format
@@ -118,7 +118,7 @@ export default async function () {
           templateHighlighted
         );
       };
-    } else if (["html", "vue-sfc"].includes(lang)) {
+    } else if ("html" === lang) {
       // render vue SFC component format
       const langScheme = languages.html;
 
