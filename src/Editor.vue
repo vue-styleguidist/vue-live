@@ -1,5 +1,6 @@
 <template>
-  <PrismEditor :class="{'VueLive-LineNumbers': editorProps.lineNumbers}" v-model="stableCode" @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" :lineNumbers="false"/>
+  <PrismEditor :class="{ 'VueLive-LineNumbers': editorProps.lineNumbers }" v-model="stableCode"
+    @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" :lineNumbers="false" />
 </template>
 
 <script lang="ts">
@@ -66,14 +67,49 @@ export default defineComponent({
      * load javascript first then load jsx
      * order is not guaranteed to work in ESmodules imports
      */
-    this.highlight = await makeHighlight('VueLive-LineNumbers');
+    this.highlight = await makeHighlight('VueLive-squiggles');
   },
   methods: {
     highlighter(code: string) {
       return this.highlight(this.prismLang, this.jsx)(
         code,
-        this.squiggles && this.error && this.error.loc
+        this.squiggles && this.adaptedErrorLoc ? this.adaptedErrorLoc : undefined
       );
+    },
+  },
+  computed: {
+    adaptedErrorLoc() {
+      // for now, we only support error in vsg format. 
+      // TODO: figure out how SourceMaps work and use them to support vue-sfc format
+      if (this.prismLang !== 'vsg') {
+        return undefined
+      }
+
+      const scriptEnd = /\n[\t ]*</.exec(this.stableCode)
+      const scriptCode = scriptEnd ? this.stableCode.slice(0, scriptEnd.index + 1) : ''
+      const linesInScriptCode = (/^[\t ]*</.test(scriptCode) ? 0 : (scriptCode.match(/\n/g)?.length || 0)) + 1
+
+      return this.error && this.error.loc ?
+        this.error.loc.start ?
+          {
+            start: {
+              ...this.error.loc.start,
+              line: this.error.loc.start.line + linesInScriptCode,
+            },
+            end: {
+              ...this.error.loc.end,
+              line: this.error.loc.end.line + linesInScriptCode,
+            },
+          } : this.error.loc.line ? {
+            start: {
+              ...this.error.loc,
+              line: this.error.loc.line + linesInScriptCode,
+            },
+            end: {
+              ...this.error.loc,
+              line: this.error.loc.line + linesInScriptCode,
+            },
+          } : undefined : undefined
     },
   },
   watch: {
@@ -112,7 +148,7 @@ export default defineComponent({
   counter-increment: step 0;
 }
 
-.VueLive-LineNumbers pre .line{
+.VueLive-LineNumbers pre .line {
   position: relative;
 }
 
@@ -125,6 +161,6 @@ export default defineComponent({
   left: -2.5rem;
   display: inline-block;
   text-align: right;
-  color: rgba(255,255,255,.4)
+  color: rgba(255, 255, 255, .4)
 }
 </style>
