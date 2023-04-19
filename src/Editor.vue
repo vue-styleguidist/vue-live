@@ -1,15 +1,15 @@
 <template>
-  <PrismEditor v-model="stableCode" @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" />
+  <PrismEditor :class="{'VueLive-LineNumbers': editorProps.lineNumbers}" v-model="stableCode" @update:modelValue="updatePreview" :highlight="highlighter" v-bind="editorProps" :lineNumbers="false"/>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from "vue";
 import { PrismEditor } from "vue-prism-editor";
+import makeHighlight, { CONFIGURED_LANGS, type CONFIGURED_LANGS_TYPE } from "vue-inbrowser-prismjs-highlighter";
 import debounce from "debounce";
 
 import "vue-prism-editor/dist/prismeditor.min.css";
 
-import makeHighlight, { CONFIGURED_LANGS, type CONFIGURED_LANGS_TYPE } from "./utils/highlight";
 
 const UPDATE_DELAY = 300;
 
@@ -37,7 +37,7 @@ export default defineComponent({
     prismLang: {
       type: String as PropType<CONFIGURED_LANGS_TYPE>,
       default: "html",
-      validator: (val: string) => CONFIGURED_LANGS.includes(val as CONFIGURED_LANGS_TYPE),
+      validator: (val: CONFIGURED_LANGS_TYPE) => CONFIGURED_LANGS.includes(val),
     },
     jsx: {
       type: Boolean,
@@ -57,10 +57,7 @@ export default defineComponent({
        * editor repainted every keystroke
        */
       stableCode: this.code,
-      highlight: (() => (code: string) => code) as (
-        lang: CONFIGURED_LANGS_TYPE,
-        jsxInExamples: boolean
-      ) => (code: string, errorLoc: any) => string,
+      highlight: (() => (code: string) => code) as Awaited<ReturnType<typeof makeHighlight>>,
     };
   },
   async beforeMount() {
@@ -69,7 +66,7 @@ export default defineComponent({
      * load javascript first then load jsx
      * order is not guaranteed to work in ESmodules imports
      */
-    this.highlight = await makeHighlight();
+    this.highlight = await makeHighlight('VueLive-LineNumbers');
   },
   methods: {
     highlighter(code: string) {
@@ -102,5 +99,21 @@ export default defineComponent({
 
 .VueLive-squiggles {
   border-bottom: 2px dotted red;
+}
+
+.VueLive-LineNumbers pre {
+  counter-reset: step;
+  counter-increment: step 0;
+}
+
+.VueLive-LineNumbers pre .line::before {
+  content: counter(step);
+  counter-increment: step;
+  width: 1rem;
+  position: absolute;
+  margin-right: 1.5rem;
+  display: inline-block;
+  text-align: right;
+  color: rgba(115,138,148,.4)
 }
 </style>
