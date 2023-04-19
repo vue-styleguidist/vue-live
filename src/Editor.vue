@@ -101,19 +101,30 @@ export default defineComponent({
   border-bottom: 2px dotted red;
 }
 
-.VueLive-LineNumbers pre {
+.VueLive-LineNumbers.prism-editor-wrapper pre.prism-editor__editor,
+.VueLive-LineNumbers.prism-editor-wrapper textarea.prism-editor__textarea {
+  padding-left: 2.5rem;
+}
+
+
+.VueLive-LineNumbers pre.prism-editor__editor {
   counter-reset: step;
   counter-increment: step 0;
+}
+
+.VueLive-LineNumbers pre .line{
+  position: relative;
 }
 
 .VueLive-LineNumbers pre .line::before {
   content: counter(step);
   counter-increment: step;
-  width: 1rem;
+  white-space: nowrap;
+  width: 2rem;
   position: absolute;
-  margin-right: 1.5rem;
+  left: -2.5rem;
   display: inline-block;
   text-align: right;
-  color: rgba(115,138,148,.4)
+  color: rgba(255,255,255,.4)
 }
 </style>
