@@ -25,7 +25,7 @@ import hash from "hash-sum";
 import Preview from "./Preview.vue";
 import Editor from "./Editor.vue";
 import VueLiveDefaultLayout from "./VueLiveDefaultLayout.vue";
-import type { CONFIGURED_LANGS_TYPE } from "./utils/highlight";
+import type { CONFIGURED_LANGS_TYPE } from "vue-inbrowser-prismjs-highlighter";
 
 const LANG_TO_PRISM = {
   vue: "html",

@@ -2,6 +2,7 @@
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "include": ["cypress/**/*.ts"],
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "composite": true,
     "isolatedModules": false,
     "types": ["cypress"]
