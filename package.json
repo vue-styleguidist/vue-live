@@ -6,7 +6,7 @@
     "serve": "vite serve",
     "types": "vue-tsc --project ./tsconfig.app.json",
     "build:lib": "vite build --config ./vite.config.lib.ts",
-    "types:lib": "vue-tsc --declaration --emitDeclarationOnly --project ./tsconfig.lib.json",
+    "types:lib": "vue-tsc --declaration --emitDeclarationOnly --project ./tsconfig.build.lib.json",
     "build:demo": "vite build",
     "start": "vite serve",
     "preview": "vite preview --port 4173",
