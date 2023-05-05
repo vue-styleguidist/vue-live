@@ -42,6 +42,7 @@ export default Object.assign(
             acorn: "Acorn",
             "hash-sum": "Hash",
             "vue-inbrowser-compiler-sucrase": "VueInBrowserCompilerSucrase",
+            "vue-inbrowser-prismjs-highlighter": "VueInBrowserPrismjsHighlighter",
 						"@vue/compiler-core": "VueCompilerCore",
 						"@vue/compiler-dom": "VueCompilerDom",
 						"acorn-walk": "AcornWalk",
