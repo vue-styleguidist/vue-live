@@ -151,13 +151,15 @@ export default defineComponent({
     async renderComponent(code: string) {
       let options = defineComponent({});
       let style;
+      const scopeAttribute = `data-${this.scope}`
       try {
         const renderedComponent = compileScript(
           code,
           this.jsx
             ? {
               jsxPragma: "__pragma__(h)",
-            } : {}
+            } : {},
+            scopeAttribute
         );
         this.compiledCodeForDebug = JSON.stringify(renderedComponent)
         style = renderedComponent.style;
@@ -245,7 +247,7 @@ export default defineComponent({
       if (style) {
         // To add the scope id attribute to each item in the html
         // this way when we add the scoped style sheet it will be applied
-        options.__scopeId = `data-${this.scope}`;
+        options.__scopeId = scopeAttribute;
         this.removeScopedStyle = addScopedStyle(style, this.scope);
       }
 
