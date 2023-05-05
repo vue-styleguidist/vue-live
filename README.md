@@ -10,7 +10,7 @@ A lightweight playground for live editing VueJs code in the browser
 
 ## Usage
 
-Install the dependency:
+Install the dependency
 
 ```
 npm install --save vue-live
