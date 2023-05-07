@@ -161,7 +161,9 @@ export default defineComponent({
             } : {},
             scopeAttribute
         );
-        this.compiledCodeForDebug = JSON.stringify(renderedComponent)
+        if(this.debug){
+          this.compiledCodeForDebug = Object.entries(renderedComponent).map(([key, code]) => typeof code === 'string' ? `<${key}>\n${code}\n</${key}>` : '').join("\n\n")
+        }
         style = renderedComponent.style;
         if (renderedComponent.script) {
           // if the compiled code contains a script it might be "just" a script
