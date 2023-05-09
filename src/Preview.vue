@@ -1,7 +1,11 @@
 <template>
   <pre v-if="debug">{{ compiledCodeForDebug }}</pre>
   <pre class="VueLive-error" v-if="error">{{ error }}</pre>
-  <component v-else-if="previewedComponent" :is="previewedComponent" :key="iteration" />
+  <component v-else-if="previewedComponent" :is="previewedComponent" :key="iteration">
+    <template v-for="(_, name) in $slots" v-slot:[name]="slotData">
+      <slot :name="name" v-bind="slotData" />
+    </template>
+  </component>
 </template>
 
 <script lang="ts">
