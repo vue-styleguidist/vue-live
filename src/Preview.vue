@@ -95,7 +95,7 @@ export default defineComponent({
         render: () => h("div"),
       })),
       iteration: 0,
-      error: false,
+      error: false as string | false,
       removeScopedStyle: () => { },
       compiledCodeForDebug: "",
     };
@@ -128,7 +128,7 @@ export default defineComponent({
         return v.toString(16);
       });
     },
-    handleError(e: any) {
+    handleError(e: any, type: string) {
       /**
        * Emitted every time the component rendered throws an error
        * Catches runtime and compilation errors
@@ -141,7 +141,7 @@ export default defineComponent({
         )}\n\n${e.message}`;
       }
       this.$emit("error", e);
-      this.error = e.message;
+      this.error = `${type} Error - ${e.message}`;
     },
     removeStyle() {
       if (this.removeScopedStyle) {
@@ -149,84 +149,111 @@ export default defineComponent({
       }
     },
     async renderComponent(code: string) {
-      let options = defineComponent({});
       let style;
       const scopeAttribute = `data-${this.scope}`
-      try {
-        const renderedComponent = compileScript(
-          code,
-          this.jsx
-            ? {
-              jsxPragma: "__pragma__(h)",
-            } : {},
+      const tryCompile = () => {
+        try {
+          return compileScript(
+            code,
+            this.jsx
+              ? {
+                jsxPragma: "__pragma__(h)",
+              } : {},
             scopeAttribute
-        );
-        if(this.debug){
-          this.compiledCodeForDebug = Object.entries(renderedComponent).map(([key, code]) => typeof code === 'string' ? `<${key}>\n${code}\n</${key}>` : '').join("\n\n")
+          );
+        } catch (e) {
+          this.handleError(e, "Compilation");
+          return undefined
         }
-        style = renderedComponent.style;
-        if (renderedComponent.script) {
-          // if the compiled code contains a script it might be "just" a script
-          // if so, change scheme used by editor
-          // NOTE: vsg is a superset of JavaScript allowing
-          // the template to add javascript code above the template without fluff, very useful for examples
-          // NOTE2: vsg stands for vue-styleguidist
-          this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
+      }
 
-          // compile and execute the script
-          // it can be:
-          // - a script setting up variables => we set up the data property of renderedComponent
-          // - a `new Vue()` script that will return a full config object
-          const calcOptions = async () => {
+      const renderedComponent = tryCompile();
+      if (!renderedComponent) { return; }
+
+      if (this.debug) {
+        this.compiledCodeForDebug = Object.entries(renderedComponent).map(([key, code]) => typeof code === 'string' ? `<${key}>\n${code}\n</${key}>` : '').join("\n\n")
+      }
+      style = renderedComponent.style;
+
+      // if the compiled code contains a script it might be "just" a script
+      // if so, change scheme used by editor
+      // NOTE: vsg is a superset of JavaScript allowing
+      // the template to add javascript code above the template without fluff, very useful for examples
+      // NOTE2: vsg stands for vue-styleguidist
+      this.$emit("detect-language", isCodeVueSfc(code) ? "vue" : "vsg");
+
+      // compile and execute the script
+      // it can be:
+      // - a script setting up variables => we set up the data property of renderedComponent
+      // - a `new Vue()` script that will return a full config object
+      const calcOptions = async () => {
+        if (renderedComponent.script) {
+          try {
             const script = renderedComponent.script;
             const requires: typeof this.requires = {}
             await Promise.allSettled(Object.keys(this.requiresPlusVue).map(async (key) => {
               requires[key] = this.requiresPlusVue[key] instanceof Promise ? (await this.requiresPlusVue[key]).default : this.requiresPlusVue[key]
             }))
-            options = defineComponent((evalInContext(
+            const tryOptions = defineComponent((evalInContext(
               script,
               (filepath) => requireAtRuntime(requires, filepath),
               adaptCreateElement,
               concatenate,
               h
             ) || {}));
-            options.name = "VueLiveCompiledExample";
-          };
-          await calcOptions();
-
-          // In case the template is inlined in the script,
-          // we need to compile it
-          if (typeof options.template === "string") {
-            renderedComponent.template = options.template;
-            compileTemplateForEval(renderedComponent);
-            await calcOptions();
-            checkTemplate({
-              ...(options as any),
-              template: options.template,
-            },
-              this.checkVariableAvailability);
-            delete options.template;
+            tryOptions.name = "VueLiveCompiledExample";
+            return tryOptions
+          } catch (e) {
+            this.handleError(e, "Evaluation");
+            return undefined
           }
-
-          if (this.dataScope) {
-            const mergeData = { ...(options as any)?.data(), ...this.dataScope };
-            options.data = () => mergeData;
-          }
+        } else {
+          return defineComponent({})
         }
+      }
+      const options = await calcOptions();
 
-        const template = renderedComponent.raw.template
-        if (template) {
+      if (!options) { return; }
+
+      // In case the template is inlined in the script,
+      // we need to compile it
+      if (typeof options.template === "string") {
+        try {
+          renderedComponent.template = options.template;
+          compileTemplateForEval(renderedComponent);
+          await calcOptions();
+          checkTemplate({
+            ...(options as any),
+            template: options.template,
+          },
+            this.checkVariableAvailability);
+          delete options.template;
+        } catch (e) {
+          this.handleError(e, "Template");
+          return;
+        }
+      }
+
+      if (this.dataScope) {
+        const mergeData = { ...(options as any)?.data(), ...this.dataScope };
+        options.data = () => mergeData;
+      }
+
+      const template = renderedComponent.raw.template
+      if (template) {
+        try {
           checkTemplate({
             ...(options as any),
             template,
           },
             this.checkVariableAvailability
           );
+        } catch (e) {
+          this.handleError(e, "Template");
+          return;
         }
-      } catch (e) {
-        this.handleError(e);
-        return;
       }
+
 
       if (this.components) {
         if (!options.components) {
@@ -257,12 +284,12 @@ export default defineComponent({
         this.handleError({
           message:
             "[Vue Live] no template or render function specified. Example cannot be rendered.",
-        });
+        }, "Render");
         return;
       }
 
       options.errorCaptured = (e: any) => {
-        this.handleError(e);
+        this.handleError(e, "Runtime");
         return false;
       };
 
