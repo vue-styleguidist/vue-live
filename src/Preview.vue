@@ -26,7 +26,7 @@ export default defineComponent({
   emits: ["error", "success", "detect-language"],
   components: {},
   errorCaptured(err) {
-    this.handleError(err);
+    this.handleError(err, "Runtime");
   },
   props: {
     debug: {
