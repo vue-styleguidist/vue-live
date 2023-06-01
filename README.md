@@ -360,3 +360,5 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+
+<!-- now works with vue 3.3.X -->
