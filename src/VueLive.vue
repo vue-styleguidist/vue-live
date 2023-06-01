@@ -1,9 +1,25 @@
 <template>
-  <component :is="layout ? layout : VueLiveDefaultLayout" v-bind="layoutProps" :code="stableCode" :language="lang"
-    :prism-lang="prismLang" :requires="requires" :data-scope="dataScope" :components="components">
+  <component
+    :is="layout ? layout : VueLiveDefaultLayout"
+    v-bind="layoutProps"
+    :code="stableCode"
+    :language="lang"
+    :prism-lang="prismLang"
+    :requires="requires"
+    :data-scope="dataScope"
+    :components="components"
+  >
     <template v-slot:editor>
-      <Editor :code="stableCode" :delay="delay" :prism-lang="prismLang" :editor-props="editorProps" :error="error"
-        :jsx="jsx" :squiggles="squiggles" @change="updatePreview" />
+      <Editor
+        :code="stableCode"
+        :delay="delay"
+        :prism-lang="prismLang"
+        :editor-props="editorProps"
+        :error="error"
+        :jsx="jsx"
+        :squiggles="squiggles"
+        @change="updatePreview"
+      />
     </template>
     <template v-slot:preview>
       <!--
@@ -12,9 +28,19 @@
         * @event error
         * @property { Error } - the error thrown
       -->
-      <Preview :key="codeKey" :code="model" @detect-language="switchLanguage" @error="handleError"
-        @success="handleSuccess" :components="components" :directives="directives" :requires="requires" :jsx="jsx" :data-scope="dataScope"
-        :check-variable-availability="checkVariableAvailability" />
+      <Preview
+        :key="codeKey"
+        :code="model"
+        @detect-language="switchLanguage"
+        @error="handleError"
+        @success="handleSuccess"
+        :components="components"
+        :directives="directives"
+        :requires="requires"
+        :jsx="jsx"
+        :data-scope="dataScope"
+        :check-variable-availability="checkVariableAvailability"
+      />
     </template>
   </component>
 </template>
@@ -59,7 +85,7 @@ export default defineComponent({
      */
     components: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
     /**
      * Hashtable of auto-registered directives
@@ -68,7 +94,7 @@ export default defineComponent({
      */
     directives: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
     /**
      * Hashtable of modules available in require and import statements
@@ -78,7 +104,7 @@ export default defineComponent({
      */
     requires: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
     /**
      * Time in ms debouncing updates to the preview
@@ -117,7 +143,7 @@ export default defineComponent({
      */
     dataScope: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
     /**
      * Set if checking variables for availability
@@ -142,7 +168,7 @@ export default defineComponent({
       model: this.code,
       lang: "vue",
       prismLang: "html" as CONFIGURED_LANGS_TYPE,
-      VueLiveDefaultLayout: markRaw(VueLiveDefaultLayout),
+      VueLiveDefaultLayout: markRaw(VueLiveDefaultLayout) as any,
       /**
        * this data only gets changed when changing language.
        * it allows for copy and pasting without having the code
