@@ -22,7 +22,7 @@
     "core-js": "^3.30.2",
     "debounce": "^1.2.1",
     "hash-sum": "^2.0.0",
-    "prismjs": "^1.29.0",
+    "prismjs": "^1.30.0",
     "vue-inbrowser-compiler-sucrase": "^4.72.4",
     "vue-inbrowser-prismjs-highlighter": "^4.69.1",
     "vue-prism-editor": "^2.0.0-alpha.2"
